@@ -6,6 +6,7 @@
 #' 
 #' @param points A character vecotr. The names of one or more points where the data was collected.
 #' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
+#' @param years  A vector of number. will return only data from the indicated years.
 #' @param min.count  A numeric vector of length one. Will only return data with a bird count equal to or geater than \code{min.count}
 #' @param max.count  A numeric vector of length one. Will only return data with a bird count equal to or less than \code{max.count}
 #' @param band. A numeirc vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
