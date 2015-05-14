@@ -1,10 +1,12 @@
 #' @title importNCRNbirds
 #' 
+#' @import lubridate
+#' 
 #' @description  This function imports data from the standard NCRN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits and FieldData.
 #' 
 #' @param Dir  The directory where the data is found
 #' 
-#' @return Returns a list of 11 \code{NCRNbirds} objects, one for each park, named using the standard 4 letter park code (e.g. ANTI, CATO etc.).
+#' @return Returns a list of 11 \code{NCRNbirds} objects, one for each park.
 #' 
 #' @export
 #' 
@@ -15,15 +17,15 @@ importNCRNbirds<-function(Dir){
   setwd(Dir)  
   
   InPoints<-read.csv("Points.csv",as.is=T, header=T)
-
-#   InPlots$Event_Earliest<-as.Date(as.character(InPlots$Event_Earliest), format="%Y%m%d")
-#   InPlots$Event_Latest<-as.Date(as.character(InPlots$Event_Latest),format="%Y%m%d")
  
   InVisits<-read.csv("Visits.csv",as.is=T, header=T)
-#  InEvents$Event_Date<-as.Date(as.character(InEvents$Event_Date_Txt), format="%Y%m%d")
+  InVisits$Date<-as.Date(as.character(InVisits$Date), format="%m/%d/%Y")
+  InVisits$Year<-year(InVisits$Date)
   
   
   InFieldData<-read.csv("FieldData.csv",as.is=T, header=T)
+  InFieldData$Date<-as.Date(as.character(InFieldData$Date), format="%m/%d/%Y")
+  InFieldData$Year<-year(InFieldData$Date)
 
   
   ANTI<-new("NCRNbirds", 
@@ -35,7 +37,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="ANTI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ANTI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ANTI",]
-  )
+            
+            )
   
   
   CATO<-new("NCRNbirds", 
