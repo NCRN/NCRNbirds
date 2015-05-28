@@ -3,7 +3,7 @@
 #' @description Returns the contents of the \code{Visits} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
 #' 
 #' @param object An NCRNbirds object or a list of such objects.
-#' @param times A numeric vector of lenght 1. Returns only data from points where the number of years that a point has been vistied is greater or equalt to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
+#' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{Date} column.
 #'  @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' 
