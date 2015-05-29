@@ -1,6 +1,6 @@
 #' @title getBirds
 #' 
-#' @description Returns bird monitoring data from the \code{birds} slot of an \code{NCRNBbirds} object. 
+#' @description Returns bird monitoring data from the \code{Birds} slot of an \code{NCRNbirds} object. 
 #' 
 #' @param object An NCRNbirds object or a list of such objects.
 #' 
@@ -13,7 +13,7 @@
 #' @param interval A numeirc vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' 
-#' @details ADD ME
+#' @details Returns the data from the \code{Birds} slot of a single \code{NCNRbirds} object or a \code{list} of such objects. The data can be filtered using the various arguements. he default output is a\code{data.frame}. However, if \code{object} is a \code{list} and \code{output} is "list" then a \code{list} of \code{data.frame}s will be returned.
 #' 
 #' @include NCRNbirds_Class_def.R
 #' @export

@@ -2,7 +2,8 @@
 #' 
 #' @description Returns the contents of the \code{Visits} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
 #' 
-#' @param object An NCRNbirds object or a list of such objects.
+#' @param object An \code{NCRNbirds} object or a list of such objects.
+#' @param points A character vector or point names. Only visits to these points will be returned.
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{Date} column.
 #'  @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
@@ -14,12 +15,12 @@
 #'  @export
 
 
-setGeneric(name="getVisits",function(object,times=NA, years=NA, points=NA, visit=NA, output="dataframe"){standardGeneric("getVisits")}, signature="object")
+setGeneric(name="getVisits",function(object,times=NA, years=NA, points=NA, visits=NA, output="dataframe"){standardGeneric("getVisits")}, signature="object")
 
 
 setMethod(f="getVisits", signature=c(object="list"),
-          function(object,times,years,points,visit,output) {
-            OutVisits<-lapply(X=object, FUN=getVisits, times=times, years=years, points=points, visit=visit)
+          function(object,times,years,points,visits,output) {
+            OutVisits<-lapply(X=object, FUN=getVisits, times=times, years=years, points=points, visits=visits)
             switch(output,
                    list={#names(OutPoints)<-getNames(object,name.class="code")
                      return(OutVisits)},
@@ -29,7 +30,7 @@ setMethod(f="getVisits", signature=c(object="list"),
 
 
 setMethod(f="getVisits", signature=c(object="NCRNbirds"),
-          function(object,times,years,points,visit, output){
+          function(object,times,years,points,visits, output){
             
             XVisits<-object@Visits
             
@@ -40,7 +41,7 @@ setMethod(f="getVisits", signature=c(object="NCRNbirds"),
                 filter(Times>=times) %>%
                 dplyr::select(Plot_Name) %>%
                 unique
-              XPoints<-XPoints[XPoints$Plot_Name %in% X$Plot_Name,]
+              XVisits<-XVisits[XVisits$Plot_Name %in% X$Plot_Name,]
               
             }
             
@@ -48,7 +49,7 @@ setMethod(f="getVisits", signature=c(object="NCRNbirds"),
             
             if(!anyNA(points)) XVisits<-XVisits[XVisits$Plot_Name %in% points,]
             
-            if(!anyNA(visit)) XVisits<-XVisits[XVisits$Visit %in% visit,]
+            if(!anyNA(visits)) XVisits<-XVisits[XVisits$Visit %in% visits,]
             
             return(XVisits)
             
