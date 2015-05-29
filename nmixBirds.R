@@ -10,8 +10,12 @@
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
 #' @param years  A vector of number. will return only data from the indicated years.
+#' 
+#' @paramt times
+
+
 #' @param band. A numeirc vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
-#' @param interval A numeric vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.
+
 #' @param visits, A length 1 numeric vector. Will only use data from points with that number of visits.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' 
@@ -24,15 +28,14 @@
 ########################
 
 
-setGeneric(name="nmixBirds",function(object,points=NA,AOU=NA,years=NA,band=1,interval=NA,visits=2,output="dataframe"){standardGeneric("nmixBirds")}, signature="object")
+setGeneric(name="nmixBirds",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),output="dataframe",...){standardGeneric("nmixBirds")}, signature="object")
 
 
-############ need to add list method I think
-
+############ need to add list method I
 
 setMethod(f="nmixBirds", signature=c(object="list"),
           function(object,points,AOU,years,band,interval,visits, output) {
-            OutBirds<-lapply(X=object, FUN=getBirds, points=points,AOU=AOU,years=years,band=band,interval=interval,visits=visits, output=output)
+            OutBirds<-lapply(X=object, FUN=getBirds, points=points,AOU=AOU,years=years,band=band,visits=visits, output=output)
             switch(output
                    ,
                    list= return(OutBirds),
@@ -41,64 +44,20 @@ setMethod(f="nmixBirds", signature=c(object="list"),
           })
 
 
-
-# Z<-getBirds(CATO,AOU="ACFL")
-#  Y$Visit<-paste0("Visit",Y$Visit)
-# 
-# 
-# GoodPoints<-Y %>%
-#   group_by(Admin_Unit_Code,Plot_Name,Year) %>%
-#   summarize(Vists=n()) %>%
-# filter(Visits=visits)
-# 
-# 
-# X<-left_join(GoodPoints,X %>% spread(key=Visit,value=Bird_Count,fill=0) %>% dplyr::select(Plot_Name,Year, Visit1, Visit2) )
-
-
-
 setMethod(f="nmixBirds", signature=c(object="NCRNbirds"),
-          function(object,points,AOU,years,band,interval,visits,output){
+          function(object,points,AOU,years,times,band,visits,...){
             
-            MixVisits<-getVisits(object) %>%
-              mutate(Visit=paste0("Visit",Visit)) %>%
-              dplyr::select(Admin_Unit_Code,Plot_Name,Visit,Year) %>%
-              left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, interval=interval))%>% 
-              group_by(Admin_Unit_Code,Plot_Name, Visit, AOU_Code,Year) %>%
-              summarize(Counts=sum(Bird_Count)) %>%
-              spread(key=Visit,value=Counts,fill=0)# %>%
+            VisitMat<-CountXVisit(object=object, points=points, AOU=AOU, years=years, times=times,
+                                      band=band, visits=visits,...)
+            
+            UnmarkedData<-unmarkedFramePCount(y=VisitMat[4:ncol(VisitMat)], 
+                                              siteCovs=as.data.frame((dplyr::select(VisitMat,Year,Admin_Unit_Code,Plot_Name))))
               
             
-            ### fix so that missing visits = NA
-            #filter(Plot_Name %in% 
-            (getVisits(object=object) %>% dplyr::select(Plot_Name) %>% unlist %>% as.character) )
-                                       
-                      #group_by(Admin_Unit_Code, Plot_Name,Year) %>% 
-                      # summarize(Visits=n()) %>% filter(Visits==visits) %>% ungroup %>% dplyr::select(Plot_Name) %>%
-              #unique))
-            return(MixVisits)
+            #if only 1 year, then no predictors, otherwise, use  year for trends            
+            PcountFormula<-if(length(unique(VisitMat$Year))==1) formula(~1~1) else formula(~1~Year)
             
-            GoodPoints<-MixVisits %>%
-              group_by(Admint_Unit_Code, Plot_name,Year) %>%
-              summarize(Visits=n()) %>%
-              filter(Visits==visits)
-              
-            
-            MixBirds<-getBirds(object, points, AOU, years, band, interval)
-            MixBirds<-MixBirds %>%
-              left_join(getVisits(object=object,years=years,points=points) %>%
-                          mutate(Visit=paste0("Visit",Visit))%>% 
-                          dplyr::select(Plot_Name,Date,Visit)) %>%
-              group_by(Admin_Unit_Code,Plot_Name,Visit,AOU_Code,Year) %>%
-              summarize(Counts=sum(Bird_Count))
-            MixData<-spread(MixBirds,key=Visit,value=Counts,fill=0) 
-            unmarkedData<-unmarkedFramePCount(y=dplyr::select(MixData,Visit1,Visit2), 
-                                              siteCovs=as.data.frame(dplyr::select(MixData,Year,Admin_Unit_Code,Plot_Name)))
-           return(unmarkedData)
-            ifelse(length(years)==1,
-              return(pcount(~1~1, data=unmarkedData, mixture="P",K=100)),
-              return(pcount(~1~Year, data=unmarkedData,mixture="P",K=100))
-           )
-            
-            
+            #run pcount
+            return(pcount(formula=PcountFormula, data=UnmarkedData, mixture="P", K=100))
           }
 )

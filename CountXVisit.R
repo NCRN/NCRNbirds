@@ -47,7 +47,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
             ##  visiting a point once instead of twice)
             
-            VisitMat<-getVisits(object=object,points=points,years=years,visits=visits) %>%
+            VisitMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits) %>%
               mutate(Visit=paste0("Visit",Visit),Visited=1) %>%
               dplyr::select(Admin_Unit_Code,Plot_Name,Year,Visit,Visited) %>%
               spread(key=Visit, value=Visited)
@@ -56,7 +56,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             ## data there will be a "0", but this will occur for both missed visits and zero counts.
 
             
-            CountMat<-getVisits(object=object,points=points,years=years,visits=visits)%>%
+            CountMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits)%>%
               mutate(Visit=paste0("Visit",Visit)) %>%
               dplyr::select(Admin_Unit_Code,Plot_Name,Date,Visit,Year) %>%
               left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
