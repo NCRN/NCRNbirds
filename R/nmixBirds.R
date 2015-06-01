@@ -2,10 +2,10 @@
 #' 
 #' @description Peforms trend analysis on bird data using N-mixture models (Royal 2004) form the unmarked package.
 #' 
-#'  @import unmarked
-#'  @import tidyr 
-#'  @import dplyr
-#' 
+#' @import unmarked
+#' @import tidyr 
+#' @import dplyr
+#'  
 #' @param object An NCRNbirds object or a list of such objects.
 #' 
 #' @param points A character vector. The names of one or more points where the data was collected.
@@ -19,11 +19,11 @@
 
 #' @param visits, A length 1 numeric vector. Will only use data from points with that number of visits.
 #' 
-#' @parm mixture  Defaults to "P". One of either "P", "NB", or "ZIP". Indicates which latent abundace distibution to use, either Poisson, Negative Binomial or Zero Inflated Poinsson.  Passed on to the \code{mixture} argumnet of \code{pcount} in the \code{unmarked} package. 
+#' @param mixture  Defaults to "P". One of either "P", "NB", or "ZIP". Indicates which latent abundace distibution to use, either Poisson, Negative Binomial or Zero Inflated Poinsson.  Passed on to the \code{mixture} argumnet of \code{pcount} in the \code{unmarked} package. 
 #' 
 #' @param ... Additonal arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.
 #' 
-#' @details This funciton simplifed the process for fitting a N-mixture model (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to the \code\{\link{[unmarked]pcount}} function and the resutls of the analysis are returned. 
+#' @details This funciton simplifed the process for fitting a N-mixture model (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to the \code{\link{[unmarked]pcount}} function and the resutls of the analysis are returned. 
 #' 
 #' @references Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated counts using binomail mixutre models. Ecological Applications. 15: 1450-1461. 
 #' @references Royle, J. A.  2004. N-Mixture models for estimating population size from spatially replicated counts. Biometrics 60: 108-115.
