@@ -4,6 +4,7 @@
 #' 
 #'  @import unmarked
 #'  @import tidyr 
+#'  @import dplyr
 #' 
 #' @param object An NCRNbirds object or a list of such objects.
 #' 
@@ -28,6 +29,7 @@
 #' @references Royle, J. A.  2004. N-Mixture models for estimating population size from spatially replicated counts. Biometrics 60: 108-115.
 #' 
 #' @include NCRNbirds_Class_def.R
+#' @include CountXVisit
 #' @export
 
 
