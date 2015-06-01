@@ -20,7 +20,7 @@
 #' 
 #' @include NCRNbirds_Class_def.R
 #' @include getVisits.R
-#' @include getVirds.R
+#' @include getBirds.R
 #' @export
 
 
