@@ -1,3 +1,5 @@
+#' @include NCRNbirds_Class_def.R getVisits.R getBirds.R 
+#' 
 #' @title CountXVisit
 #' 
 #' @description Produces a Count X Visit matrix for use in analyses
@@ -17,10 +19,6 @@
 #' 
 #' @details This produces a Count X Visit matrix for a \code{NPSbirds} object or a \code{list} of such objects. Each row of the matrix will correspond to a differnet plot in a differnt year. The columns of the matrix will be the park code, the point name, the year visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their abundaces will be totaled. 
 #' 
-#' 
-#' @include NCRNbirds_Class_def.R
-#' @include getVisits.R
-#' @include getBirds.R
 #' @export
 
 

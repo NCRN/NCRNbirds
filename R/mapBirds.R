@@ -1,12 +1,14 @@
+#' @include NCRNbirds_Class_def.R makeNCRNbirds.R
+#' 
 #' @title mapBirds
 #' 
 #' @import leaflet
 #' 
-#' @description Produces an html map from a vector of plot names and a vector of corresponding values.
+#' @description Produces an html map from a vector of point names and a vector of corresponding values.
 #' 
-#' @param object Either an object of class \code{NPSForVeg} or a list of such objects
-#' @param plots A character vector of plot names. 
-#' @param values  A vector of values to map. Can be either numberical data or categories.
+#' @param object Either an object of class \code{NCRNbirds} or a list of such objects
+#' @param points A character vector of plot names. 
+#' @param values  A vector of values to map. Can be either numerical data or categories.
 #' @param maptype The type of base map to be used. Options are:
 #'  \describe{
 #'  \item{"basic"}{The default, uses the basic Park Tiles map, similar to the maps found in park brochures.}
@@ -20,12 +22,13 @@
 #'  \describe{
 #'    \item{"quantile"}{Divides the data into the number of groups indicated in \code{colorgroups} based on quantiles of the data. An approximately equal number of plots will be in each group.  Each group will be given a different color.}
 #'    \item{"bin"}{Divides the data into groups based on the \code{cut} function. Like the "quantile" option in divides the plots into groups, but in this case each group should cover an approximately equal range in values of the data. Alternatively if \code{colorgroups} is a vector rather than a single number, the elements of the vector will be the cut points separating the groups to be mapped.}
-#'    \item{"numeric"}{Colors the plots based on a smooth color ramp, rather than dividing into groups.}
+#'    \item{"numeric"}{Colors the plots based on amp smooth color ramp, rather than dividing into groups.}
 #'    \item{"factor}{Used when \code{values} are categorical data.}
 #'  }
 #' @param colors  A character vector of one or more colors for the plots on the map. See discussion below.
+#' @param title  A character vector to be used as the lengend title. 
 #' 
-#' @details  This function is serves as a wrapper for the leaflet package. It quickly creates a map by plotting the locations of the plots on the ParkTiles base map from the NPS. 
+#' @details  This function is serves as a wrapper for the leaflet package. It quickly creates a map by plotting the locations of the points on the ParkTiles base map from the NPS. 
 #' 
 #' Several option exist for coloring the plots based on the \code{colorNumeric}, \code{colorBin}, \code{colorQuantile}, and \code{colorFactor} functions in leaflet.
 #' 
@@ -44,20 +47,20 @@
 #' @export
 
 setGeneric(name="mapBirds",function(object,points,values, maptype="basic", colorgroups=8,radius=30,opacity=1,colortype="quantile",
-                                     colors=c("cyan","magenta4","orangered3"),...){standardGeneric("mapBirds")}, signature="object")
+                                     colors=c("cyan","magenta4","orangered3"),title=deparse(substitute(values)),...){standardGeneric("mapBirds")}, signature="object")
 
 setMethod(f="mapBirds", signature=c(object="list"),
-          function(object,points,values,maptype,colorgroups,radius,opacity,colortype,colors,...){
-            TempPark<-make(object,ParkCode="TEMPOBJ", ShortName="TempObj",LongName="Temp park for SiteXSpec", Network="SiteSpec")
+          function(object,points,values,maptype,colorgroups,radius,opacity,colortype,colors,title,...){
+            TempPark<-makeNCRNbirds(object,ParkCode="TEMPOBJ", ShortName="TempObj",LongName="Temp park Map", Network="TempMap")
             return(mapBirds(object=TempPark, points=points,values=values,maptype=maptype, colorgroups=colorgroups,radius=radius,
-                             opacity=opacity,colortype=colortype,colors=colors,...))
+                             opacity=opacity,colortype=colortype,colors=colors,title=title...))
           })
 
 
 setMethod(f="mapBirds", signature=c(object="NCRNbirds"),
           function(object,points,values,...){
             
-            ColRamp<-colorRampPalette(colors)
+            #ColRamp<-colorRampPalette(colors)
             
             BaseMap<-switch(maptype,
                             basic="//{s}.tiles.mapbox.com/v4/nps.2yxv8n84,nps.jhd2e8lb/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnBzIiwiYSI6IkdfeS1OY1UifQ.K8Qn5ojTw4RV1GwBlsci-Q",
@@ -66,16 +69,16 @@ setMethod(f="mapBirds", signature=c(object="NCRNbirds"),
             )
             
             MapCol<-switch(colortype,
-                           quantile=colorQuantile(palette=ColRamp(colorgroups),n=colorgroups,domain=values),
-                           bin=colorBin(palette=ColRamp(ifelse(length(colorgroups)==1,colorgroups,length(colorgroups)-1) ),
-                                        bins=colorgroups,domain=c(min(values),max(values))),
-                           numeric=colorNumeric(palette=ColRamp(length(values)),domain=c(min(values),max(values) )),
-                           factor=colorFactor(palette=ColRamp(length(unique(values))),domain=values  )
+                           quantile=colorQuantile(palette=colors, n=colorgroups,domain=values),
+                           bin=colorBin(palette=colors,bins=colorgroups,domain=values),
+                           numeric=colorNumeric(palette=colors,domain=values),
+                           factor=colorFactor(palette=colors,domain=values)
             )
             
-            ForMap<-leaflet() %>%
+            BirdMap<-leaflet() %>%
               addTiles(urlTemplate=BaseMap) 
-            ForMap%>%
+            BirdMap%>%
               addCircles(data=getPoints(object=object,points=points), color=MapCol(values), fillColor=MapCol(values), radius=radius,
-                         opacity=opacity, fillOpacity=opacity, popup=paste(points,":",as.character(values)))
+                        opacity=opacity, fillOpacity=opacity, popup=paste(points,":",as.character(values))) %>%
+              addLegend(pal=MapCol, values=values,title=title)
           })

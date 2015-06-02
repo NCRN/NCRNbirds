@@ -1,7 +1,7 @@
 Package: NCRNbirds
 Type: Package
 Title: Data analysis and visualzation for NCRN bird monitoring.
-Version: 0.1.0
+Version: 0.1.1
 Date: 2015-06-01
 Author: John Paul Schmit
 Maintainer: John Paul Schmit <john_schmit@nps.gov>
@@ -13,10 +13,11 @@ LazyData: true
 Depends:
     R (>= 3.1.2)
 Imports:
-    dplyr(>= 0.4.1),
     lubridate(>= 1.3.3),
+    dplyr(>= 0.4.1),
     tidyr(>= 0.2.0),
-    unmarked(>= 0.10-6)
+    unmarked(>= 0.10-6),
+    leaflet(>= 0.0.16)
 Collate:
     'NCRNbirds_Class_def.R'
     'getVisits.R'
@@ -25,5 +26,6 @@ Collate:
     'getChecklist.R'
     'getPoints.R'
     'importNCRNbirds.R'
+    'makeNCRNbirds.R'
     'mapBirds.R'
     'nmixBirds.R'

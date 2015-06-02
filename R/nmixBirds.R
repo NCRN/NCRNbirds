@@ -1,3 +1,5 @@
+#' @include NCRNbirds_Class_def.R CountXVisit.R
+#' 
 #' @title nmixBirds
 #' 
 #' @description Peforms trend analysis on bird data using N-mixture models (Royal 2004) form the unmarked package.
@@ -28,8 +30,6 @@
 #' @references Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated counts using binomail mixutre models. Ecological Applications. 15: 1450-1461. 
 #' @references Royle, J. A.  2004. N-Mixture models for estimating population size from spatially replicated counts. Biometrics 60: 108-115.
 #' 
-#' @include NCRNbirds_Class_def.R
-#' @include CountXVisit
 #' @export
 
 

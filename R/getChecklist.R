@@ -1,3 +1,5 @@
+#' @include NCRNbirds_Class_def.R getBirds.R
+#' 
 #' @title getChecklist
 #' 
 #' @description Returns a checklist of birds found based on the  \code{Birds} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
@@ -9,9 +11,6 @@
 #' 
 #'  @details This function returns AOU codes frome either a single \code{NCRNbirds} object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object. 
 #'  
-#'  
-#'  @include NCRNbirds_Class_def.R
-#'  @include getBirds.R
 #'  @export
 
 

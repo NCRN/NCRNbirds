@@ -6,12 +6,14 @@
 \usage{
 mapBirds(object, points, values, maptype = "basic", colorgroups = 8,
   radius = 30, opacity = 1, colortype = "quantile", colors = c("cyan",
-  "magenta4", "orangered3"), ...)
+  "magenta4", "orangered3"), title = deparse(substitute(values)), ...)
 }
 \arguments{
-\item{object}{Either an object of class \code{NPSForVeg} or a list of such objects}
+\item{object}{Either an object of class \code{NCRNbirds} or a list of such objects}
 
-\item{values}{A vector of values to map. Can be either numberical data or categories.}
+\item{points}{A character vector of plot names.}
+
+\item{values}{A vector of values to map. Can be either numerical data or categories.}
 
 \item{maptype}{The type of base map to be used. Options are:
  \describe{
@@ -30,19 +32,19 @@ mapBirds(object, points, values, maptype = "basic", colorgroups = 8,
 \describe{
   \item{"quantile"}{Divides the data into the number of groups indicated in \code{colorgroups} based on quantiles of the data. An approximately equal number of plots will be in each group.  Each group will be given a different color.}
   \item{"bin"}{Divides the data into groups based on the \code{cut} function. Like the "quantile" option in divides the plots into groups, but in this case each group should cover an approximately equal range in values of the data. Alternatively if \code{colorgroups} is a vector rather than a single number, the elements of the vector will be the cut points separating the groups to be mapped.}
-  \item{"numeric"}{Colors the plots based on a smooth color ramp, rather than dividing into groups.}
+  \item{"numeric"}{Colors the plots based on amp smooth color ramp, rather than dividing into groups.}
   \item{"factor}{Used when \code{values} are categorical data.}
 }}
 
 \item{colors}{A character vector of one or more colors for the plots on the map. See discussion below.}
 
-\item{plots}{A character vector of plot names.}
+\item{title}{A character vector to be used as the lengend title.}
 }
 \description{
-Produces an html map from a vector of plot names and a vector of corresponding values.
+Produces an html map from a vector of point names and a vector of corresponding values.
 }
 \details{
-This function is serves as a wrapper for the leaflet package. It quickly creates a map by plotting the locations of the plots on the ParkTiles base map from the NPS.
+This function is serves as a wrapper for the leaflet package. It quickly creates a map by plotting the locations of the points on the ParkTiles base map from the NPS.
 
 Several option exist for coloring the plots based on the \code{colorNumeric}, \code{colorBin}, \code{colorQuantile}, and \code{colorFactor} functions in leaflet.
 
