@@ -2,7 +2,8 @@
 #' 
 #' @title mapBirds
 #' 
-#' @import leaflet
+#' @importFrom leaflet addCircles addLegend addTiles leaflet colorBin colorFactor colorNumeric colorQuantile leaflet
+#' @importFrom magrittr %>%
 #' 
 #' @description Produces an html map from a vector of point names and a vector of corresponding values.
 #' 
@@ -53,14 +54,12 @@ setMethod(f="mapBirds", signature=c(object="list"),
           function(object,points,values,maptype,colorgroups,radius,opacity,colortype,colors,title,...){
             TempPark<-makeNCRNbirds(object,ParkCode="TEMPOBJ", ShortName="TempObj",LongName="Temp park Map", Network="TempMap")
             return(mapBirds(object=TempPark, points=points,values=values,maptype=maptype, colorgroups=colorgroups,radius=radius,
-                             opacity=opacity,colortype=colortype,colors=colors,title=title...))
+                             opacity=opacity,colortype=colortype,colors=colors,title=title,...))
           })
 
 
 setMethod(f="mapBirds", signature=c(object="NCRNbirds"),
           function(object,points,values,...){
-            
-            #ColRamp<-colorRampPalette(colors)
             
             BaseMap<-switch(maptype,
                             basic="//{s}.tiles.mapbox.com/v4/nps.2yxv8n84,nps.jhd2e8lb/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnBzIiwiYSI6IkdfeS1OY1UifQ.K8Qn5ojTw4RV1GwBlsci-Q",

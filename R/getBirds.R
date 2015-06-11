@@ -2,6 +2,9 @@
 #' 
 #' @title getBirds
 #' 
+#' @importFrom dplyr filter
+#' @importFrom magrittr %>%
+#' 
 #' @description Returns bird monitoring data from the \code{Birds} slot of an \code{NCRNbirds} object. 
 #' 
 #' @param object An NCRNbirds object or a list of such objects.
@@ -36,15 +39,15 @@ setMethod(f="getBirds", signature=c(object="NCRNbirds"),
           function(object,points,AOU,years,min.count,max.count,band,interval,double,output){
             XBirds<-object@Birds
   
-            if(!anyNA(points)) XBirds<-XBirds[XBirds$Plot_Name %in% points,]
-            if(!anyNA(AOU)) XBirds<-XBirds[XBirds$AOU_Code %in% AOU,]
-            if(!anyNA(years)) XBirds<-XBirds[XBirds$Year %in% years,]
-            if(!anyNA(min.count)) XBirds<-XBirds[XBirds$Bird_Count >=min.count,]  
-            if(!anyNA(max.count)) XBirds<-XBirds[XBirds$Bird_Count <=max.count,]  
-            if(!anyNA(band)) XBirds<-XBirds[XBirds$Distance_id %in% band,]  
-            if(!anyNA(interval)) XBirds<-XBirds[XBirds$Interval %in% interval,]
-            if(double)Xbirds<-XBirds[XBirds$Plot_Name %in% unique(getVisits(object=object,
-                                                                years=years,points=points,visit=c(1,2))$Plot_Name), ]
+            if(!is.na(points)) XBirds<-XBirds %>% filter(Plot_Name %in% points)
+            if(!is.na(AOU)) XBirds<-XBirds %>% filter (AOU_Code %in% AOU)
+            if(!is.na(years)) XBirds<-XBirds %>% filter(Year %in% years)
+            if(!is.na(min.count)) XBirds<-XBirds %>% filter(Bird_Count >= min.count)  
+            if(!is.na(max.count)) XBirds<-XBirds %>% filter(Bird_Count <= max.count)
+            if(!is.na(band)) XBirds<-XBirds %>% filter(Distance_id %in% band)  
+            if(!is.na(interval)) XBirds<-XBirds %>%  filter(Interval %in% interval)
+            #if(double)Xbirds<-XBirds[XBirds$Plot_Name %in% unique(getVisits(object=object,
+            #                                                    years=years,points=points,visit=c(1,2))$Plot_Name), ]
 
             return(XBirds)
             

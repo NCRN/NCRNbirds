@@ -2,7 +2,7 @@
 #'  
 #' @title getPoints
 #' 
-#' @import dplyr
+#' @importFrom  dplyr group_by filter mutate select tbl_df
 #' 
 #' 
 #' @description Returns the contents of the \code{Points} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.

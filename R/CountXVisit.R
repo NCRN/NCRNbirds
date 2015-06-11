@@ -4,8 +4,10 @@
 #' 
 #' @description Produces a Count X Visit matrix for use in analyses
 #' 
-#' @import tidyr 
-#' @import dplyr
+#' @importFrom dplyr group_by left_join mutate select summarize
+#' @importFrom magrittr %>%
+#' @importFrom tidyr spread 
+#' 
 #' 
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
 #' @param points A character vector. The names of one or more points where the data was collected.

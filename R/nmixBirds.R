@@ -4,10 +4,9 @@
 #' 
 #' @description Peforms trend analysis on bird data using N-mixture models (Royal 2004) form the unmarked package.
 #' 
-#' @import unmarked
-#' @import tidyr 
-#' @import dplyr
-#'  
+#' @importFrom dplyr select
+#' @importFrom  unmarked pcount unmarkedFramePCount
+#'
 #' @param object An NCRNbirds object or a list of such objects.
 #' 
 #' @param points A character vector. The names of one or more points where the data was collected.

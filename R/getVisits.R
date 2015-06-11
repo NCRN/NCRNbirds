@@ -4,6 +4,8 @@
 #' 
 #' @description Returns the contents of the \code{Visits} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
 #' 
+#' @importFrom dplyr filter group_by mutate select tbl_df
+#' 
 #' @param object An \code{NCRNbirds} object or a list of such objects.
 #' @param points A character vector or point names. Only visits to these points will be returned.
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
