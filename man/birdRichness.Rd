@@ -16,7 +16,7 @@ birdRichness(object, points = NA, AOU = NA, years = NA,
 
 \item{years}{A vector of numbers passed to \code{\link{getBirds}}. \code{NA} (the default) will count species regardless of the year they were monitored, otherwise only data from years listed in \code{years} will be used.}
 
-\item{output}{Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, when \code{object} is a \code{list}. "Total" will give the number of distinct species found across all parks. "List" will return a list, with each entry to the list corresponding to the species richness of one of the \code{NCRNbirds} objects in the input list.}
+\item{output}{Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. "List" will return a list, with each entry to the list corresponding to the species richness of one of the \code{NCRNbirds} objects in the input list.}
 
 \item{...}{addtional arguments passed to \code{\link{getBirds}}. Any argument which is a valid argument for \code{\link{getBirds}} can be used here.}
 }
