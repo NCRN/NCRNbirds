@@ -1,7 +1,7 @@
 Package: NCRNbirds
 Type: Package
 Title: Data analysis and visualzation for NCRN bird monitoring.
-Version: 0.1.2
+Version: 0.1.3
 Date: 2015-06-11
 Author: John Paul Schmit
 Maintainer: John Paul Schmit <john_schmit@nps.gov>

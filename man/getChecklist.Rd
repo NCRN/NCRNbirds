@@ -4,7 +4,7 @@
 \alias{getChecklist}
 \title{getChecklist}
 \usage{
-getChecklist(object, years = NA, points = NA, output = "dataframe")
+getChecklist(object, years = NA, points = NA, output = "dataframe", ...)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
@@ -14,6 +14,8 @@ getChecklist(object, years = NA, points = NA, output = "dataframe")
 \item{points}{A character vector. The names of one or more points where the data was collected.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
+
+\item{...}{Other options passed onto \code{\link{getBirds}}. Any valid option for \code{getBirds}, such as \code{bands}, \code{min.count} etc. can be added to further specify which data should be considered in making the checklist.}
 }
 \description{
 Returns a checklist of birds found based on the  \code{Birds} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
