@@ -13,13 +13,13 @@
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
 #' @param years  A vector of number. will return only data from the indicated years.
-#' @param times  A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{Date} column.
+#' @param times  A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.
 #' @param band. A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
 #' @param visits, The visits that will be used for the matrix. Defautls to \code{c(1,2)}.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' @param ... Additional arguments passed to \code{getBirds}
 #' 
-#' @details This produces a Count X Visit matrix for a \code{NPSbirds} object or a \code{list} of such objects. Each row of the matrix will correspond to a differnet plot in a differnt year. The columns of the matrix will be the park code, the point name, the year visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their abundaces will be totaled. 
+#' @details This produces a Count X Visit matrix for a \code{NPSbirds} object or a \code{list} of such objects. Each row of the matrix will correspond to a different pointt in a different year. The columns of the matrix will be the park code, the point name, the year visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their abundances will be totaled. 
 #' 
 #' @export
 
@@ -49,7 +49,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             
             VisitMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits) %>%
               mutate(Visit=paste0("Visit",Visit),Visited=1) %>%
-              dplyr::select(Admin_Unit_Code,Plot_Name,Year,Visit,Visited) %>%
+              dplyr::select(Admin_Unit_Code,Point_Name,Year,Visit,Visited) %>%
               spread(key=Visit, value=Visited)
             
             ## This makes a matrix that has the value of the count for each visit, summed across all intervals. If there is no 
@@ -58,9 +58,9 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             
             CountMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits)%>%
               mutate(Visit=paste0("Visit",Visit)) %>%
-              dplyr::select(Admin_Unit_Code,Plot_Name,Date,Visit,Year) %>%
+              dplyr::select(Admin_Unit_Code,Point_Name,EventDate,Visit,Year) %>%
               left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
-              group_by(Admin_Unit_Code,Plot_Name, Year, Visit) %>%
+              group_by(Admin_Unit_Code,Point_Name, Year, Visit) %>%
               summarize(Counts=sum(Bird_Count)) %>%
               spread(key=Visit,value=Counts,fill=0) 
               

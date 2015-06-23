@@ -57,7 +57,7 @@ setMethod(f="nmixBirds", signature=c(object="NCRNbirds"),
                                       band=band, visits=visits,...)
             
             UnmarkedData<-unmarkedFramePCount(y=VisitMat[4:ncol(VisitMat)], 
-                                              siteCovs=as.data.frame((dplyr::select(VisitMat,Year,Admin_Unit_Code,Plot_Name))))
+                                              siteCovs=as.data.frame((dplyr::select(VisitMat,Year,Admin_Unit_Code,Point_Name))))
               
             
             #if only 1 year, then no predictors, otherwise, use  year for trends            

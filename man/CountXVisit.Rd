@@ -16,7 +16,7 @@ CountXVisit(object, points = NA, AOU = NA, years = NA, times = NA,
 
 \item{years}{A vector of number. will return only data from the indicated years.}
 
-\item{times}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{Date} column.}
+\item{times}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.}
 
 \item{visits,}{The visits that will be used for the matrix. Defautls to \code{c(1,2)}.}
 
@@ -30,6 +30,6 @@ CountXVisit(object, points = NA, AOU = NA, years = NA, times = NA,
 Produces a Count X Visit matrix for use in analyses
 }
 \details{
-This produces a Count X Visit matrix for a \code{NPSbirds} object or a \code{list} of such objects. Each row of the matrix will correspond to a differnet plot in a differnt year. The columns of the matrix will be the park code, the point name, the year visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their abundaces will be totaled.
+This produces a Count X Visit matrix for a \code{NPSbirds} object or a \code{list} of such objects. Each row of the matrix will correspond to a different pointt in a different year. The columns of the matrix will be the park code, the point name, the year visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their abundances will be totaled.
 }
 

@@ -11,7 +11,7 @@
 #' @param Network  The network code for the new \code{NCRNbirds} object
 #' @param points An optional charcter vector with point names. When specificied, only data from the given poits will be included in the new \code{NCRNbirds} Object.
 #' 
-#' @details This function creates new \code{NCRNbirds} objects by combining two or more previously existing objects and/or by subsetting exisitng objects. If more than one object is provided then the data for these objects is combined. Providing a \code{points} argument will indicate which plots are in the new object. The user must indicate the new network code, park code and park names. 
+#' @details This function creates new \code{NCRNbirds} objects by combining two or more previously existing objects and/or by subsetting exisitng objects. If more than one object is provided then the data for these objects is combined. Providing a \code{points} argument will indicate which points are in the new object. The user must indicate the new network code, park code and park names. 
 #' 
 #' @export
 

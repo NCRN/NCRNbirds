@@ -21,13 +21,13 @@ importNCRNbirds<-function(Dir){
   InPoints<-read.csv("Points.csv",as.is=T, header=T)
  
   InVisits<-read.csv("Visits.csv",as.is=T, header=T)
-  InVisits$Date<-as.Date(as.character(InVisits$Date), format="%m/%d/%Y")
-  InVisits$Year<-year(InVisits$Date)
+  InVisits$EventDate<-as.Date(as.character(InVisits$EventDate), format="%m/%d/%Y")
+  InVisits$Year<-year(InVisits$EventDate)
   
   
   InFieldData<-read.csv("FieldData.csv",as.is=T, header=T)
-  InFieldData$Date<-as.Date(as.character(InFieldData$Date), format="%m/%d/%Y")
-  InFieldData$Year<-year(InFieldData$Date)
+  InFieldData$EventDate<-as.Date(as.character(InFieldData$EventDate), format="%m/%d/%Y")
+  InFieldData$Year<-year(InFieldData$EventDate)
 
   
   ANTI<-new("NCRNbirds", 

@@ -39,15 +39,15 @@ setMethod(f="getBirds", signature=c(object="NCRNbirds"),
           function(object,points,AOU,years,min.count,max.count,band,interval,double,output){
             XBirds<-object@Birds
   
-            if(!anyNA(points)) XBirds<-XBirds %>% filter(Plot_Name %in% points)
+            if(!anyNA(points)) XBirds<-XBirds %>% filter(Point_Name %in% points)
             if(!anyNA(AOU)) XBirds<-XBirds %>% filter (AOU_Code %in% AOU)
             if(!anyNA(years)) XBirds<-XBirds %>% filter(Year %in% years)
             if(!anyNA(min.count)) XBirds<-XBirds %>% filter(Bird_Count >= min.count)  
             if(!anyNA(max.count)) XBirds<-XBirds %>% filter(Bird_Count <= max.count)
             if(!anyNA(band)) XBirds<-XBirds %>% filter(Distance_id %in% band)  
             if(!anyNA(interval)) XBirds<-XBirds %>%  filter(Interval %in% interval)
-            #if(double)Xbirds<-XBirds[XBirds$Plot_Name %in% unique(getVisits(object=object,
-            #                                                    years=years,points=points,visit=c(1,2))$Plot_Name), ]
+            #if(double)Xbirds<-XBirds[XBirds$Point_Name %in% unique(getVisits(object=object,
+            #                                                    years=years,points=points,visit=c(1,2))$Point_Name), ]
 
             return(XBirds)
             

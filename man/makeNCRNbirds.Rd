@@ -24,6 +24,6 @@ makeNCRNbirds(object, ParkCode, ShortName, LongName, Network, points = NA,
 makes a new \code{NCRNbirds} object from one or more existing objects
 }
 \details{
-This function creates new \code{NCRNbirds} objects by combining two or more previously existing objects and/or by subsetting exisitng objects. If more than one object is provided then the data for these objects is combined. Providing a \code{points} argument will indicate which plots are in the new object. The user must indicate the new network code, park code and park names.
+This function creates new \code{NCRNbirds} objects by combining two or more previously existing objects and/or by subsetting exisitng objects. If more than one object is provided then the data for these objects is combined. Providing a \code{points} argument will indicate which points are in the new object. The user must indicate the new network code, park code and park names.
 }
 

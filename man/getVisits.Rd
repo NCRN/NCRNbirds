@@ -12,7 +12,7 @@ getVisits(object, times = NA, years = NA, points = NA, visits = NA,
 
 \item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{Date} column.}
+\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{EventDate} column.}
 
 \item{points}{A character vector or point names. Only visits to these points will be returned.}
 

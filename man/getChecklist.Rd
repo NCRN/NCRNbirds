@@ -9,7 +9,7 @@ getChecklist(object, years = NA, points = NA, output = "dataframe", ...)
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
 
-\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{Date} column.}
+\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.}
 
 \item{points}{A character vector. The names of one or more points where the data was collected.}
 

@@ -9,7 +9,7 @@
 #' 
 #' @param object An NCRNbirds object or a list of such objects.
 #' @param times A numeric vector of lenght 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
-#' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{Date} column.
+#' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{EventDate} column.
 #'  @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' 
 #'  @details This function returns point data either from a single NCRNbirds object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object. 
@@ -39,19 +39,19 @@ setMethod(f="getPoints", signature=c(object="NCRNbirds"),
         
         if(!anyNA(times))      {
           X<-tbl_df(object@Visits) %>%
-            group_by(Plot_Name) %>%
+            group_by(Point_Name) %>%
             mutate(Times=length(unique(Year))) %>%
             filter(Times>=times) %>%
-            dplyr::select(Plot_Name) %>%
+            dplyr::select(Point_Name) %>%
             unique
-          XPoints<-XPoints[XPoints$Plot_Name %in% X$Plot_Name,]
+          XPoints<-XPoints[XPoints$Point_Name %in% X$Point_Name,]
           
         }
         
-        if(!anyNA(years))XPoints<-XPoints[XPoints$Plot_Name %in% object@Visits$Plot_Name[object@Visits$Year %in% years],]
+        if(!anyNA(years))XPoints<-XPoints[XPoints$Point_Name %in% object@Visits$Point_Name[object@Visits$Year %in% years],]
         
         #########################
-        if(!anyNA(points)) XPoints<-XPoints[XPoints$Plot_Name %in% points,]
+        if(!anyNA(points)) XPoints<-XPoints[XPoints$Point_Name %in% points,]
         
         
         return(XPoints)
