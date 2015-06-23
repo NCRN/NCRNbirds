@@ -1,8 +1,8 @@
 #' @include NCRNbirds_Class_def.R getVisits.R getBirds.R 
 #' 
-#' @title CountXVisit
+#' @title BCI
 #' 
-#' @description Produces a Count X Visit matrix for use in analyses
+#' @description Calcualtes the Bird Conservation Index (BCI)
 #' 
 #' @importFrom dplyr group_by left_join mutate select summarize
 #' @importFrom magrittr %>%
@@ -27,11 +27,11 @@
 ########################
 
 
-setGeneric(name="CountXVisit",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")
+setGeneric(name="BCI",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),output="dataframe",...){standardGeneric("BCI")}, signature="object")
 
 
 
-setMethod(f="CountXVisit", signature=c(object="list"),
+setMethod(f="BCI", signature=c(object="list"),
           function(object, points, AOU, years, band, visits, output,...) {
             OutMat<-lapply(X=object, FUN=CountXVisit, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,...)
             switch(output,
@@ -41,7 +41,7 @@ setMethod(f="CountXVisit", signature=c(object="list"),
           })
 
 
-setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
+setMethod(f="BCI", signature=c(object="NCRNbirds"),
           function(object,points,AOU,years,band,visits,output,...){
             
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only

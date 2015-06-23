@@ -9,6 +9,7 @@
 #' @slot Points A \code{data.frame} with information on the mointoring points, such as names and lat/long.
 #' @slot Visits A \code{data.frame} with information on each sampling visit.
 #' @slot Birds  A \code{data.frame} with the bird monitoring data. 
+#' @slot Species A \code{data.frame} with meta-data about the bird species, including AOU Code, Latin and common names, as well as guild assignments for the BCI calculations.
 #' 
 #' @exportClass NCRNbirds
 
@@ -22,6 +23,7 @@ setClass(Class="NCRNbirds",
            
            Points="data.frame",
            Visits="data.frame",
-           Birds="data.frame"
+           Birds="data.frame",
+           Species='data.frame'
            )
 )

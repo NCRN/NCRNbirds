@@ -23,5 +23,7 @@ An S4 class that contains the data from bird monitoring from a set of montoirng 
 \item{\code{Visits}}{A \code{data.frame} with information on each sampling visit.}
 
 \item{\code{Birds}}{A \code{data.frame} with the bird monitoring data.}
+
+\item{\code{Species}}{A \code{data.frame} with meta-data about the bird species, including AOU Code, Latin and common names, as well as guild assignments for the BCI calculations.}
 }}
 

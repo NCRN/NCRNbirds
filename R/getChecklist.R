@@ -5,7 +5,7 @@
 #' @description Returns a checklist of birds found based on the  \code{Birds} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
 #' 
 #' @param object An NCRNbirds object or a list of such objects.
-#' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{Date} column.
+#' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.
 #'  @param points A character vector. The names of one or more points where the data was collected.
 #'  @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #'  @param ... Other options passed onto \code{\link{getBirds}}. Any valid option for \code{getBirds}, such as \code{bands}, \code{min.count} etc. can be added to further specify which data should be considered in making the checklist.

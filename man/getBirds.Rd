@@ -5,8 +5,8 @@
 \title{getBirds}
 \usage{
 getBirds(object, points = NA, AOU = NA, years = NA, min.count = NA,
-  max.count = NA, band = NA, interval = NA, double = TRUE,
-  output = "dataframe")
+  max.count = NA, band = NA, interval = NA, visits = NA, times = NA,
+  reps = NA, output = "dataframe")
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
@@ -22,6 +22,12 @@ getBirds(object, points = NA, AOU = NA, years = NA, min.count = NA,
 \item{max.count}{A numeric vector of length one. Will only return data with a bird count equal to or less than \code{max.count}}
 
 \item{interval}{A numeirc vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.}
+
+\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
+
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
+\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 
