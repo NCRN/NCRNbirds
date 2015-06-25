@@ -13,7 +13,6 @@
 #' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.
 #' @param reps A length 1 numeric vector,d deflatus to NA, Returns only data form points and years where the point has been visited at least \code{reps} times in the year.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
-#' 
 #'  @details This function returns point data either from a single NCRNbirds object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object. 
 #'  
 #'  @export
@@ -42,6 +41,8 @@ setMethod(f="getVisits", signature=c(object="NCRNbirds"),
             
             if(!anyNA(points)) XVisits<-XVisits[XVisits$Point_Name %in% points,]
             
+            if(!anyNA(visits)) XVisits<-XVisits[XVisits$Visit %in% visits,]
+            
             if(!anyNA(times))      {
               X<-tbl_df(object@Visits) %>%
                 group_by(Point_Name) %>%
@@ -62,8 +63,7 @@ setMethod(f="getVisits", signature=c(object="NCRNbirds"),
                 unique
               XVisits<-XVisits %>% semi_join(X, by=c("Point_Name","Year"))
             }
-            
-            if(!anyNA(visits)) XVisits<-XVisits[XVisits$Visit %in% visits,]
+
             
             return(XVisits)
             

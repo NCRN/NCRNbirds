@@ -19,7 +19,7 @@
 #'  
 #'  @export
 
-
+ 
 setGeneric(name="getBirdNames",function(object,names=NA, in.style="AOU", out.style="common"){standardGeneric("getBirdNames")}, signature="object")
 
 

@@ -28,6 +28,7 @@ importNCRNbirds<-function(Dir){
   InFieldData<-read.csv("FieldData.csv",as.is=T, header=T)
   InFieldData$EventDate<-as.Date(as.character(InFieldData$EventDate), format="%m/%d/%Y")
   InFieldData$Year<-year(InFieldData$EventDate)
+
   
   InSpecies<-read.csv("BirdGuildAssignments.csv", as.is=T, header=T )
 
