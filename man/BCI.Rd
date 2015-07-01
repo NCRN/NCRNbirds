@@ -5,7 +5,7 @@
 \title{BCI}
 \usage{
 BCI(object, points = NA, AOU = NA, years = NA, times = NA, band = 1,
-  visits = c(1, 2), output = "dataframe", ...)
+  intervals = NA, visits = NA, reps = NA, output = "dataframe", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}

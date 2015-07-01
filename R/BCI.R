@@ -27,7 +27,7 @@
 ########################
 
 
-setGeneric(name="BCI",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),output="dataframe",...){standardGeneric("BCI")}, signature="object")
+setGeneric(name="BCI",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,intervals=NA, visits=NA,reps=NA,output="dataframe",...){standardGeneric("BCI")}, signature="object")
 
 
 
@@ -43,34 +43,14 @@ setMethod(f="BCI", signature=c(object="list"),
 
 setMethod(f="BCI", signature=c(object="NCRNbirds"),
           function(object,points,AOU,years,band,visits,output,...){
+            XPoints<-getPoints(object=object,years=years)$Point_Name
+            XList<-sapply(X=XPoints, FUN=getChecklist, object=object,years=years)
+            XBCI<-as.data.frame(matrix(nrow=length(XList), ncol=5))
             
-            ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
-            ##  visiting a point once instead of twice)
-            
-            VisitMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits) %>%
-              mutate(Visit=paste0("Visit",Visit),Visited=1) %>%
-              dplyr::select(Admin_Unit_Code,Point_Name,Year,Visit,Visited) %>%
-              spread(key=Visit, value=Visited)
-            
-            ## This makes a matrix that has the value of the count for each visit, summed across all intervals. If there is no 
-            ## data there will be a "0", but this will occur for both missed visits and zero counts.
-
-            
-            CountMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits)%>%
-              mutate(Visit=paste0("Visit",Visit)) %>%
-              dplyr::select(Admin_Unit_Code,Point_Name,EventDate,Visit,Year) %>%
-              left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
-              group_by(Admin_Unit_Code,Point_Name, Year, Visit) %>%
-              summarize(Counts=sum(Bird_Count)) %>%
-              spread(key=Visit,value=Counts,fill=0) 
-              
-            
-            ## Now we need to multiply the Visit1, Visit2 etc. columns from each matrix so that missing visits will get
-            ## NA instead of 0 in the output
-            
-            CountMat[4:ncol(CountMat)]<-CountMat[4:ncol(CountMat)]*VisitMat[4:ncol(CountMat)]
-            return(CountMat)
-            
-            
+            # use the @Species slot to add the guilds to the birds
+            # use mutates to get the numbers
+            # add them up and spit out park, point, year, BCI, category, category codes as a data.frame
+            return(XBCI)
+            ## Multiple years?
           }
 )
