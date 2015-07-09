@@ -2,37 +2,39 @@
 #' 
 #' @title BCI
 #' 
-#' @description Calcualtes the Bird Conservation Index (BCI)
+#' @description Calcualtes the Bird Conmmunity Index (BCI) of O'Connell et al 1998, 2000.
 #' 
 #' @importFrom dplyr mutate rowwise
 #' @importFrom magrittr %>%
 #' 
 #' 
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
+#' @param years  A vector of numbers. Will only return data from the indicated years. It is highly recommeded to only calculate the BCI over a single year's data.
 #' @param points A character vector. The names of one or more points where the data was collected.
-#' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
-#' @param years  A vector of number. will return only data from the indicated years.
-#' @param times  A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.
-#' @param band. A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
-#' @param visits, The visits that will be used for the matrix. Defautls to \code{c(1,2)}.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
-#' @param ... Additional arguments passed to \code{getBirds}
+#' @param ... Additional arguments passed to \code{\link{getChecklist}} and from there to \code{\link{getBirds}}
 #' 
-#' @details This produces a Count X Visit matrix for a \code{NPSbirds} object or a \code{list} of such objects. Each row of the matrix will correspond to a different pointt in a different year. The columns of the matrix will be the park code, the point name, the year visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their abundances will be totaled. 
+#' @return Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species presetn in each guild nand guild type.
 #' 
+#' @details This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well. Typically a single years' data is used for the BCI, so it is recommend (but not strictly requried) that a single year be indicated in the \code{years} argument. The fuction calls \code{\link{getChecklist}} to get a species list of birds for each point.  That function, in turn, call \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds from all distance bands and time intervals will be included in the calcuation.
+#' 
+#' @references O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool for Assessing Biotic Integrity in the Mid-Atlantic Highlands. Final Report prepared for U. S. Environmental Protection Agency, Region III.
+#' 
+#' O'Connell TJ, LE Jackson and RP Brooks. 2000. Bird guilds as indicators of ecological condition in the central Appalachians. Ecological Applications 10:1706-1721.
+#'  
 #' @export
 
 
 ########################
 
 
-setGeneric(name="BCI",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,intervals=NA, visits=NA,reps=NA,output="dataframe",...){standardGeneric("BCI")}, signature="object")
+setGeneric(name="BCI",function(object,years=NA,points=NA,output="dataframe",...){standardGeneric("BCI")}, signature="object")
 
 
 
 setMethod(f="BCI", signature=c(object="list"),
-          function(object, points, AOU, years, band, visits, output,...) {
-            OutMat<-lapply(X=object, FUN=CountXVisit, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,...)
+          function(object, years, points, output,...) {
+            OutMat<-lapply(X=object, FUN=BCI, years=years, points=points,...)
             switch(output,
                    list= return(OutMat),
                    dataframe=return(do.call("rbind",OutMat))
@@ -41,10 +43,12 @@ setMethod(f="BCI", signature=c(object="list"),
 
 
 setMethod(f="BCI", signature=c(object="NCRNbirds"),
-          function(object,points,AOU,years,band,visits,output,...){
+          function(object,years, points,...){
+            
             XPoints<-getPoints(object=object,years=years)$Point_Name
-            XList<-lapply(X=XPoints, FUN=getChecklist, object=object,years=years)
+            XList<-lapply(X=XPoints, FUN=getChecklist, object=object, years=years, ...)
             XGuilds<-getGuilds(object=object)
+            
             XBCI<-data.frame(Point_Name=XPoints)
              XBCI<-XBCI %>% rowwise %>% 
                mutate(ForestGeneralist= sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat=="Forest Generalist",]$AOU_Code),
@@ -114,12 +118,7 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
                       BCI = BCI_Structural + BCI_Funcitonal + BCI_Compostional,
                       BCI_Category=c("Low Integrity", "Meidum Integrity","High Integrity","Highest Integrity")[findInterval(BCI,
                                                                                                                     vec=c(0,40.1,52.1,60.1,77.1))]
-                )
-             
-                 
-             
-            # add them up and spit out park, point, year, BCI, category, category codes as a data.frame
-            return(XBCI)
-            ## Multiple years?
+               )
+            return(as.data.frame(XBCI))
           }
 )

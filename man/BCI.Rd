@@ -4,32 +4,31 @@
 \alias{BCI}
 \title{BCI}
 \usage{
-BCI(object, points = NA, AOU = NA, years = NA, times = NA, band = 1,
-  intervals = NA, visits = NA, reps = NA, output = "dataframe", ...)
+BCI(object, years = NA, points = NA, output = "dataframe", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}
 
+\item{years}{A vector of numbers. Will only return data from the indicated years. It is highly recommeded to only calculate the BCI over a single year's data.}
+
 \item{points}{A character vector. The names of one or more points where the data was collected.}
-
-\item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
-
-\item{years}{A vector of number. will return only data from the indicated years.}
-
-\item{times}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.}
-
-\item{visits,}{The visits that will be used for the matrix. Defautls to \code{c(1,2)}.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 
-\item{...}{Additional arguments passed to \code{getBirds}}
-
-\item{band.}{A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
+\item{...}{Additional arguments passed to \code{\link{getChecklist}} and from there to \code{\link{getBirds}}}
+}
+\value{
+Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species presetn in each guild nand guild type.
 }
 \description{
-Calcualtes the Bird Conservation Index (BCI)
+Calcualtes the Bird Conmmunity Index (BCI) of O'Connell et al 1998, 2000.
 }
 \details{
-This produces a Count X Visit matrix for a \code{NPSbirds} object or a \code{list} of such objects. Each row of the matrix will correspond to a different pointt in a different year. The columns of the matrix will be the park code, the point name, the year visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their abundances will be totaled.
+This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well. Typically a single years' data is used for the BCI, so it is recommend (but not strictly requried) that a single year be indicated in the \code{years} argument. The fuction calls \code{\link{getChecklist}} to get a species list of birds for each point.  That function, in turn, call \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds from all distance bands and time intervals will be included in the calcuation.
+}
+\references{
+O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool for Assessing Biotic Integrity in the Mid-Atlantic Highlands. Final Report prepared for U. S. Environmental Protection Agency, Region III.
+
+O'Connell TJ, LE Jackson and RP Brooks. 2000. Bird guilds as indicators of ecological condition in the central Appalachians. Ecological Applications 10:1706-1721.
 }
 
