@@ -116,7 +116,7 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
                       BCI_Funcitonal=BCI_BarkProber + BCI_GroundGleaner + BCI_CanopyInsectivore + BCI_ShrubInsectivore + BCI_Omnivore,
                       BCI_Compostional=BCI_NestPredator + BCI_Exotic + BCI_Resident + BCI_TemperateMigrant + BCI_SingleBrooded,
                       BCI = BCI_Structural + BCI_Funcitonal + BCI_Compostional,
-                      BCI_Category=c("Low Integrity", "Meidum Integrity","High Integrity","Highest Integrity")[findInterval(BCI,
+                      BCI_Category=c("Low Integrity", "Medium Integrity","High Integrity","Highest Integrity")[findInterval(BCI,
                                                                                                                     vec=c(0,40.1,52.1,60.1,77.1))]
                )
             return(as.data.frame(XBCI))
