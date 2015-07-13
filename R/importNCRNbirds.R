@@ -4,7 +4,7 @@
 #' 
 #' @importFrom lubridate year
 #' 
-#' @description  This function imports data from the standard NCRN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits and FieldData.
+#' @description  This function imports data from the standard NCRN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
 #' 
 #' @param Dir  The directory where the data is found
 #' 
@@ -31,6 +31,8 @@ importNCRNbirds<-function(Dir){
 
   
   InSpecies<-read.csv("BirdGuildAssignments.csv", as.is=T, header=T )
+  
+  setwd(OldDir)
 
   
   ANTI<-new("NCRNbirds", 

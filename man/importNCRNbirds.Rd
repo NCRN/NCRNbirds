@@ -13,6 +13,6 @@ importNCRNbirds(Dir)
 Returns a list of 11 \code{NCRNbirds} objects, one for each park.
 }
 \description{
-This function imports data from the standard NCRN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits and FieldData.
+This function imports data from the standard NCRN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
 }
 
