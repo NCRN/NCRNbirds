@@ -4,7 +4,8 @@
 \alias{getChecklist}
 \title{getChecklist}
 \usage{
-getChecklist(object, years = NA, points = NA, output = "dataframe", ...)
+getChecklist(object, years = NA, points = NA, out.style = "AOU",
+  output = "dataframe", ...)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
@@ -12,6 +13,8 @@ getChecklist(object, years = NA, points = NA, output = "dataframe", ...)
 \item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.}
 
 \item{points}{A character vector. The names of one or more points where the data was collected.}
+
+\item{out.style}{A length 1 character vector. Either "AOU", "Latin", "common". Indicates the type of names to be returned. Defaults to "AOU"}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 

@@ -10,7 +10,7 @@
 #' @param object A \code{NCRNbirds} object or a \code{list} of such objects.
 #' @param names  A character vector containing the names to be translated.
 #' @param in.style A length 1 character vector. Either "AOU", "Latin" or "common".  Indicates the type of name found in the "names" agrument. 
-#' @param out.styels. A length 1 character vector. Either "AOU", "Latin", "common". Indicates the type of names to be returned. Defaults to "common"
+#' @param out.style A length 1 character vector. Either "AOU", "Latin", "common". Indicates the type of names to be returned. Defaults to "common"
 #' # @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' 
 #'  @details This function converts a vector of names between the American Ornitholgoical Union Code (AOU Code), Latin name and scientific name. This is used by various other functions to provide the correct type of name in the output. The data to make these conversion is stored in the \code{Species} solot of a \code{\link{NCRNbirds}} object. 

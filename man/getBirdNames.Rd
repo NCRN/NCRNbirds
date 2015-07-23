@@ -13,7 +13,7 @@ getBirdNames(object, names = NA, in.style = "AOU", out.style = "common")
 
 \item{in.style}{A length 1 character vector. Either "AOU", "Latin" or "common".  Indicates the type of name found in the "names" agrument.}
 
-\item{out.styels.}{A length 1 character vector. Either "AOU", "Latin", "common". Indicates the type of names to be returned. Defaults to "common"
+\item{out.style}{A length 1 character vector. Either "AOU", "Latin", "common". Indicates the type of names to be returned. Defaults to "common"
 #}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
