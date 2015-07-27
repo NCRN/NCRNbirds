@@ -20,7 +20,7 @@ setGeneric(name="getChecklist",function(object, years=NA, points=NA, out.style="
 
 
 setMethod(f="getChecklist", signature=c(object="list"),
-          function(object,years,points,output,...) {
+          function(object,years,points,out.style,output,...) {
             OutList<-lapply(X=object, FUN=getChecklist, years=years, points=points, out.style=out.style,...)
             switch(output,
                    list={return(OutList)},
