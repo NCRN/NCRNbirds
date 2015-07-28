@@ -18,13 +18,13 @@ BCI(object, years = NA, points = NA, output = "dataframe", ...)
 \item{...}{Additional arguments passed to \code{\link{getChecklist}} and from there to \code{\link{getBirds}}}
 }
 \value{
-Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species presetn in each guild nand guild type.
+Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species present in each guild and guild type.
 }
 \description{
 Calcualtes the Bird Conmmunity Index (BCI) of O'Connell et al 1998, 2000.
 }
 \details{
-This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well. Typically a single years' data is used for the BCI, so it is recommend (but not strictly requried) that a single year be indicated in the \code{years} argument. The fuction calls \code{\link{getChecklist}} to get a species list of birds for each point.  That function, in turn, call \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds from all distance bands and time intervals will be included in the calcuation.
+This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well. Typically a single years' data is used for the BCI, so it is recommend (but not strictly requried) that a single year be indicated in the \code{years} argument. The fuction calls \code{\link{getChecklist}} to get a species list of birds for each point.  That function, in turn, calls \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds from all distance bands and time intervals will be included in the calculation.
 }
 \references{
 O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool for Assessing Biotic Integrity in the Mid-Atlantic Highlands. Final Report prepared for U. S. Environmental Protection Agency, Region III.
