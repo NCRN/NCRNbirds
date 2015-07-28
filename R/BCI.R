@@ -47,9 +47,10 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
       
     XPoints<-getPoints(object=object,years=years)$Point_Name
     XList<-lapply(X=XPoints, FUN=getChecklist, object=object, years=years, ...)
+    names(XList)<-XPoints
     XGuilds<-getGuilds(object=object)
             
-    XBCI<-data.frame(Point_Name=getPoints(object=object,years=years)[c("Admin_Unit_Code","Point_Name")])
+    XBCI<-data.frame(getPoints(object=object,years=years)[c("Admin_Unit_Code","Point_Name")])
     XBCI<-XBCI %>% rowwise %>% 
     mutate(ForestGeneralist= sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat=="Forest Generalist",]$AOU_Code),
           InteriorForest=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat=="Interior Forest Obligate",]$AOU_Code),
@@ -73,7 +74,7 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
           SingleBrooded=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Brood.Numbers=="Single Brooded",]$AOU_Code),
           Total=length(XList[[Point_Name]])
     ) 
-    BCI<-XBCI %>% 
+    XBCI<-XBCI %>% 
     mutate(Pro_ForestGeneralist=round(ForestGeneralist/Total,digits=3),
           Pro_InteriorForest=round(InteriorForest/Total,digits=3),
           Pro_ForestGroundNester=round(ForestGroundNester/Total,digits=3),
