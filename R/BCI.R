@@ -54,10 +54,12 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
     XBCI<-XBCI %>% rowwise %>% 
     mutate(ForestGeneralist= sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat=="Forest Generalist",]$AOU_Code),
           InteriorForest=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat=="Interior Forest Obligate",]$AOU_Code),
+          
           ForestGroundNester=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Nest.Placement=="Forest Ground Nester",]$AOU_Code),
           OpenGroundNester=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Nest.Placement=="Open Ground Nester",]$AOU_Code),
           ShrubNester=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Nest.Placement=="Shrub",]$AOU_Code),
           CanopyNester=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Nest.Placement=="Canopy",]$AOU_Code),
+          
           BarkProber=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Foraging.Behavior=="Bark Prober" & 
                                                                   XGuilds$Trophic.Level=="Insectivore",]$AOU_Code),
           GroundGleaner=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Foraging.Behavior=="Ground Gleaner" & 
@@ -66,31 +68,47 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
                                                                   XGuilds$Trophic.Level=="Insectivore",]$AOU_Code),
           ShrubInsectivore=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Foraging.Behavior=="Lower Canopy Forager" & 
                                                                   XGuilds$Trophic.Level=="Insectivore",]$AOU_Code),
+          
           Omnivore=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Trophic.Level=="Omnivore",]$AOU_Code),
+          
           NestPredator=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Pred_Para_Desc=="Yes",]$AOU_Code),
-          Exotic=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Exotic=="Exotic",]$AOU_Code),
+          
+          Exotic=sum(XList[[Point_Name]] %in% XGuilds[XGuilds$Exotic=="Exotic",]$AOU_Code),
+          
           Resident=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Migratory=="Resident",]$AOU_Code),
           TemperateMigrant=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Migratory=="Temperate Migrant",]$AOU_Code),
+          
           SingleBrooded=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Brood.Numbers=="Single Brooded",]$AOU_Code),
+          
+          TotalHabitat=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat!="",]$AOU_Code), #Totals for BCI calc
+          TotalNest=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Nest.Placement!="",]$AOU_Code),
+          TotalForage=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Foraging.Behavior!="" & XGuilds$Trophic.Level!="",]$AOU_Code),
+          TotalTrophic=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Trophic.Level!="",]$AOU_Code),
+          TotalPredPara=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Pred_Para_Desc!="",]$AOU_Code),
+          TotalExotic=sum(XList[[Point_Name]]%in% XGuilds[XGuilds["Exotic"]!="","AOU_Code"]),#$AOU_Code),
+          TotalMigratory=sum(XList[[Point_Name]] %in% XGuilds[XGuilds$Migratory!="",]$AOU_Code),
+
+          TotalBrood=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Brood.Numbers!="",]$AOU_Code),
           Total=length(XList[[Point_Name]])
     ) 
+    
     XBCI<-XBCI %>% 
-    mutate(Pro_ForestGeneralist=round(ForestGeneralist/Total,digits=3),
-          Pro_InteriorForest=round(InteriorForest/Total,digits=3),
-          Pro_ForestGroundNester=round(ForestGroundNester/Total,digits=3),
-          Pro_OpenGroundNester=round(OpenGroundNester/Total,digits=3),
-          Pro_ShrubNester=round(ShrubNester/Total,digits=3),
-          Pro_CanopyNester=round(CanopyNester/Total,digits=3),
-          Pro_BarkProber=round(BarkProber/Total,digits=3),
-          Pro_GroundGleaner=round(GroundGleaner/Total,digits=3),
-          Pro_CanopyInsectivore=round(CanopyInsectivore/Total,digits=3),
-          Pro_ShrubInsectivore=round(ShrubInsectivore/Total,digits=3),
-          Pro_Omnivore=round(Omnivore/Total,digits=3),
-          Pro_NestPredator=round(NestPredator/Total,digits=3),
-          Pro_Exotic=round(Exotic/Total, digits=3),
-          Pro_Resident=round(Resident/Total,digits=3),
-          Pro_TemperateMigrant=round(TemperateMigrant/Total,digits=3),
-          Pro_SingleBrooded=round(SingleBrooded/Total,digits=3)
+    mutate(Pro_ForestGeneralist=round(ForestGeneralist/TotalHabitat,digits=3),
+          Pro_InteriorForest=round(InteriorForest/TotalHabitat,digits=3),
+          Pro_ForestGroundNester=round(ForestGroundNester/TotalNest,digits=3),
+          Pro_OpenGroundNester=round(OpenGroundNester/TotalNest,digits=3),
+          Pro_ShrubNester=round(ShrubNester/TotalNest,digits=3),
+          Pro_CanopyNester=round(CanopyNester/TotalNest,digits=3),
+          Pro_BarkProber=round(BarkProber/TotalForage,digits=3),
+          Pro_GroundGleaner=round(GroundGleaner/TotalForage,digits=3),
+          Pro_CanopyInsectivore=round(CanopyInsectivore/TotalForage,digits=3),
+          Pro_ShrubInsectivore=round(ShrubInsectivore/TotalForage,digits=3),
+          Pro_Omnivore=round(Omnivore/TotalTrophic,digits=3),
+          Pro_NestPredator=round(NestPredator/TotalPredPara,digits=3),
+          Pro_Exotic=round(Exotic/TotalExotic, digits=3),
+          Pro_Resident=round(Resident/TotalMigratory,digits=3),
+          Pro_TemperateMigrant=round(TemperateMigrant/TotalMigratory,digits=3),
+          Pro_SingleBrooded=round(SingleBrooded/TotalBrood,digits=3)
     )
      
    XBCI<-XBCI %>% 
