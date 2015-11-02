@@ -2,7 +2,7 @@
 #' 
 #' @title BCI
 #' 
-#' @description Calcualtes the Bird Conmmunity Index (BCI) of O'Connell et al 1998, 2000.
+#' @description Calculates the Bird Conmmunity Index (BCI) of O'Connell et al 1998, 2000.
 #' 
 #' @importFrom dplyr mutate rowwise
 #' @importFrom magrittr %>%
@@ -16,7 +16,7 @@
 #' 
 #' @return Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species present in each guild and guild type.
 #' 
-#' @details This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well. Typically a single years' data is used for the BCI, so it is recommend (but not strictly requried) that a single year be indicated in the \code{years} argument. The fuction calls \code{\link{getChecklist}} to get a species list of birds for each point.  That function, in turn, calls \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds from all distance bands and time intervals will be included in the calculation.
+#' @details This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well. Typically a single years' data is used for the BCI, so it is recommended (but not strictly requried) that a single year be indicated in the \code{years} argument. The function calls \code{\link{getChecklist}} to get a species list of birds for each point.  That function, in turn, calls \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds from all distance bands and time intervals will be included in the calculation.
 #' 
 #' @references O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool for Assessing Biotic Integrity in the Mid-Atlantic Highlands. Final Report prepared for U. S. Environmental Protection Agency, Region III.
 #' 
@@ -92,6 +92,8 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
           Total=length(XList[[Point_Name]])
     ) 
     
+
+    
     XBCI<-XBCI %>% 
     mutate(Pro_ForestGeneralist=round(ForestGeneralist/TotalHabitat,digits=3),
           Pro_InteriorForest=round(InteriorForest/TotalHabitat,digits=3),
@@ -111,6 +113,8 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
           Pro_SingleBrooded=round(SingleBrooded/TotalBrood,digits=3)
     )
      
+    XBCI[is.na(XBCI)]<-0   #This is for the situation where one of the totals is zero
+    
    XBCI<-XBCI %>% 
    mutate(BCI_ForestGeneralist=c(4.5, 2.5)[findInterval(Pro_ForestGeneralist,vec=c(0, 0.281, 1.001))],
         BCI_InteriorForest=c(1, 1.5, 3, 4, 5)[findInterval(Pro_InteriorForest, vec=c(0,0.011,0.081,0.261,0.431,1.001))],

@@ -11,7 +11,6 @@
 #' @return Returns a list of 11 \code{NCRNbirds} objects, one for each park.
 #' 
 #' @export
-#' 
 
 
 importNCRNbirds<-function(Dir){
