@@ -10,17 +10,20 @@ getChecklist(object, years = NA, points = NA, out.style = "AOU",
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
 
-\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.
- @param points A character vector. The names of one or more points where the data was collected.
-  @param out.style A length 1 character vector. Either "AOU", "Latin", "common". Indicates the type of names to be returned. Defaults to "AOU"
- @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
- @param ... Other options passed onto \code{\link{getBirds}}. Any valid option for \code{getBirds}, such as \code{bands}, \code{min.count} etc. can be added to further specify which data should be considered in making the checklist.
+\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is derived from the information in the \code{EventDate} column.}
 
- @details This function returns AOU codes frome either a single \code{NCRNbirds} object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object. 
- 
- @export}
+\item{points}{A character vector. The names of one or more points where the data was collected.}
+
+\item{out.style}{A length 1 character vector. Either "AOU", "Latin", "common". Indicates the type of names to be returned. Defaults to "AOU"}
+
+\item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
+
+\item{...}{Other options passed onto \code{\link{getBirds}}. Any valid option for \code{getBirds}, such as \code{bands}, \code{min.count} etc. can be added to further specify which data should be considered in making the checklist.}
 }
 \description{
 Returns a checklist of birds found based on the  \code{Birds} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
+}
+\details{
+This function returns AOU codes frome either a single \code{NCRNbirds} object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object.
 }
 

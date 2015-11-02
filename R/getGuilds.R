@@ -22,9 +22,9 @@
 #' }
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function. When a list of \code{NCRNbirds} object is used, and the output is "dataframe" then a each unique conbination of species and guidls will only be listed once in the resulting dataframe. If some species have ifferent guild assingments in the different \code{NCRNbirds} objects in the list, then those species will be listed twice which could have unintended consiquences
 #' 
-#'@details This function returns data on bird guilds from an \code{NPSForVeg} object or a list of such objects. This data is stored in the \code{Species} slot.
+#' @details This function returns data on bird guilds from an \code{NPSForVeg} object or a list of such objects. This data is stored in the \code{Species} slot.
 #'
-#'  @export
+#' @export
 
 
 setGeneric(name="getGuilds",function(object,AOU=NA,categories=NA,output="dataframe"){standardGeneric("getGuilds")}, signature="object")
