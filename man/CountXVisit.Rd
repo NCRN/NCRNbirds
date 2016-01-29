@@ -14,11 +14,11 @@ CountXVisit(object, points = NA, AOU = NA, years = NA, times = NA,
 
 \item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
 
-\item{years}{A vector of number. will return only data from the indicated years.}
+\item{years}{A vector of numbers. will return only data from the indicated years.}
 
 \item{times}{A numeric vector of length 1 passed on to \code{link{getVisits}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{visits, }{The visits that will be used for the matrix. Defautls to \code{c(1,2)}.}
+\item{visits}{The visits that will be used for the matrix. Defautls to \code{c(1,2)}.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 

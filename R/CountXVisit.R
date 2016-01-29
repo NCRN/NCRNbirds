@@ -12,10 +12,10 @@
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
-#' @param years  A vector of number. will return only data from the indicated years.
+#' @param years  A vector of numbers. will return only data from the indicated years.
 #' @param times  A numeric vector of length 1 passed on to \code{link{getVisits}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param band. A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
-#' @param visits, The visits that will be used for the matrix. Defautls to \code{c(1,2)}.
+#' @param visits  The visits that will be used for the matrix. Defautls to \code{c(1,2)}.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' @param ... Additional arguments passed to \code{getBirds}
 #' 
@@ -69,6 +69,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             ## NA instead of 0 in the output
             
             CountMat[4:ncol(CountMat)]<-CountMat[4:ncol(CountMat)]*VisitMat[4:ncol(CountMat)]
+            CountMat<-CountMat %>% ungroup  # to fix errors with dplyr when maniplating grouped tables
             return(CountMat)
             
             
