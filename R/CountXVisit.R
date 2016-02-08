@@ -4,7 +4,7 @@
 #' 
 #' @description Produces a Count X Visit matrix for use in analyses
 #' 
-#' @importFrom dplyr group_by left_join mutate select summarize
+#' @importFrom dplyr group_by left_join mutate select summarize ungroup
 #' @importFrom magrittr %>%
 #' @importFrom tidyr spread 
 #' 
