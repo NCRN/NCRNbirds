@@ -12,7 +12,7 @@
 #' 
 #' @export
 
-#Test
+# This code has been modified for NETN parks
 
 importNCRNbirds<-function(Dir){
   OldDir<-getwd()
@@ -48,27 +48,27 @@ importNCRNbirds<-function(Dir){
             )
   
   
-  CATO<-new("NCRNbirds", 
-            ParkCode="CATO", 
-            ShortName="Catoctin", 
-            LongName="Catoctin Mountain Park", 
-            Network="NCRN", 
+ MABI<-new("NCRNbirds", 
+            ParkCode="MABI", 
+            ShortName="Marsh-Billings", 
+            LongName="Marsh-Billings-Rockefeller National Historical Park", 
+            Network="NETN", 
             
-            Points=InPoints[InPoints$Admin_Unit_Code=="CATO",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="CATO",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="CATO",],
+            Points=InPoints[InPoints$Admin_Unit_Code=="MABI",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="MABI",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="MABI",],
             Species=InSpecies
   )
   
-  CHOH<-new("NCRNbirds", 
-            ParkCode="CHOH", 
-            ShortName="C&O Canal", 
-            LongName="Chesapeake & Ohio Canal National Historical Park", 
-            Network="NCRN", 
+  MIMA<-new("NCRNbirds", 
+            ParkCode="MIMA", 
+            ShortName="Minute Man", 
+            LongName="Minute Man National Historical Park", 
+            Network="NETN", 
             
-            Points=InPoints[InPoints$Admin_Unit_Code=="CHOH",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="CHOH",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="CHOH",],
+            Points=InPoints[InPoints$Admin_Unit_Code=="MIMA",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="MIMA",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="MIMA",],
             Species=InSpecies
   )
   
