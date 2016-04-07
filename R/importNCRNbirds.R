@@ -12,6 +12,7 @@
 #' 
 #' @export
 
+#Test
 
 importNCRNbirds<-function(Dir){
   OldDir<-getwd()
@@ -34,8 +35,8 @@ importNCRNbirds<-function(Dir){
   setwd(OldDir)
 
   
-  ANTI<-new("NCRNbirds", 
-            ParkCode="ANTI", 
+  ACAD<-new("NCRNbirds", 
+            ParkCode="ACAD", 
             ShortName="Antietam", 
             LongName="Antietam National Battlefield", 
             Network="NCRN", 
