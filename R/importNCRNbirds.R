@@ -37,13 +37,13 @@ importNCRNbirds<-function(Dir){
   
   ACAD<-new("NCRNbirds", 
             ParkCode="ACAD", 
-            ShortName="Antietam", 
-            LongName="Antietam National Battlefield", 
-            Network="NCRN", 
+            ShortName="Acadia", 
+            LongName="Acadia National Park", 
+            Network="NETN", 
             
-            Points=InPoints[InPoints$Admin_Unit_Code=="ANTI",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="ANTI",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="ANTI",],
+            Points=InPoints[InPoints$Admin_Unit_Code=="ACAD",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="ACAD",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="ACAD",],
             Species=InSpecies
             )
   
