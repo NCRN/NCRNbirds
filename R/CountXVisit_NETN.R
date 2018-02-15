@@ -1,6 +1,6 @@
 #' @include NCRNbirds_Class_def.R getVisits.R getBirds.R 
 #' 
-#' @title CountXVisit
+#' @title CountXVisit_NETN
 #' 
 #' @description Produces a Count X Visit matrix for use in analyses
 #' 
@@ -27,13 +27,13 @@
 ########################
 
 
-setGeneric(name="CountXVisit",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")
+setGeneric(name="CountXVisit_NETN",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),output="dataframe",...){standardGeneric("CountXVisit_NETN")}, signature="object")
 
 
 
-setMethod(f="CountXVisit", signature=c(object="list"),
+setMethod(f="CountXVisit_NETN", signature=c(object="list"),
           function(object, points, AOU, years, band, visits, output,...) {
-            OutMat<-lapply(X=object, FUN=CountXVisit, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,...)
+            OutMat<-lapply(X=object, FUN=CountXVisit_NETN, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,...)
             switch(output,
                    list= return(OutMat),
                    dataframe=return(do.call("rbind",OutMat))
@@ -41,7 +41,7 @@ setMethod(f="CountXVisit", signature=c(object="list"),
           })
 
 
-setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
+setMethod(f="CountXVisit_NETN", signature=c(object="NCRNbirds"),
           function(object,points,AOU,years,band,visits,output,...){
             
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
