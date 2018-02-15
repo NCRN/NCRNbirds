@@ -32,4 +32,3 @@ Returns the guild data from the \code{Species} slot of an NCRNbirds object. The 
 \details{
 This function returns data on bird guilds from an \code{NPSForVeg} object or a list of such objects. This data is stored in the \code{Species} slot.
 }
-

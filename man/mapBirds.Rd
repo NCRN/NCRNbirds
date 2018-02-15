@@ -58,4 +58,3 @@ factor - This well color the points when \code{values} is categorical data (e.g.
 
 The \code{colors} agrument indicates which colors will be chosen for the points. This is a charcter vector and can either be standard R color names ("blue", "green" etc.) or hexadecimal colors ("#0000FF","008000",etc). If the number of colors is equal to the number of groups that each group will get the corresponding color. If there are fewer colors than groups, than a colorramp will be created using the indicate colors and used for the points. Typically maps made with the \code{"numeric"} option will make use of the color ramp.
 }
-

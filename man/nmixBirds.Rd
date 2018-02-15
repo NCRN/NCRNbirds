@@ -37,4 +37,3 @@ Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated 
 
 Royle, J. A.  2004. N-Mixture models for estimating population size from spatially replicated counts. Biometrics 60: 108-115.
 }
-

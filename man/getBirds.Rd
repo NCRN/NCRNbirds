@@ -38,4 +38,3 @@ Returns bird monitoring data from the \code{Birds} slot of an \code{NCRNbirds} o
 \details{
 Returns the data from the \code{Birds} slot of a single \code{NCNRbirds} object or a \code{list} of such objects. The data can be filtered using the various arguements. he default output is a\code{data.frame}. However, if \code{object} is a \code{list} and \code{output} is "list" then a \code{list} of \code{data.frame}s will be returned.
 }
-
