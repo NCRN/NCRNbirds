@@ -28,4 +28,3 @@ Returns the contents of the \code{Visits} slot of an NCRNbirds object. The retur
 \details{
 This function returns point data either from a single NCRNbirds object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object.
 }
-

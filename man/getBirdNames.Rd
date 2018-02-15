@@ -24,4 +24,3 @@ This function converts a vector of names between the American Ornitholgoical Uni
  
  Currently the \code{list} method simply uses the data from the \code{Species} slot of the first object in the list.
 }
-

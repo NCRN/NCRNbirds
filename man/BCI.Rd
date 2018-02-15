@@ -31,4 +31,3 @@ O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool 
 
 O'Connell TJ, LE Jackson and RP Brooks. 2000. Bird guilds as indicators of ecological condition in the central Appalachians. Ecological Applications 10:1706-1721.
 }
-

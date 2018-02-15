@@ -18,12 +18,13 @@ Imports:
     tidyr(>= 0.2.0),
     unmarked(>= 0.10-6),
     leaflet(>= 0.0.16)
-Collate:
+Collate: 
     'NCRNbirds_Class_def.R'
     'getVisits.R'
     'getBirds.R'
     'BCI.R'
     'CountXVisit.R'
+    'CountXVisit_NETN.R'
     'birdRichness.R'
     'getBirdNames.R'
     'getChecklist.R'
@@ -31,7 +32,8 @@ Collate:
     'getParkNames.R'
     'getPoints.R'
     'importNCRNbirds.R'
+    'importNETNbirds.R'
     'makeNCRNbirds.R'
     'mapBirds.R'
     'nmixBirds.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

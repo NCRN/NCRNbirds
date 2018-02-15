@@ -26,4 +26,3 @@ Returns the number of bird species found in a park, at a point or a collection o
 \details{
 This function calculates the species richness for a park, group of parks, group of monitoring points etc. Species richness is the number of different species found, regardless of their abundance. The function works by first getting the monitoring data by using the \code{\link{getBirds}} function and then counting the number of unique birds found. All of the options for combining or subsetting data in \code{\link{getBirds}} will work for \code{birdRichness} including subsetting by year and monitoring point.
 }
-
