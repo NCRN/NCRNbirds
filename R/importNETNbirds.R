@@ -1,6 +1,6 @@
 #' @include NCRNbirds_Class_def.R
 #' 
-#' @title importNCRNbirds
+#' @title importNETNbirds
 #' 
 #' @importFrom lubridate year
 #' 
@@ -8,49 +8,75 @@
 #' 
 #' @param Dir  The directory where the data is found
 #' 
-#' @return Returns a list of 11 \code{NCRNbirds} objects, one for each park.
+#' @return Returns a list of 12 \code{NCRNbirds} objects, one for each park.
 #' 
 #' @export
 
-# This code has been modified for NETN parks
 
-importNCRNbirds<-function(Dir){
+importNETNbirds<-function(Dir){
   OldDir<-getwd()
   setwd(Dir)  
   
   InPoints<-read.csv("Points.csv",as.is=T, header=T)
- 
+  
   InVisits<-read.csv("Visits.csv",as.is=T, header=T)
-  InVisits$EventDate<-as.Date(as.character(InVisits$EventDate), format="%m/%d/%Y")
+  InVisits$EventDate<-mdy(InVisits$EventDate)
   InVisits$Year<-year(InVisits$EventDate)
+  InVisits$Visit<-as.character(InVisits$Visit)
   
   
   InFieldData<-read.csv("FieldData.csv",as.is=T, header=T)
-  InFieldData$EventDate<-as.Date(as.character(InFieldData$EventDate), format="%m/%d/%Y")
+  InFieldData$EventDate<-mdy(InFieldData$EventDate)
   InFieldData$Year<-year(InFieldData$EventDate)
-
+  
   
   InSpecies<-read.csv("BirdGuildAssignments.csv", as.is=T, header=T )
   
   setwd(OldDir)
-
+  
   
   ACAD<-new("NCRNbirds", 
             ParkCode="ACAD", 
             ShortName="Acadia", 
             LongName="Acadia National Park", 
-            Network="NETN", 
+            Network="NETN",  
             
             Points=InPoints[InPoints$Admin_Unit_Code=="ACAD",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ACAD",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ACAD",],
             Species=InSpecies
-            )
+  )
   
   
- MABI<-new("NCRNbirds", 
+  ELRO<-new("NCRNbirds", 
+            ParkCode="ELRO", 
+            ShortName="Eleanor Roosevelt NHS", 
+            LongName="Eleanor Roosevelt National Historic Site", 
+            Network="NETN", 
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="ELRO",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="ELRO",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="ELRO",],
+            Species=InSpecies
+  )
+  
+  
+  HOFR<-new("NCRNbirds", 
+            ParkCode="HOFR", 
+            ShortName="Home Of Franklin D Roosevelt", 
+            LongName="Home Of Franklin D Roosevelt National Historic Site", 
+            Network="NETN", 
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="HOFR",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="HOFR",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="HOFR",],
+            Species=InSpecies
+  )
+  
+  
+  MABI<-new("NCRNbirds", 
             ParkCode="MABI", 
-            ShortName="Marsh-Billings", 
+            ShortName="Marsh-Billings-Rockefeller", 
             LongName="Marsh-Billings-Rockefeller National Historical Park", 
             Network="NETN", 
             
@@ -72,102 +98,90 @@ importNCRNbirds<-function(Dir){
             Species=InSpecies
   )
   
-  GWMP<-new("NCRNbirds", 
-            ParkCode="GWMP", 
-            ShortName="GW Parkway", 
-            LongName="George Washington Memorial Parkway", 
-            Network="NCRN", 
-             
-            Points=InPoints[InPoints$Admin_Unit_Code=="GWMP",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="GWMP",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="GWMP",],
+  MORR<-new("NCRNbirds", 
+            ParkCode="MORR", 
+            ShortName="Morristown", 
+            LongName="Morristown National Historical Park", 
+            Network="NETN", 
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="MORR",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="MORR",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="MORR",],
             Species=InSpecies
   )
   
-  HAFE<-new("NCRNbirds", 
-            ParkCode="HAFE", 
-            ShortName="Harpers Ferry", 
-            LongName="Harpers Ferry National Histroical Park", 
-            Network="NCRN", 
+  # ROVA<-new("NCRNbirds",
+  #           ParkCode="ROVA",
+  #           ShortName="Roosevelt-Vanderbilt",
+  #           LongName="Roosevelt-Vanderbilt National Historic Sites",
+  #           Network="NETN",
+  # 
+  #           Points=InPoints[InPoints$Admin_Unit_Code=="ROVA",],
+  #           Visits=InVisits[InVisits$Admin_Unit_Code=="ROVA",],
+  #           Birds=InFieldData[InFieldData$Admin_Unit_Code=="ROVA",],
+  #           Species=InSpecies
+  # )
+  # 
+  SAGA<-new("NCRNbirds", 
+            ParkCode="SAGA", 
+            ShortName="Saint-Gaudens", 
+            LongName="Saint-Gaudens National Historic Site", 
+            Network="NETN",
             
-            Points=InPoints[InPoints$Admin_Unit_Code=="HAFE",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="HAFE",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="HAFE",],
+            Points=InPoints[InPoints$Admin_Unit_Code=="SAGA",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="SAGA",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="SAGA",],
+            Species=InSpecies
+  ) 
+  
+  SARA<-new("NCRNbirds", 
+            ParkCode="SARA", 
+            ShortName="Saratoga", 
+            LongName="Saratoga National Historical Park", 
+            Network="NETN",
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="SARA",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="SARA",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="SARA",],
+            Species=InSpecies
+  ) 
+  
+  SAIR<-new("NCRNbirds", 
+            ParkCode="SAIR", 
+            ShortName="Saugus Iron Works", 
+            LongName="Saugus Iron Works National Historic Site", 
+            Network="NETN",
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="SAIR",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="SAIR",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="SAIR",],
+            Species=InSpecies
+  ) 
+  
+  VAMA<-new("NCRNbirds", 
+            ParkCode="VAMA", 
+            ShortName="Vanderbilt Mansion", 
+            LongName="Vanderbilt Mansion National Historic Site", 
+            Network="NETN",
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="VAMA",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="VAMA",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="VAMA",],
             Species=InSpecies
   )
   
-  MANA<-new("NCRNbirds",
-            ParkCode="MANA",
-            ShortName="Manassas",
-            LongName="Manassas National Battlefield Park", 
-            Network="NCRN", 
+  WEFA<-new("NCRNbirds", 
+            ParkCode="WEFA", 
+            ShortName="Weir Farm", 
+            LongName="Weir Farm National Historic Site", 
+            Network="NETN",  
             
-            Points=InPoints[InPoints$Admin_Unit_Code=="MANA",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="MANA",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="MANA",],
+            Points=InPoints[InPoints$Admin_Unit_Code=="WEFA",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="WEFA",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="WEFA",],
             Species=InSpecies
   ) 
   
-  MONO<-new("NCRNbirds",
-            ParkCode="MONO",
-            ShortName="Monocacy",
-            LongName="Monocacy National Battlefield", 
-            Network="NCRN", 
-            
-            Points=InPoints[InPoints$Admin_Unit_Code=="MONO",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="MONO",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="MONO",],
-            Species=InSpecies
-  ) 
   
-  NACE<-new("NCRNbirds",
-            ParkCode="NACE",
-            ShortName="Nat.Cap.Parks - East",
-            LongName="National Captial Parks-East", 
-            Network="NCRN", 
-            
-            Points=InPoints[InPoints$Admin_Unit_Code=="NACE",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="NACE",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="NACE",],
-            Species=InSpecies
-  ) 
-  
-  PRWI<-new("NCRNbirds",
-            ParkCode="PRWI",
-            ShortName="Prince William",
-            LongName="Prince William Forest Park", 
-            Network="NCRN", 
-            
-            Points=InPoints[InPoints$Admin_Unit_Code=="PRWI",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="PRWI",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="PRWI",],
-            Species=InSpecies
-  ) 
-  
-  ROCR<-new("NCRNbirds",
-            ParkCode="ROCR",
-            ShortName="Rock Creek",
-            LongName="Rock Creek Park", 
-            Network="NCRN", 
-            
-            Points=InPoints[InPoints$Admin_Unit_Code=="ROCR",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="ROCR",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="ROCR",],
-            Species=InSpecies
-  ) 
-  
-  WOTR<-new("NCRNbirds",
-            ParkCode="WOTR",
-            ShortName="Wolf Trap",
-            LongName="Wolf Trap National Park for the Performing Arts", 
-            Network="NCRN", 
-            
-            Points=InPoints[InPoints$Admin_Unit_Code=="WOTR",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="WOTR",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="WOTR",],
-            Species=InSpecies
-  )
-  
-  
-  return(c(ANTI,CATO,CHOH,GWMP,HAFE,MANA,MONO,NACE,PRWI,ROCR,WOTR))
+  return(c(ACAD,ELRO,HOFR,MABI,MIMA,MORR,SAGA,SARA,SAIR,VAMA,WEFA))
 }
