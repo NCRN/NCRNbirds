@@ -50,7 +50,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             VisitMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits) %>%
               mutate(Visit=paste0("Visit",Visit),Visited=1) %>%
               dplyr::select(Admin_Unit_Code,Point_Name,Year,Visit,Visited) %>%
-              spread(key=Visit, value=Visited, drop=FALSE)
+              spread(key=Visit, value=Visited)
             
             ## This makes a matrix that has the value of the count for each visit, summed across all intervals. If there is no 
             ## data there will be a "0", but this will occur for both missed visits and zero counts.
@@ -62,7 +62,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
               left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
               group_by(Admin_Unit_Code,Point_Name, Year, Visit) %>%
               summarize(Counts=sum(Bird_Count)) %>%
-              spread(key=Visit,value=Counts,fill=0, drop=FALSE) 
+              spread(key=Visit,value=Counts,fill=0) 
               
             
             ## Now we need to multiply the Visit1, Visit2 etc. columns from each matrix so that missing visits will get
