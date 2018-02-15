@@ -25,7 +25,7 @@
 
 
 ########################
-
+#### TEST FUNCTION TO SEE HOW HANDLES MISSING VISIT OBS FOR CERATIN PARKS AND COMPLILES DF'S
 
 setGeneric(name="CountXVisit_NETN",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),output="dataframe",...){standardGeneric("CountXVisit_NETN")}, signature="object")
 
