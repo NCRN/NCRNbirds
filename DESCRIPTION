@@ -1,12 +1,12 @@
 Package: NCRNbirds
 Type: Package
 Title: Data analysis and visualzation for NCRN bird monitoring.
-Version: 0.1.13
-Date: 2015-11-2
-Author: John Paul Schmit
+Version: 0.1.14
+Date: 2018-2-16
+Author: John Paul Schmit, Aaaron Weed
 Maintainer: John Paul Schmit <john_schmit@nps.gov>
 Description: This pacakge is designed to analyze and visualize data from the
-    National Park Service, National Capital Region Inventory and Monitoring
+    National Park Service, National Capital Region and North East Temperate Inventory and Monitoring
     Network.
 License: Public Domain
 LazyData: true

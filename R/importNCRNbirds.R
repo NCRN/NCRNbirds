@@ -35,40 +35,40 @@ importNCRNbirds<-function(Dir){
   setwd(OldDir)
 
   
-  ACAD<-new("NCRNbirds", 
-            ParkCode="ACAD", 
-            ShortName="Acadia", 
-            LongName="Acadia National Park", 
-            Network="NETN", 
+  ANTI<-new("NCRNbirds", 
+            ParkCode="ANTI", 
+            ShortName="Antietam", 
+            LongName="Antietam National Battlefield", 
+            Network="NCRN", 
             
-            Points=InPoints[InPoints$Admin_Unit_Code=="ACAD",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="ACAD",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="ACAD",],
-            Species=InSpecies
-            )
-  
-  
- MABI<-new("NCRNbirds", 
-            ParkCode="MABI", 
-            ShortName="Marsh-Billings", 
-            LongName="Marsh-Billings-Rockefeller National Historical Park", 
-            Network="NETN", 
-            
-            Points=InPoints[InPoints$Admin_Unit_Code=="MABI",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="MABI",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="MABI",],
+            Points=InPoints[InPoints$Admin_Unit_Code=="ANTI",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="ANTI",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="ANTI",],
             Species=InSpecies
   )
   
-  MIMA<-new("NCRNbirds", 
-            ParkCode="MIMA", 
-            ShortName="Minute Man", 
-            LongName="Minute Man National Historical Park", 
-            Network="NETN", 
+  
+  CATO<-new("NCRNbirds", 
+            ParkCode="CATO", 
+            ShortName="Catoctin", 
+            LongName="Catoctin Mountain Park", 
+            Network="NCRN", 
             
-            Points=InPoints[InPoints$Admin_Unit_Code=="MIMA",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="MIMA",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="MIMA",],
+            Points=InPoints[InPoints$Admin_Unit_Code=="CATO",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="CATO",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="CATO",],
+            Species=InSpecies
+  )
+  
+  CHOH<-new("NCRNbirds", 
+            ParkCode="CHOH", 
+            ShortName="C&O Canal", 
+            LongName="Chesapeake & Ohio Canal National Historical Park", 
+            Network="NCRN", 
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="CHOH",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="CHOH",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="CHOH",],
             Species=InSpecies
   )
   
