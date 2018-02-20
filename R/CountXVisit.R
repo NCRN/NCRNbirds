@@ -4,7 +4,7 @@
 #' 
 #' @description Produces a Count X Visit matrix for use in analyses
 #' 
-#' @importFrom dplyr group_by left_join mutate select summarize ungroup
+#' @importFrom dplyr group_by left_join mutate select summarize ungroup bind_rows
 #' @importFrom magrittr %>%
 #' @importFrom tidyr spread 
 #' 
@@ -36,7 +36,7 @@ setMethod(f="CountXVisit", signature=c(object="list"),
             OutMat<-lapply(X=object, FUN=CountXVisit, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,...)
             switch(output,
                    list= return(OutMat),
-                   dataframe=return(do.call("rbind",OutMat))
+                   dataframe=return(bind_rows(OutMat))
             )
           })
 
