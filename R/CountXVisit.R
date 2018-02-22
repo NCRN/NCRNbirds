@@ -68,7 +68,12 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             ## Now we need to multiply the Visit1, Visit2 etc. columns from each matrix so that missing visits will get
             ## NA instead of 0 in the output
             
-            CountMat[4:ncol(CountMat)]<-CountMat[4:ncol(CountMat)]*VisitMat[4:ncol(CountMat)]
+          
+            if( ncol( CountMat)> 3) {
+              CountMat[4:ncol(CountMat)]<-CountMat[4:ncol(CountMat)]*VisitMat[4:ncol(CountMat)]
+            }
+           
+            
             CountMat<-CountMat %>% ungroup  # to fix errors with dplyr when maniplating grouped tables
             return(CountMat)
             
