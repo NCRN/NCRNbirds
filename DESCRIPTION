@@ -31,6 +31,7 @@ Collate:
     'getParkNames.R'
     'getPoints.R'
     'importERMNbirds.R'
+    'importMIDNbirds.R'
     'importNCRNbirds.R'
     'importNETNbirds.R'
     'makeNCRNbirds.R'
