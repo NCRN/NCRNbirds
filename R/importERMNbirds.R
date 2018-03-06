@@ -2,11 +2,11 @@
 #' 
 #' @title importERMNbirds
 #' 
-#' @importFrom lubridate year
+#' @importFrom lubridate year mdy
 #' 
-#' @description  This function imports data from the standard NCRN.csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
+#' @description  This function imports data from the standard ERMN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
 #' 
-#' @param Dir  The directory where the data are found
+#' @param Dir  The directory where the data are found. You should omit the trailing slash ("/") in the directory name.
 #' 
 #' @return Returns a list of 6 \code{NCRNbirds} objects, one for each park.
 #' 
@@ -17,23 +17,18 @@ importERMNbirds<-function(Dir){
   OldDir<-getwd()
   setwd(Dir)  
   
-  InPoints<-read.csv("Points.csv",as.is=T, header=T)
+  InPoints<-read.csv(paste(Dir,"Points.csv", sep="/"),as.is=T, header=T)
   
-  InVisits<-read.csv("Visits.csv",as.is=T, header=T)
+  InVisits<-read.csv(paste(Dir,"Visits.csv",sep="/"),as.is=T, header=T)
   InVisits$EventDate<-mdy(InVisits$EventDate)
   InVisits$Year<-year(InVisits$EventDate)
   InVisits$Visit<-as.character(InVisits$Visit)
   
-  
-  InFieldData<-read.csv("FieldData.csv",as.is=T, header=T)
+  InFieldData<-read.csv(paste(Dir,"FieldData.csv", sep="/"),as.is=T, header=T)
   InFieldData$EventDate<-mdy(InFieldData$EventDate)
   InFieldData$Year<-year(InFieldData$EventDate)
   
-  
-  InSpecies<-read.csv("BirdGuildAssignments.csv", as.is=T, header=T )
-  
-  setwd(OldDir)
-  
+  InSpecies<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
   
   DEWA<-new("NCRNbirds", 
             ParkCode="DEWA", 

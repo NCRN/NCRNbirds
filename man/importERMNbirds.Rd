@@ -7,11 +7,11 @@
 importERMNbirds(Dir)
 }
 \arguments{
-\item{Dir}{The directory where the data are found}
+\item{Dir}{The directory where the data are found. You should omit the trailing slash ("/") in the directory name.}
 }
 \value{
 Returns a list of 6 \code{NCRNbirds} objects, one for each park.
 }
 \description{
-This function imports data from the standard NCRN.csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
+This function imports data from the standard ERMN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
 }
