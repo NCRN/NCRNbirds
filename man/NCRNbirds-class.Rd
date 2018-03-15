@@ -20,6 +20,8 @@ An S4 class that contains the data from bird monitoring at a set of monitoring p
 
 \item{\code{VisitNumber}}{A \code{numeric} vector of length 1. The number of visits that is typically made to each point. This serves as the default number of visits for other functions.}
 
+\item{\code{Bands}}{A \code{data.frame} with metadata for the distance bands used during monitoring. Includes a name, min distance and max distance for each band.}
+
 \item{\code{Points}}{A \code{data.frame} with metadata for the monitoring points, such as names and lat/long.}
 
 \item{\code{Visits}}{A \code{data.frame} with metadata for each sampling visit.}

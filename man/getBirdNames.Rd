@@ -20,7 +20,7 @@ getBirdNames(object, names = NA, in.style = "AOU", out.style = "common")
 Translates between Latin name, common name and AOU code based on data from the \code{Species} slot.
 }
 \details{
-This function converts a vector of names between the American Ornitholgoical Union Code (AOU Code), Latin name and scientific name. This is used by various other functions to provide the correct type of name in the output. The data to make these conversion is stored in the \code{Species} solot of a \code{\link{NCRNbirds}} object. 
+This function converts a vector of names between the American Ornitholgoical Union Code (AOU Code), Latin name and scientific name. This is used by various other functions to provide the correct type of name in the output. The data to make these conversion is stored in the \code{Species} solot of a \code{NCRNbirds} object. 
  
  Currently the \code{list} method simply uses the data from the \code{Species} slot of the first object in the list.
 }

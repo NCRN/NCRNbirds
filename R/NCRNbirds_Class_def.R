@@ -7,6 +7,7 @@
 #' @slot LongName  A long, formal name for the park. Stored as a length 1 character vector. 
 #' @slot Network The code for the Inventory & Montoirng network (or other network) the park belongs to. Stored as a length 1 character vector. 
 #' @slot VisitNumber A \code{numeric} vector of length 1. The number of visits that is typically made to each point. This serves as the default number of visits for other functions.
+#' @slot Bands A \code{data.frame} with metadata for the distance bands used during monitoring. Includes a name, min distance and max distance for each band.
 #' @slot Points A \code{data.frame} with metadata for the monitoring points, such as names and lat/long.
 #' @slot Visits A \code{data.frame} with metadata for each sampling visit.
 #' @slot Birds  A \code{data.frame} with the bird monitoring data. Each row is an observation of a number of individuals of a particular species at a particular point, visit, time interval and distance band.
@@ -23,6 +24,7 @@ setClass(Class="NCRNbirds",
            Network="character",
            
            VisitNumber="numeric",
+           Bands="data.frame",
            
            Points="data.frame",
            Visits="data.frame",
