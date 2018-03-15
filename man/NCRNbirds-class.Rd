@@ -5,7 +5,7 @@
 \alias{NCRNbirds-class}
 \title{S4 Class Definition for NCRNbirds}
 \description{
-An S4 class that contains the data from bird monitoring at a set of monitoring points. This will typcially be a single park, but it could be any group of plots, including part of a park or a group of parks.
+#' An S4 class that contains the data from bird monitoring at a set of monitoring points. This will typcially be a single park, but it could be any group of plots, including part of a park or a group of parks.
 }
 \section{Slots}{
 
@@ -21,6 +21,8 @@ An S4 class that contains the data from bird monitoring at a set of monitoring p
 \item{\code{VisitNumber}}{A \code{numeric} vector of length 1. The number of visits that is typically made to each point. This serves as the default number of visits for other functions.}
 
 \item{\code{Bands}}{A \code{data.frame} with metadata for the distance bands used during monitoring. Includes a name, min distance and max distance for each band.}
+
+\item{\code{Intervals}}{A \code{data.frame} with mmeatdata for the time intervals used during monitroing. Includes a name start time in minutes and end time in minutes for each interval.}
 
 \item{\code{Points}}{A \code{data.frame} with metadata for the monitoring points, such as names and lat/long.}
 
