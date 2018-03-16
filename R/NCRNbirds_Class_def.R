@@ -26,7 +26,7 @@ setClass(Class="NCRNbirds",
            
            VisitNumber="numeric",
            Bands="data.frame",
-           Intervals="numeric",
+           Intervals="data.frame",
            
            Points="data.frame",
            Visits="data.frame",
@@ -41,7 +41,7 @@ setClass(Class="NCRNbirds",
                         
                         VisitNumber=numeric(),
                         Bands=data.frame(),
-                        Intervals=numeric(),
+                        Intervals=data.frame(),
                         
                         Points=data.frame(),
                         Visits=data.frame(),
