@@ -32,5 +32,20 @@ setClass(Class="NCRNbirds",
            Visits="data.frame",
            Birds="data.frame",
            Species='data.frame'
-           )
+           ),
+         
+         prototype=list(ParkCode=character(),
+                        ShortName=character(),
+                        LongName=character(),
+                        Network=character(),
+                        
+                        VisitNumber=numeric(),
+                        Bands=data.frame(),
+                        Intervals=numeric(),
+                        
+                        Points=data.frame(),
+                        Visits=data.frame(),
+                        Birds=data.frame(),
+                        Species=data.frame()
+        )
 )
