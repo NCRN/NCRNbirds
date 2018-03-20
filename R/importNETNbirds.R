@@ -15,6 +15,10 @@
 
 importNETNbirds<-function(Dir){
   
+  InBands<-read.csv(paste(Dir,"NETNbands.csv", sep="/"),as.is=T, header = T)
+  
+  InIntervals<-read.csv(paste(Dir,"NETNintervals.csv", sep="/"),as.is=T, header = T)
+  
   InPoints<-read.csv(paste(Dir,"Points.csv", sep="/"),as.is=T, header=T)
   
   InVisits<-read.csv(paste(Dir,"Visits.csv",sep="/"),as.is=T, header=T)
@@ -34,6 +38,10 @@ importNETNbirds<-function(Dir){
             LongName="Acadia National Park", 
             Network="NETN",  
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="ACAD",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ACAD",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ACAD",],
@@ -46,6 +54,10 @@ importNETNbirds<-function(Dir){
             ShortName="Eleanor Roosevelt NHS", 
             LongName="Eleanor Roosevelt National Historic Site", 
             Network="NETN", 
+            
+            VisitNumber=1,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="ELRO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ELRO",],
@@ -60,6 +72,10 @@ importNETNbirds<-function(Dir){
             LongName="Home Of Franklin D Roosevelt National Historic Site", 
             Network="NETN", 
             
+            VisitNumber=1,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="HOFR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="HOFR",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="HOFR",],
@@ -73,6 +89,10 @@ importNETNbirds<-function(Dir){
             LongName="Marsh-Billings-Rockefeller National Historical Park", 
             Network="NETN", 
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="MABI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MABI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="MABI",],
@@ -85,6 +105,10 @@ importNETNbirds<-function(Dir){
             LongName="Minute Man National Historical Park", 
             Network="NETN", 
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="MIMA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MIMA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="MIMA",],
@@ -96,6 +120,11 @@ importNETNbirds<-function(Dir){
             ShortName="Morristown", 
             LongName="Morristown National Historical Park", 
             Network="NETN", 
+            
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             
             Points=InPoints[InPoints$Admin_Unit_Code=="MORR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MORR",],
@@ -121,6 +150,10 @@ importNETNbirds<-function(Dir){
             LongName="Saint-Gaudens National Historic Site", 
             Network="NETN",
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="SAGA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="SAGA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="SAGA",],
@@ -133,6 +166,10 @@ importNETNbirds<-function(Dir){
             LongName="Saratoga National Historical Park", 
             Network="NETN",
             
+            VisitNumber=1,
+            Bands=InBands,
+            Intervals=InIntervals,
+          
             Points=InPoints[InPoints$Admin_Unit_Code=="SARA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="SARA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="SARA",],
@@ -144,6 +181,10 @@ importNETNbirds<-function(Dir){
             ShortName="Saugus Iron Works", 
             LongName="Saugus Iron Works National Historic Site", 
             Network="NETN",
+            
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="SAIR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="SAIR",],
@@ -157,6 +198,10 @@ importNETNbirds<-function(Dir){
             LongName="Vanderbilt Mansion National Historic Site", 
             Network="NETN",
             
+            VisitNumber=1,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="VAMA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="VAMA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="VAMA",],
@@ -168,6 +213,10 @@ importNETNbirds<-function(Dir){
             ShortName="Weir Farm", 
             LongName="Weir Farm National Historic Site", 
             Network="NETN",  
+            
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="WEFA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="WEFA",],
