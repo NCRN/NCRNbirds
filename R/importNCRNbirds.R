@@ -15,7 +15,11 @@
 
 
 importNCRNbirds<-function(Dir){
-
+  
+  InBands<-read.csv(paste(Dir,"NCRNbands.csv", sep="/"),as.is=T, header = T)
+  
+  InIntervals<-read.csv(paste(Dir,"NCRNintervals.csv", sep="/"),as.is=T, header = T)
+  
   InPoints<-read.csv(paste(Dir,"Points.csv", sep="/"),as.is=T, header=T)
  
   InVisits<-read.csv(paste(Dir,"Visits.csv",sep="/"),as.is=T, header=T)
@@ -32,7 +36,11 @@ importNCRNbirds<-function(Dir){
             ParkCode="ANTI", 
             ShortName="Antietam", 
             LongName="Antietam National Battlefield", 
-            Network="NCRN", 
+            Network="NCRN",
+            
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="ANTI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ANTI",],
@@ -47,6 +55,10 @@ importNCRNbirds<-function(Dir){
             LongName="Catoctin Mountain Park", 
             Network="NCRN", 
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="CATO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="CATO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="CATO",],
@@ -59,6 +71,10 @@ importNCRNbirds<-function(Dir){
             LongName="Chesapeake & Ohio Canal National Historical Park", 
             Network="NCRN", 
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="CHOH",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="CHOH",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="CHOH",],
@@ -70,6 +86,10 @@ importNCRNbirds<-function(Dir){
             ShortName="GW Parkway", 
             LongName="George Washington Memorial Parkway", 
             Network="NCRN", 
+            
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
              
             Points=InPoints[InPoints$Admin_Unit_Code=="GWMP",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="GWMP",],
@@ -83,6 +103,10 @@ importNCRNbirds<-function(Dir){
             LongName="Harpers Ferry National Histroical Park", 
             Network="NCRN", 
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="HAFE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="HAFE",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="HAFE",],
@@ -94,6 +118,10 @@ importNCRNbirds<-function(Dir){
             ShortName="Manassas",
             LongName="Manassas National Battlefield Park", 
             Network="NCRN", 
+            
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="MANA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MANA",],
@@ -107,6 +135,10 @@ importNCRNbirds<-function(Dir){
             LongName="Monocacy National Battlefield", 
             Network="NCRN", 
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="MONO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MONO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="MONO",],
@@ -118,6 +150,10 @@ importNCRNbirds<-function(Dir){
             ShortName="Nat.Cap.Parks - East",
             LongName="National Captial Parks-East", 
             Network="NCRN", 
+            
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="NACE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="NACE",],
@@ -131,6 +167,10 @@ importNCRNbirds<-function(Dir){
             LongName="Prince William Forest Park", 
             Network="NCRN", 
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="PRWI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="PRWI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="PRWI",],
@@ -143,6 +183,10 @@ importNCRNbirds<-function(Dir){
             LongName="Rock Creek Park", 
             Network="NCRN", 
             
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="ROCR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ROCR",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ROCR",],
@@ -154,6 +198,10 @@ importNCRNbirds<-function(Dir){
             ShortName="Wolf Trap",
             LongName="Wolf Trap National Park for the Performing Arts", 
             Network="NCRN", 
+            
+            VisitNumber=2,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="WOTR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="WOTR",],

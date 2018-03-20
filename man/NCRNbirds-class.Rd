@@ -5,7 +5,7 @@
 \alias{NCRNbirds-class}
 \title{S4 Class Definition for NCRNbirds}
 \description{
-An S4 class that contains the data from bird monitoring from a set of montoirng points. This will typcially be a single park, but it could be any group of plots, including part of a park or a group of parks.
+#' An S4 class that contains the data from bird monitoring at a set of monitoring points. This will typcially be a single park, but it could be any group of plots, including part of a park or a group of parks.
 }
 \section{Slots}{
 
@@ -16,14 +16,20 @@ An S4 class that contains the data from bird monitoring from a set of montoirng 
 
 \item{\code{LongName}}{A long, formal name for the park. Stored as a length 1 character vector.}
 
-\item{\code{Network}}{The code for the Inventory & Montoirng network (or other networ) the park belongs to. Stored as a length 1 character vector.}
+\item{\code{Network}}{The code for the Inventory & Montoirng network (or other network) the park belongs to. Stored as a length 1 character vector.}
 
-\item{\code{Points}}{A \code{data.frame} with information on the mointoring points, such as names and lat/long.}
+\item{\code{VisitNumber}}{A \code{numeric} vector of length 1. The number of visits that is typically made to each point. This serves as the default number of visits for other functions.}
 
-\item{\code{Visits}}{A \code{data.frame} with information on each sampling visit.}
+\item{\code{Bands}}{A \code{data.frame} with metadata for the distance bands used during monitoring. Includes a name, min distance and max distance for each band.}
 
-\item{\code{Birds}}{A \code{data.frame} with the bird monitoring data.}
+\item{\code{Intervals}}{A \code{data.frame} with mmeatdata for the time intervals used during monitroing. Includes a name start time in minutes and end time in minutes for each interval.}
 
-\item{\code{Species}}{A \code{data.frame} with meta-data about the bird species, including AOU Code, Latin and common names, as well as guild assignments for the BCI calculations.}
+\item{\code{Points}}{A \code{data.frame} with metadata for the monitoring points, such as names and lat/long.}
+
+\item{\code{Visits}}{A \code{data.frame} with metadata for each sampling visit.}
+
+\item{\code{Birds}}{A \code{data.frame} with the bird monitoring data. Each row is an observation of a number of individuals of a particular species at a particular point, visit, time interval and distance band.}
+
+\item{\code{Species}}{A \code{data.frame} with metadata about the bird species, including AOU (American Ornithological Union) Code, Latin and common names, as well as guild assignments for the BCI calculations.}
 }}
 
