@@ -4,7 +4,7 @@
 #' 
 #' @importFrom lubridate year mdy
 #' 
-#' @description  This function imports data from the standard ERMN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
+#' @description  This function imports data from the standard ERMN.csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
 #' 
 #' @param Dir  The directory where the data are found. You should omit the trailing slash ("/") in the directory name.
 #' 
@@ -14,18 +14,19 @@
 
 
 importERMNbirds<-function(Dir){
-  OldDir<-getwd()
-  setwd(Dir)  
+ 
+  InBands<-read.csv(paste(Dir,"ERMNbands.csv", sep="/"),as.is=T, header = T)
   
-  InPoints<-read.csv(paste(Dir,"Points.csv", sep="/"),as.is=T, header=T)
+  InIntervals<-read.csv(paste(Dir,"ERMNintervals.csv", sep="/"),as.is=T, header = T)
   
-  InVisits<-read.csv(paste(Dir,"Visits.csv",sep="/"),as.is=T, header=T)
-  InVisits$EventDate<-mdy(InVisits$EventDate)
+  InPoints<-read.csv(paste(Dir,"ERMNpoints.csv", sep="/"),as.is=T, header=T)
+  
+  InVisits<-read.csv(paste(Dir,"ERMNvisits.csv",sep="/"),as.is=T, header=T)
+  InVisits$EventDate<-as.Date(as.character(InVisits$EventDate), format="%m/%d/%Y")
   InVisits$Year<-year(InVisits$EventDate)
-  InVisits$Visit<-as.character(InVisits$Visit)
   
-  InFieldData<-read.csv(paste(Dir,"FieldData.csv", sep="/"),as.is=T, header=T)
-  InFieldData$EventDate<-mdy(InFieldData$EventDate)
+  InFieldData<-read.csv(paste(Dir,"ERMNFieldData.csv", sep="/"),as.is=T, header=T)
+  InFieldData$EventDate<-as.Date(as.character(InFieldData$EventDate), format="%m/%d/%Y")
   InFieldData$Year<-year(InFieldData$EventDate)
   
   InSpecies<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
@@ -34,7 +35,11 @@ importERMNbirds<-function(Dir){
             ParkCode="DEWA", 
             ShortName="Delaware Water Gap NRA", 
             LongName="Delaware Water Gap National Recreation Area", 
-            Network="ERMN",  
+            Network="ERMN", 
+            
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="DEWA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="DEWA",],
@@ -49,6 +54,10 @@ importERMNbirds<-function(Dir){
             LongName="Allagheny Portage Railroad National Historic Site", 
             Network="ERMN", 
             
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="ALPO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ALPO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ALPO",],
@@ -61,6 +70,10 @@ importERMNbirds<-function(Dir){
             ShortName="Fort Necessity NB", 
             LongName="Fort Necessity National Battlefield", 
             Network="ERMN", 
+            
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="FONE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="FONE",],
@@ -75,6 +88,10 @@ importERMNbirds<-function(Dir){
             LongName="Friendship Hill National Historic Site", 
             Network="ERMN", 
             
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="FRHI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="FRHI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="FRHI",],
@@ -87,6 +104,10 @@ importERMNbirds<-function(Dir){
             LongName="New River Gorge National River", 
             Network="ERMN", 
             
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
             Points=InPoints[InPoints$Admin_Unit_Code=="NERI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="NERI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="NERI",],
@@ -98,6 +119,10 @@ importERMNbirds<-function(Dir){
             ShortName="Bluestone NSR", 
             LongName="Bluestone National Scenic River", 
             Network="ERMN", 
+            
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
             
             Points=InPoints[InPoints$Admin_Unit_Code=="BLUE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="BLUE",],
