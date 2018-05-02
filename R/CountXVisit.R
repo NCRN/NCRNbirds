@@ -53,7 +53,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
             ##  visiting a point once instead of twice)
-            Visits<-if(is.na(visits)) 1:getDesign(object,info="visits") else visits
+            visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
             
             VisitMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits) %>%
               mutate(Visit=paste0("Visit",Visit),Visited=1) %>%
