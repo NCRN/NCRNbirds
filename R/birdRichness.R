@@ -25,13 +25,16 @@ setMethod(f="birdRichness", signature=c(object="list"),
                    list= return(
                      lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,output=output,...)
                      ),
-                   total=return(n_distinct(getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)$AOU_Code))
+                   total=return(if_else(n_distinct(getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)$AOU_Code) == 0,
+                                        NA_integer_,n_distinct(getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)$AOU_Code))
+                                )
             )
           })
 
 
 setMethod(f="birdRichness", signature=c(object="NCRNbirds"),
           function(object,points,AOU,years,output,...){
-            n_distinct(getBirds(object=object,points=points,AOU=AOU,years=years,output=output,...)$AOU_Code)
+            count<- n_distinct(getBirds(object=object,points=points,AOU=AOU,years=years,output=output,...)$AOU_Code)
+            if_else(count == 0,NA_integer_,count)
           }
 )
