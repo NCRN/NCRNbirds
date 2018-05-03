@@ -51,6 +51,7 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
     XGuilds<-getGuilds(object=object)
             
     XBCI<-data.frame(getPoints(object=object,years=years)[c("Admin_Unit_Code","Point_Name")])
+    if(nrow(XBCI)==0) return()
     XBCI<-XBCI %>% rowwise %>% 
     mutate(ForestGeneralist= sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat=="Forest Generalist",]$AOU_Code),
           InteriorForest=sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat=="Interior Forest Obligate",]$AOU_Code),
