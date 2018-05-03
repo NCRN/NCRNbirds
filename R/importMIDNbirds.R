@@ -8,7 +8,7 @@
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
 #' 
-#' @return Returns a list of 12 \code{NCRNbirds} objects, one for each park.
+#' @return Returns a list of 6 \code{NCRNbirds} objects, one for each park.
 #' 
 #' @export
 
