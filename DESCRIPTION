@@ -39,4 +39,5 @@ Collate:
     'makeNCRNbirds.R'
     'mapBirds.R'
     'nmixBirds.R'
+    'richnessPlot.R'
 RoxygenNote: 6.0.1

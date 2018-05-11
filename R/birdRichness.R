@@ -2,7 +2,7 @@
 #' 
 #' @title birdRichness
 #' 
-#' @importFrom dplyr filter if_else n_distinct pull summarise
+#' @importFrom dplyr distinct filter n_distinct pull summarise
 #' @importFrom magrittr %>% 
 #' 
 #' @description Returns the number of bird species found in a park, at a point or a collection of points. 
@@ -40,44 +40,43 @@ setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,byYear=
                                         output="total",...){standardGeneric("birdRichness")}, signature="object")
 
 setMethod(f="birdRichness", signature=c(object="list"),
-          function(object,points,AOU,years,output,...) {
-            switch(output,
-                   list= return(
-                     lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,output=output,...)
-                     ),
-                   total=return(if_else(n_distinct(getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)$AOU_Code) == 0,
-                                        NA_integer_,n_distinct(getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)$AOU_Code))
-                                )
-            )
-          })
+  function(object,points,AOU,years,byYear,output,...) {
+    switch(output,
+      list= return(
+        lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,byYear=byYear,output=output,...)
+      ),
+      total={
+        Data<-getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)
+        years<-getVisits(object=object, points=points, years=years, output="dataframe") %>% distinct(Year) %>% pull() 
+        return(birdRichness(object=Data, years=years, byYear=byYear, output=output)      
+      )}
+    )
+})
 
 
 setMethod(f="birdRichness", signature=c(object="NCRNbirds"),
-          function(object,points,AOU,years,output,...){
+  function(object,points,AOU,years,byYear,output,...){
 
-            Data<-getBirds(object=object,points=points,AOU=AOU,years=years,output=output,...)
-            
-            
-            
-            if_else(count == 0 & nrow(getVisits(object=object, points=points, years=years))==0, NA_integer_, count)
+    Data<-getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)
+    years<-getVisits(object=object, points=points, years=years, output="dataframe") %>% distinct(Year) %>% pull() 
+    return(birdRichness(object=Data, years=years, byYear=byYear))
 })
 
 
 
 setMethod(f="birdRichness", signature=c(object="data.frame"),
-          function(object,years, byYear){
-            if(all(is.na(years))) { #years is NA, so just get years from data
-              count<-object %>% {if(byYear) group_by(., Year) else .} %>% summarise(Richness=n_distinct(AOU_Code))
-              if(!byYear) count<-pull(count)
-             } else {               # years is specified, so use them.
-               object<-object %>% filter(Year %in% years)
-               if(!byYear) {count<-pull(object,AOU_Code) %>% n_distinct() 
-               } else {
-              count<-data.frame(Year=years, Richness=sapply(years, FUN=function(x){object %>% 
-                  filter(Year==x) %>% pull(AOU_Code) %>%  n_distinct()})) 
-               }
-             }
+  function(object,years, byYear){
             
-             
-            return(count)
+    if(all(is.na(years))) { #years is NA, so just get years from data
+      count<-object %>% {if(byYear) group_by(., Year) else .} %>% summarise(Richness=n_distinct(AOU_Code))
+      if(!byYear) count<-pull(count)
+    } else {               # years is specified, so use them.
+      object<-object %>% filter(Year %in% years)
+      if(!byYear) {count<-pull(object,AOU_Code) %>% n_distinct() 
+      } else {
+        count<-data.frame(Year=years, Richness=sapply(years, FUN=function(x){object %>% 
+        filter(Year==x) %>% pull(AOU_Code) %>%  n_distinct()})) 
+      }
+    }
+  return(count)
 })
