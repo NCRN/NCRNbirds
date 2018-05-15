@@ -1,4 +1,6 @@
 #' @include NCRNbirds_Class_def.R getBirds.R
+#' @include getVisits.R
+#' @include getBirds.R
 #' 
 #' @title birdRichness
 #' 
@@ -65,7 +67,7 @@ setMethod(f="birdRichness", signature=c(object="NCRNbirds"),
 
 
 setMethod(f="birdRichness", signature=c(object="data.frame"),
-  function(object,years, byYear){
+  function(object,years,byYear){
             
     if(all(is.na(years))) { #years is NA, so just get years from data
       count<-object %>% {if(byYear) group_by(., Year) else .} %>% summarise(Richness=n_distinct(AOU_Code))
