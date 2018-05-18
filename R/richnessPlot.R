@@ -8,7 +8,7 @@
 #' @importFrom magrittr %>% 
 #' @importFrom tidyr replace_na
 #' 
-#' @description Plots species richenss over time.
+#' @description Plots species richness over time.
 #' 
 #' @param object An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.
 #' @param years  A nuemric vector. Indicates which years should be graphed.
@@ -68,7 +68,7 @@ setMethod(f="richnessPlot", signature=c(object="data.frame"),
     GraphOut<-ggplot(data=object, aes(x=Year, y=Richness))+
       geom_point(size=4, color="blue")+
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
-      labs(y=" Number of Species Observed", caption="Number in parenthesis indicates number of points monitored each year.")+
+      labs(y=" Number of Species Observed", caption="Values in parentheses indicate the number of points monitored each year.")+
       {if(!is.na(plot_title)) ggtitle(plot_title)}+
       theme_minimal()+
       theme(axis.line=element_line(color="black"))
