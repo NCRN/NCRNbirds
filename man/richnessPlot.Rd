@@ -25,7 +25,7 @@ provided by the user.}
 \item{...}{Additional arguments passed to \code{\link{birdRichness}}}
 }
 \description{
-Plots species richenss over time.
+Plots species richness over time.
 }
 \details{
 This function produces a graph of species richness over time. It does this by using the output of the \code{\link{birdRichness}}
