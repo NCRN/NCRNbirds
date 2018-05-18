@@ -3,6 +3,7 @@
 export(BCI)
 export(CountXVisit)
 export(birdRichness)
+export(detectsPlot)
 export(getBirdNames)
 export(getBirds)
 export(getChecklist)

@@ -11,13 +11,13 @@
 #' @description Plots species richness over time.
 #' 
 #' @param object An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.
-#' @param years  A nuemric vector. Indicates which years should be graphed.
+#' @param years  A numeric vector. Indicates which years should be graphed.
 #' @param points A character vector of point names. Only these points will be used.
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 #' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 #' provided by the user. 
-#' @param output Either "total" (the default) or "list". Only used when \code{obejct} is a \code{list}. 
+#' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' 
 #' @details This function produces a graph of species richness over time. It does this by using the output of the \code{\link{birdRichness}}
