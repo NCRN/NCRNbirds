@@ -4,11 +4,11 @@
 \alias{birdRichness}
 \title{birdRichness}
 \usage{
-birdRichness(object, points = NA, AOU = NA, years = NA,
+birdRichness(object, points = NA, AOU = NA, years = NA, byYear = FALSE,
   output = "total", ...)
 }
 \arguments{
-\item{object}{An NCRNbirds object or a list of such objects.}
+\item{object}{An NCRNbirds object or a list of such objects or a \code{data.frame} like that created by \code{\link{getBirds}}.}
 
 \item{points}{A character vector passed to \code{\link{getBirds}}. The names of one or more points where the data was collected.
 \code{NA}(the default) measures richness from all points.}
@@ -17,7 +17,11 @@ birdRichness(object, points = NA, AOU = NA, years = NA,
 \code{NA} (the default) measures richness based on all species, otherwise only species listed in \code{AOU} will be counted.}
 
 \item{years}{A vector of numbers passed to \code{\link{getBirds}}. \code{NA} (the default) will count species regardless of the year
-they were monitored, otherwise only data from years listed in \code{years} will be used.}
+they were monitored, otherwise only data from years listed in \code{years} will be used. See details below for 
+how years where no visits took place are handeled.}
+
+\item{byYear}{Logical. If \code{FALSE} (the default) the total species richness across all years will be returned a single numeric value,
+if \code{TRUE} a data.frame will be returned with each row a different year and its correspoding species richnes}
 
 \item{output}{Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, 
 when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. 
@@ -33,5 +37,11 @@ This function calculates the species richness for a park, group of parks, group 
 Species richness is the number of different species found, regardless of their abundance. The function works by first getting the monitoring data by 
 using the \code{\link{getBirds}} function and then counting the number of unique birds found. All of the options for combining or subsetting 
 data in \code{\link{getBirds}} will work for \code{birdRichness} including subsetting by year and monitoring point. If there is no data, due to 
-no sampling occuring at hte specified time and place, \code{NA} will be returned.
+no sampling occuring at hte specified time and place, \code{NA} will be returned. 
+
+How years with no visits are handled depends on wth is supplied in \code{object}. If the \code{object} is a \code{data.frame} and 
+ \code{years} are specified, it is assumed that result is wanted for all of those years. Therefore if some years are not present in the data, 
+ they will be assigned a richness of zero. If the \code{object} is a \code{NCRNbirds} object or a list of such objects, then 
+\code{\link{getVisits}} will be called to determine which years samplign took place in. Only years with vistis will be returned, and 
+years where no birds were observed will be given a richenss of zero.
 }
