@@ -10,7 +10,7 @@ richnessPlot(object, years = NA, points = NA, plot_title = NA,
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.}
 
-\item{years}{A nuemric vector. Indicates which years should be graphed.}
+\item{years}{A numeric vector. Indicates which years should be graphed.}
 
 \item{points}{A character vector of point names. Only these points will be used.}
 
@@ -20,7 +20,7 @@ richnessPlot(object, years = NA, points = NA, plot_title = NA,
 or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 provided by the user.}
 
-\item{output}{Either "total" (the default) or "list". Only used when \code{obejct} is a \code{list}.}
+\item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
 
 \item{...}{Additional arguments passed to \code{\link{birdRichness}}}
 }

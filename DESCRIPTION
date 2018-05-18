@@ -26,6 +26,7 @@ Collate:
     'BCI.R'
     'getDesign.R'
     'CountXVisit.R'
+    'DetectsPlot.R'
     'birdRichness.R'
     'getBirdNames.R'
     'getChecklist.R'
