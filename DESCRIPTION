@@ -26,7 +26,6 @@ Collate:
     'BCI.R'
     'getDesign.R'
     'CountXVisit.R'
-    'DetectsPlot.R'
     'birdRichness.R'
     'getBirdNames.R'
     'getChecklist.R'
@@ -41,4 +40,4 @@ Collate:
     'mapBirds.R'
     'nmixBirds.R'
     'richnessPlot.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
