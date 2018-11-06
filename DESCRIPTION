@@ -18,12 +18,15 @@ Imports:
     tidyr(>= 0.2.0),
     unmarked(>= 0.10-6),
     leaflet(>= 0.0.16),
-    data.table(>= 1.10.4-3)
+    data.table(>= 1.10.4-3),
+    purrr(>= 0.2.5),
+    ggplot2(>= 3.0.0)
 Collate: 
     'NCRNbirds_Class_def.R'
     'getVisits.R'
     'getBirds.R'
     'BCI.R'
+    'BCIPlot.R'
     'getDesign.R'
     'CountXVisit.R'
     'birdRichness.R'
