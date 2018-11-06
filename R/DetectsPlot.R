@@ -1,12 +1,14 @@
 #' @include NCRNbirds_Class_def.R
 #' @include CountXVisit.R
+#' @include getParkNames.R
+#' @include getVisits.R
 #'   
 #' @title detectsPlot
 #'
-#' @importFrom dplyr group_by n_distinct pull right_join summarize
+#' @importFrom dplyr group_by summarise
 #' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous theme theme_minimal
 #' @importFrom magrittr %>% 
-#' @importFrom tidyr replace_na
+#' @importFrom tidyr gather
 #' 
 #' @description Plots bird detections (relative abundance) over time.
 #' 
@@ -26,23 +28,25 @@
 #' @export
 
 
-setGeneric(name="detectsPlot",function(object,years=NA, points=NA, plot_title=NA, point_num=NA,output="total", ...){standardGeneric("detectsPlot")}, signature="object")
+setGeneric(name="detectsPlot",function(object,years=NA, points=NA, plot_title=NA, point_num= NA, output="total", ...){standardGeneric("detectsPlot")}, signature="object")
 
 
 setMethod(f="detectsPlot", signature=c(object="list"),
-  function(object,years,points,plot_title, point_num, output, ...) {
-    switch(output,
-      total={ graphdata<-CountXVisit(object=object, years=years, points=points, ...) %>% 
-        # if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points) %>% 
-            group_by(Year) %>%  
-            # right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Mean) %>% replace_na(0) %>% 
-            summarize("Visit 1"=round(mean(Visit1, na.rm=T),digits=2), "Visit 2"= round( mean(Visit2, na.rm=T),digits=2)) %>% 
-            gather(key=Visit, value=Mean, `Visit 1`, `Visit 2`)  %>% 
-            mutate(Visit= factor(Visit))
-        return(detectsPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
-      },
-      list={
-        return(lapply(X=object, FUN=detectsPlot, years=years, points=points, plot_title=plot_title, point_num=point_num))
+          function(object,years,points,plot_title, point_num,output, ...) {
+            switch(output,
+                   total={graphdata<-CountXVisit(object=object, years=years, points=points,  ...)%>%
+                            gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%  # rearrange to sum by visit to handle varying visits per point
+                            group_by(Year, visit) %>% 
+                            dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=2))
+                   
+                   if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points) %>% 
+                       group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
+                       right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
+                   
+                   return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num))
+                   },
+                   list={
+                     return(lapply(X=object, FUN=detectsPlot, years=years, points=points, plot_title=plot_title,point_num=point_num))
       }
     )
 })
@@ -51,32 +55,32 @@ setMethod(f="detectsPlot", signature=c(object="list"),
 setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
   function(object,years,points,plot_title,point_num, ...){
       
-    graphdata<-CountXVisit(object=object, years=years, points=points, ...) %>% 
-      # if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points) %>% 
-        group_by(Year) %>%  
-        # right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Mean) %>% replace_na(0) %>% 
-        summarize("Visit 1"=round(mean(Visit1, na.rm=T),digits=2), "Visit 2"= round( mean(Visit2, na.rm=T),digits=2)) %>% 
-        gather(key=Visit, value=Mean, `Visit 1`, `Visit 2`)  %>% 
-        mutate(Visit= factor(Visit))
+    graphdata<-CountXVisit(object=object, years=years, points=points,  ...) %>% 
+        gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%    # rearrange to sum by visit to handle varying visits per point
+        group_by(Year, visit) %>% 
+        dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=2))
+            
+    if(is.na(plot_title)) plot_title<-paste0("Number of Birds Detected in ", getParkNames(object,name.class = "long")) 
+    if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points) %>% 
+        group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
+        right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
     
-    return(detectsPlot(object=graphdata, plot_title=plot_title, point_num=point_num))
+    return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num))
 
 })
 
 setMethod(f="detectsPlot", signature=c(object="data.frame"),
-  function(object, plot_title, point_num){
-   
-    
-    integer_breaks<-min(object$Year):max(object$Year)
-    YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", point_num,")") else integer_breaks
-    
-    GraphOut<-ggplot(data=object, aes(x=Year, y=Mean, colour= Visit))+
-      geom_point(size=4)+
-      scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
-      labs(y=" Mean Number of Birds Detected per Point", caption="Values in parentheses indicate the number of points monitored each year.")+
-      {if(!is.na(plot_title)) ggtitle(plot_title)}+
-      theme_minimal()+
-      theme(axis.line=element_line(color="black"))
-    
-    return(GraphOut)
-})
+          function(object, plot_title, point_num){
+            
+            integer_breaks<-min(object$Year):max(object$Year)
+            YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", point_num,")") else integer_breaks
+            
+            GraphOut<-ggplot(data=object, aes(x=Year, y=Mean, colour = visit))+
+              geom_point(size=4)+
+              scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
+              labs(y=" Mean number of birds detected", caption="Values in parentheses indicate the number of points monitored each year.")+
+              {if(!is.na(plot_title)) ggtitle(plot_title)}+
+              theme_classic()
+            return(GraphOut)
+          })
+
