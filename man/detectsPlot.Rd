@@ -4,8 +4,8 @@
 \alias{detectsPlot}
 \title{detectsPlot}
 \usage{
-detectsPlot(object, years = NA, points = NA, plot_title = NA,
-  point_num = NA, output = "total", ...)
+detectsPlot(object, years = NA, points = NA, visits = NA,
+  plot_title = NA, point_num = NA, output = "total", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{CountXVisit()}.}
@@ -13,6 +13,8 @@ detectsPlot(object, years = NA, points = NA, plot_title = NA,
 \item{years}{A numeric vector. Indicates which years should be graphed.}
 
 \item{points}{A character vector of point names. Only these points will be used.}
+
+\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
 
 \item{plot_title}{Optional,  A title for the plot.}
 
