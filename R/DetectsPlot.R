@@ -6,7 +6,7 @@
 #' @title detectsPlot
 #'
 #' @importFrom dplyr group_by summarise
-#' @importFrom ggplot2 aes geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal
+#' @importFrom ggplot2 aes geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal scale_color_brewer
 #' @importFrom magrittr %>% 
 #' @importFrom tidyr gather
 #' 
@@ -15,7 +15,7 @@
 #' @param object An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{CountXVisit()}.
 #' @param years  A numeric vector. Indicates which years should be graphed.
 #' @param points A character vector of point names. Only these points will be used.
-#' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.
+#' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 #' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
@@ -77,7 +77,7 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
             YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", point_num,")") else integer_breaks
             
             GraphOut<-ggplot(data=object, aes(x=Year, y=Mean, colour = visit))+
-              geom_point(size=4)+
+              geom_point(size=4)+scale_color_brewer(palette="Dark2")+
               scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
               labs(y=" Mean number of birds detected", caption="Values in parentheses indicate the number of points monitored each year.")+
               {if(!is.na(plot_title)) ggtitle(plot_title)}+
