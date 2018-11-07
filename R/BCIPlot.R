@@ -59,7 +59,7 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
     # return(richnessPlot(object=graphdata, plot_title=plot_title, point_num=point_num))
     
     
-    graphdata<-data.frame(Years=years,BCI=NA, BCI_Category=NA)
+    graphdata<-data.frame(Year=years,BCI=NA, BCI_Category=NA)
     
     graphdata$BCI<-(years %>% map(~BCI(object=object, years=.x, points=points, ...),...)) %>% map("BCI") %>% 
       map(mean) %>% unlist %>% round(0)
@@ -68,7 +68,10 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
                                                           BCI>=40.1 & BCI<52.1 ~ "Medium Integrity",
                                                           BCI>=52.1 & BCI < 60.1 ~ "High Integrity",
                                                           BCI>=60.1 ~ "Highest Integrity" ))
-  return(graphdata)
+    
+    point_num<- years %>% map(~getPoints(object, years=., points=points)) %>% map(nrow) %>% unlist
+    
+    return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
 })
 
 setMethod(f="BCIPlot", signature=c(object="data.frame"),
@@ -86,8 +89,8 @@ setMethod(f="BCIPlot", signature=c(object="data.frame"),
     #   theme_minimal()+
     #   theme(axis.line=element_line(color="black"))
     
-    GraphOUt<-ggplot(data=object, aes(x=Year, y=BCI)) +
-      geom_point(size=4, color=BCI_Category) +
+    GraphOut<-ggplot(data=object, aes(x=Year, y=BCI, color=BCI_Category)) +
+      geom_point(size=4) +
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks) +
       labs(y=" Bird Community Index", caption="Values in parentheses indicate the number of points monitored each year.") +
       {if(!is.na(plot_title)) ggtitle(plot_title)} +
