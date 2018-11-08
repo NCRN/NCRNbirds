@@ -39,7 +39,7 @@ setMethod(f="detectsPlot", signature=c(object="list"),
                    total={graphdata<-CountXVisit(object=object, years=years, points=points,visits=visits,times=times, ...)%>%
                             gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%  # rearrange to sum by visit to handle varying visits per point
                             group_by(Year, visit) %>% 
-                            dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=2))
+                            dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3))
                    
                    if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points, visits=visits,times=times) %>% 
                        group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
@@ -60,9 +60,9 @@ setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
     graphdata<-CountXVisit(object=object, years=years, points=points,visits=visits,times=times,  ...) %>% 
         gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%    # rearrange to sum by visit to handle varying visits per point
         group_by(Year, visit) %>% 
-        dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=2))
+        dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3))
             
-    if(is.na(plot_title)) plot_title<-paste0("Number of Birds Detected in ", getParkNames(object,name.class = "long")) 
+    if(is.na(plot_title)) plot_title<-paste0("Mean number of Birds Detected in ", getParkNames(object,name.class = "long")) 
     if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points, visits=visits, times=times) %>% 
         group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
         right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
@@ -80,9 +80,14 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
             GraphOut<-ggplot(data=object, aes(x=Year, y=Mean, colour = visit))+
               geom_point(size=4)+scale_color_brewer(palette="Dark2")+
               scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
-              labs(y=" Mean number of birds detected", caption="Values in parentheses indicate the number of points monitored each year.")+
+              labs(y=" Mean number of birds detected", caption="Values in parentheses indicate the number of points monitored in each year.")+
               {if(!is.na(plot_title)) ggtitle(plot_title)}+
-              theme_classic()
+              theme_classic()+  
+              theme(axis.title.y =element_text(size = 14, face ="bold", vjust= 1))+
+              theme(axis.title.x =element_text(size = 14, face ="bold", vjust= 1))+
+              theme(axis.text.y = element_text(color="black", vjust= 0.5,size = 12))+
+              theme(axis.text.x = element_text(color="black", size = 10))
+              
             return(GraphOut)
           })
 
