@@ -4,9 +4,10 @@
 #' @title BCIPlot
 #'
 #' @importFrom dplyr case_when group_by n_distinct pull right_join summarize
-#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous theme theme_minimal
+#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous scale_color_manual theme theme_minimal
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map 
+#' @importFrom viridis viridis_pal
 
 #' @importFrom tidyr replace_na
 #' 
@@ -49,14 +50,10 @@ setMethod(f="BCIPlot", signature=c(object="list"),
 
 setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
   function(object,years,points,plot_title=NA, ...){
-      
-    # graphdata<-birdRichness(object=object, years=years, points=points, byYear=T, ...)
-    # if(is.na(plot_title)) plot_title<-paste0("Number of Bird Species Observed in ", getParkNames(object,name.class = "long"))
-    # if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points) %>% 
-    #     group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
-    #     right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
-    # 
-    # return(richnessPlot(object=graphdata, plot_title=plot_title, point_num=point_num))
+
+    ## Need to handle years in some way - mandatory or dervied?
+    ## check on visits as well
+    
     
     
     graphdata<-data.frame(Year=years,BCI=NA, BCI_Category=NA)
@@ -77,20 +74,17 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
 setMethod(f="BCIPlot", signature=c(object="data.frame"),
   function(object, plot_title, point_num){
    ## comes in as year bci
+    BCIColors<-viridis_pal()(4)
+    names(BCIColors)<-c("Low Integrety", "Medium Integrity", "High Integrity", "Highest Integrity")
+    BCIscale<-scale_color_manual(name="BCI", values=BCIColors)
     
      integer_breaks<-min(object$Year):max(object$Year)
      YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", point_num,")") else integer_breaks
-    # 
-    # GraphOut<-ggplot(data=object, aes(x=Year, y=Richness))+
-    #   geom_point(size=4, color="blue")+
-    #   scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
-    #   labs(y=" Number of Species Observed", caption="Values in parentheses indicate the number of points monitored each year.")+
-    #   {if(!is.na(plot_title)) ggtitle(plot_title)}+
-    #   theme_minimal()+
-    #   theme(axis.line=element_line(color="black"))
+
     
     GraphOut<-ggplot(data=object, aes(x=Year, y=BCI, color=BCI_Category)) +
       geom_point(size=4) +
+      BCIscale +
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks) +
       labs(y=" Bird Community Index", caption="Values in parentheses indicate the number of points monitored each year.") +
       {if(!is.na(plot_title)) ggtitle(plot_title)} +
