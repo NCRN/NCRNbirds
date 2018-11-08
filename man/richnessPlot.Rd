@@ -5,7 +5,7 @@
 \title{richnessPlot}
 \usage{
 richnessPlot(object, years = NA, points = NA, plot_title = NA,
-  point_num = NA, output = "total", ...)
+  point_num = NA, visits = NA, output = "total", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.}
@@ -19,6 +19,8 @@ richnessPlot(object, years = NA, points = NA, plot_title = NA,
 \item{point_num}{An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 provided by the user.}
+
+\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
 

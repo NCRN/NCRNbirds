@@ -10,7 +10,7 @@
 #' @param points A character vector or point names. Only visits to these points will be returned.
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{EventDate} column.
-#' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.
+#' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
 #' @param reps A length 1 numeric vector,d deflatus to NA, Returns only data form points and years where the point has been visited at least \code{reps} times in the year.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' @details This function returns point data either from a single NCRNbirds object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object. 

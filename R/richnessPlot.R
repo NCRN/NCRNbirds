@@ -17,6 +17,7 @@
 #' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 #' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 #' provided by the user. 
+#' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' 
@@ -26,17 +27,17 @@
 #' @export
 
 
-setGeneric(name="richnessPlot",function(object,years=NA, points=NA, plot_title=NA, point_num=NA,output="total", ...){standardGeneric("richnessPlot")}, signature="object")
+setGeneric(name="richnessPlot",function(object,years=NA, points=NA, plot_title=NA, point_num=NA,visits = NA,output="total", ...){standardGeneric("richnessPlot")}, signature="object")
 
 
 setMethod(f="richnessPlot", signature=c(object="list"),
-  function(object,years,points,plot_title, point_num, output, ...) {
+  function(object,years,points,plot_title, point_num, visits = visits, output, ...) {
     switch(output,
-      total={graphdata=birdRichness(object, years=years, points=points, byYear=T, output="total", ...)
-      if(all(is.na(point_num))) point_num<-getVisits(object, years=years,points=points) %>% 
+      total={graphdata=birdRichness(object, years=years, points=points, visits = visits, byYear=T, output="total", ...)
+      if(all(is.na(point_num))) point_num<-getVisits(object, years=years,points=points,visits = visits) %>% 
           group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
           right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
-        return(richnessPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
+        return(richnessPlot(object=graphdata, plot_title=plot_title, point_num = point_num,visits = visits))
       },
       list={
         return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num))
@@ -46,15 +47,15 @@ setMethod(f="richnessPlot", signature=c(object="list"),
 
 
 setMethod(f="richnessPlot", signature=c(object="NCRNbirds"),
-  function(object,years,points,plot_title,point_num, ...){
+  function(object,years,points,plot_title,point_num,visits = visits,  ...){
       
     graphdata<-birdRichness(object=object, years=years, points=points, byYear=T, ...)
     if(is.na(plot_title)) plot_title<-paste0("Number of Bird Species Observed in ", getParkNames(object,name.class = "long"))
-    if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points) %>% 
+    if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points,visits = visits) %>% 
         group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
         right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
     
-    return(richnessPlot(object=graphdata, plot_title=plot_title, point_num=point_num))
+    return(richnessPlot(object=graphdata, plot_title=plot_title, point_num=point_num,visits = visits))
 
 })
 
