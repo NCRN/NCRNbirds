@@ -65,7 +65,7 @@ setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
             
     if(is.na(plot_title)) plot_title<-paste0("Mean number of Birds Detected in ", getParkNames(object,name.class = "long")) 
     if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points, visits=visits, times=times) %>% 
-        group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
+        group_by(Year) %>% summarise(Total=n_distinct(Point_Name,EventDate)) %>% 
         right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
     
     return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se= se))
