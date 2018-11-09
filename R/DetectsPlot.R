@@ -5,10 +5,11 @@
 #'   
 #' @title detectsPlot
 #'
-#' @importFrom dplyr group_by summarise
-#' @importFrom ggplot2 aes geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal scale_color_brewer geom_errorbar
+#' @importFrom dplyr group_by pull summarise
+#' @importFrom ggplot2 aes element_text geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal scale_color_brewer geom_errorbar
 #' @importFrom magrittr %>% 
-#' @importFrom tidyr gather
+#' @importFrom purrr map pmap
+#' @importFrom tidyr full_seq gather 
 #' 
 #' @description Plots bird detections (relative abundance) over time.
 #' 
@@ -18,7 +19,7 @@
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
 #' @param plot_title  Optional,  A title for the plot. 
-#' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
+#' @param point_num An optional list of numeric vector indicating the number of points sampled each visit of each year. Each visit is a separte elemnet in the list. If \code{object} is a \code{NCRNbirds} object
 #' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 #' provided by the user. 
 #' @param se Add Standard error to the plot. \code{TRUE} or \code{FALSE}, defaults to  \code{FALSE}
@@ -35,21 +36,29 @@ setGeneric(name="detectsPlot",function(object,years=NA, points=NA, visits=NA, ti
 
 
 setMethod(f="detectsPlot", signature=c(object="list"),
-          function(object,years,points,visits,times,plot_title, point_num,se, output, ...) {
-            switch(output,
-                   total={graphdata<-CountXVisit(object=object, years=years, points=points,visits=visits,times=times, ...)%>%
-                            gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%  # rearrange to sum by visit to handle varying visits per point
-                            group_by(Year, visit) %>% 
-                            dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3), se= round(sd(count, na.rm=T)/sqrt(n()),digits=3))
+  function(object,years,points,visits,times,plot_title, point_num,se, output, ...) {
+
+    
+    
+    switch(output,
+       total={    visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
+       
+       years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
+         pull(Year) %>% unique %>% sort %>% full_seq(1) else years
+       
+         graphdata<-CountXVisit(object=object, years=years, points=points,visits=visits,times=times, ...)%>%
+                    gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%  # rearrange to sum by visit to handle varying visits per point
+                    group_by(Year, visit) %>% 
+                    dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3), se= round(sd(count, na.rm=T)/sqrt(n()),digits=3))
                    
-                   if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points, visits=visits,times=times) %>% 
-                       group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
-                       right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
+         if (all(is.na(point_num))) point_num<-purrr::map(visits, function(visits){ 
+           purrr::map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
+         
                    
-                   return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num))
-                   },
-                   list={
-                     return(lapply(X=object, FUN=detectsPlot, years=years, points=points, plot_title=plot_title,point_num=point_num, se= se))
+                 return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se))
+                },
+      list={
+         return(lapply(X=object, FUN=detectsPlot, years=years, points=points, plot_title=plot_title,point_num=point_num, se= se))
       }
     )
 })
@@ -58,29 +67,38 @@ setMethod(f="detectsPlot", signature=c(object="list"),
 setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
   function(object,years,points,visits,times, plot_title,point_num, ...){
       
+    
+    visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
+    years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
+      pull(Year) %>% unique %>% sort %>% full_seq(1) else years
+    
+    
+    
     graphdata<-CountXVisit(object=object, years=years, points=points,visits=visits,times=times,  ...) %>% 
         gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%    # rearrange to sum by visit to handle varying visits per point
         group_by(Year, visit) %>% 
         dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3),se= round(sd(count, na.rm=T)/sqrt(n()),digits=3))
-            
+    
     if(is.na(plot_title)) plot_title<-paste0("Mean number of Birds Detected in ", getParkNames(object,name.class = "long")) 
-    if(all(is.na(point_num))) point_num<-getVisits(object, years=years, points=points, visits=visits, times=times) %>% 
-        group_by(Year) %>% summarise(Total=n_distinct(Point_Name,EventDate)) %>% 
-        right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
+    
+    if (all(is.na(point_num))) point_num<-purrr::map(visits, function(visits){ 
+      purrr::map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
     
     return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se= se))
-
 })
 
 setMethod(f="detectsPlot", signature=c(object="data.frame"),
           function(object, plot_title, point_num, se){
             
+            SampEffort<-if(!all(is.na(point_num))) pmap(point_num, paste, sep=",") %>% unlist else NA
+            
             integer_breaks<-min(object$Year):max(object$Year)
-            YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", point_num,")") else integer_breaks
+            YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", SampEffort,")") else integer_breaks
             
             GraphOut<-ggplot(data=object, aes(x=Year, y=Mean, colour = visit))+
               geom_point(size=4)+scale_color_brewer(palette="Dark2")+
-              scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+              {if(!is.na(plot_title)) ggtitle(plot_title)}+
+              scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+            
+              {if(!is.na(plot_title)) ggtitle(plot_title)}+
               theme_classic()+  
               theme(axis.title.y =element_text(size = 14, face ="bold", vjust= 1))+
               theme(axis.title.x =element_text(size = 14, face ="bold", vjust= 1))+
@@ -88,10 +106,10 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
               theme(axis.text.x = element_text(color="black", size = 10))
               
             if(!se) {GraphOut<- (GraphOut+
-              labs(y=" Mean number of birds detected",caption="Values in parentheses indicate the number of points monitored in each year."))
+              labs(y=" Mean number of birds detected per point",caption="Values in parentheses indicate the number of points monitored per visit in each year."))
             }else{
               GraphOut<- (GraphOut+ geom_errorbar(aes(ymin=Mean-se, ymax=Mean+se), width=.6)+
-                labs(y=" Mean + SE number of birds detected",caption="Values in parentheses indicate the number of points monitored in each year."))
+                labs(y=" Mean + SE number of birds detected per point",caption="Values in parentheses indicate the number of points monitored per visit in each year."))
                 }
             
             return(GraphOut)

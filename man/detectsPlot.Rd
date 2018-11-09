@@ -20,7 +20,7 @@ detectsPlot(object, years = NA, points = NA, visits = NA, times = NA,
 
 \item{plot_title}{Optional,  A title for the plot.}
 
-\item{point_num}{An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
+\item{point_num}{An optional list of numeric vector indicating the number of points sampled each visit of each year. Each visit is a separte elemnet in the list. If \code{object} is a \code{NCRNbirds} object
 or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 provided by the user.}
 
