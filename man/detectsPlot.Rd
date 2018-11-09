@@ -5,7 +5,7 @@
 \title{detectsPlot}
 \usage{
 detectsPlot(object, years = NA, points = NA, visits = NA, times = NA,
-  plot_title = NA, point_num = NA, output = "total", ...)
+  plot_title = NA, point_num = NA, se = FALSE, output = "total", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{CountXVisit()}.}
@@ -23,6 +23,8 @@ detectsPlot(object, years = NA, points = NA, visits = NA, times = NA,
 \item{point_num}{An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 provided by the user.}
+
+\item{se}{Add Standard error to the plot. \code{TRUE} or \code{FALSE}, defaults to  \code{FALSE}}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
 
