@@ -65,9 +65,9 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
 
             
             CountMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits)%>%
-              mutate(Visit=paste0("Visit",Visit)) %>%
               dplyr::select(Admin_Unit_Code,Point_Name,EventDate,Visit,Year) %>%
               left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
+              mutate(Visit=paste0("Visit",Visit)) %>%
               group_by(Admin_Unit_Code,Point_Name, Year, Visit) %>%
               summarize(Counts=sum(Bird_Count)) %>%
               spread(key=Visit,value=Counts,fill=0) 
