@@ -4,8 +4,8 @@
 \alias{richnessPlot}
 \title{richnessPlot}
 \usage{
-richnessPlot(object, years = NA, points = NA, plot_title = NA,
-  point_num = NA, visits = NA, output = "total", ...)
+richnessPlot(object, years = NA, points = NA, visits = NA, times = NA,
+  plot_title = NA, point_num = NA, output = "total", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.}
@@ -14,13 +14,15 @@ richnessPlot(object, years = NA, points = NA, plot_title = NA,
 
 \item{points}{A character vector of point names. Only these points will be used.}
 
+\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
+
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
 \item{plot_title}{Optional,  A title for the plot.}
 
 \item{point_num}{An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 provided by the user.}
-
-\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
 
