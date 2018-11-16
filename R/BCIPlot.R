@@ -4,9 +4,10 @@
 #' @title BCIPlot
 #'
 #' @importFrom dplyr case_when group_by n_distinct pull right_join summarize
-#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous scale_color_manual theme theme_minimal
+#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous scale_y_continuous scale_color_manual theme theme_minimal
 #' @importFrom magrittr %>% 
-#' @importFrom purrr map 
+#' @importFrom purrr map pmap
+#' @importFrom tidyr full_seq
 #' @importFrom viridis viridis_pal
 
 #' @importFrom tidyr replace_na
@@ -16,6 +17,8 @@
 #' @param object An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.
 #' @param years  A numeric vector. Indicates which years should be graphed.
 #' @param points A character vector of point names. Only these points will be used.
+#' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits. 
+#' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 #' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
@@ -29,11 +32,11 @@
 #' @export
 
 
-setGeneric(name="BCIPlot",function(object,years=NA, points=NA,plot_title=NA, point_num=NA,output="total", ...){standardGeneric("BCIPlot")}, signature="object")
+setGeneric(name="BCIPlot",function(object,years=NA, points=NA,visits=NA, times=NA, plot_title=NA, point_num=NA,output="total", ...){standardGeneric("BCIPlot")}, signature="object")
 
 
 setMethod(f="BCIPlot", signature=c(object="list"),
-  function(object,years,points,plot_title, point_num, output, ...) {
+  function(object,years,points,visits, times, plot_title, point_num, output, ...) {
     # switch(output,
     #   total={graphdata=birdRichness(object, years=years, points=points, byYear=T, output="total", ...)
     #   if(all(is.na(point_num))) point_num<-getVisits(object, years=years,points=points) %>% 
@@ -49,24 +52,26 @@ setMethod(f="BCIPlot", signature=c(object="list"),
 
 
 setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
-  function(object,years,points,plot_title=NA, ...){
+  function(object,years,points,visits, times, plot_title=NA, ...){
 
-    ## Need to handle years in some way - mandatory or dervied?
-    ## check on visits as well
-    
+    visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
+    years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
+      pull(Year) %>% unique %>% sort %>% full_seq(1) else years
     
     
     graphdata<-data.frame(Year=years,BCI=NA, BCI_Category=NA)
     
-    graphdata$BCI<-(years %>% map(~BCI(object=object, years=.x, points=points, ...),...)) %>% map("BCI") %>% 
-      map(mean) %>% unlist %>% round(0)
+    graphdata$BCI<-(years %>% map(~BCI(object=object, years=.x, points=points, visits=visits, times=times,...),...)) %>%
+      map("BCI") %>% map(mean) %>% unlist %>% round(0)
     
     graphdata<-graphdata %>% mutate (BCI_Category=case_when( BCI <40.1 ~"Low Integrity",
                                                           BCI>=40.1 & BCI<52.1 ~ "Medium Integrity",
                                                           BCI>=52.1 & BCI < 60.1 ~ "High Integrity",
                                                           BCI>=60.1 ~ "Highest Integrity" ))
     
-    point_num<- years %>% map(~getPoints(object, years=., points=points)) %>% map(nrow) %>% unlist
+    if (all(is.na(point_num))) point_num<-map(visits, function(visits){ 
+      map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
+        unlist(F)})
     
     return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
 })
@@ -78,14 +83,18 @@ setMethod(f="BCIPlot", signature=c(object="data.frame"),
     names(BCIColors)<-c("Low Integrety", "Medium Integrity", "High Integrity", "Highest Integrity")
     BCIscale<-scale_color_manual(name="BCI", values=BCIColors)
     
-     integer_breaks<-min(object$Year):max(object$Year)
-     YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", point_num,")") else integer_breaks
+    
+    SampEffort<-if(!all(is.na(point_num))) pmap(point_num, paste, sep=",") %>% unlist else NA
+    
+    integer_breaks<-min(object$Year):max(object$Year)
+    YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", SampEffort,")") else integer_breaks
 
     
     GraphOut<-ggplot(data=object, aes(x=Year, y=BCI, color=BCI_Category)) +
       geom_point(size=4) +
       BCIscale +
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks) +
+      scale_y_continuous(limits=c(0,70))+
       labs(y=" Bird Community Index", caption="Values in parentheses indicate the number of points monitored each year.") +
       {if(!is.na(plot_title)) ggtitle(plot_title)} +
       theme_minimal() +
