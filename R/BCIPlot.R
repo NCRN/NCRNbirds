@@ -4,7 +4,8 @@
 #' @title BCIPlot
 #'
 #' @importFrom dplyr case_when group_by n_distinct pull right_join summarize
-#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous scale_y_continuous scale_color_manual theme theme_minimal
+#' @importFrom ggplot2 aes annotate element_line geom_point ggplot ggtitle guides guide_legend labs 
+#' @importFrom ggplot2 scale_color_manual scale_x_continuous scale_y_continuous theme theme_classic
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map pmap
 #' @importFrom tidyr full_seq
@@ -26,8 +27,9 @@
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' 
-#' @details This function produces a graph of species richness over time. It does this by using the output of the \code{\link{birdRichness}}
-#' function. The data is then passed on to ggplot2 for graphing.
+#' @details This function produces a graph the Bird community Index  over time. It does this by using the output of 
+#' the \code{\link{BCI}} function, and averging the plot values for the park's yearly value. The data is then passed on 
+#' to ggplot2 for graphing.
 #'   
 #' @export
 
@@ -67,7 +69,9 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
     graphdata<-graphdata %>% mutate (BCI_Category=case_when( BCI <40.1 ~"Low Integrity",
                                                           BCI>=40.1 & BCI<52.1 ~ "Medium Integrity",
                                                           BCI>=52.1 & BCI < 60.1 ~ "High Integrity",
-                                                          BCI>=60.1 ~ "Highest Integrity" ))
+                                                          BCI>=60.1 ~ "Highest Integrity" ), 
+                                     BCI_Category=factor(BCI_Category, levels=c("Low Integrity","Medium Integrity",
+                                                                                "High Integrity","Highest Integrity")))
     
     if (all(is.na(point_num))) point_num<-map(visits, function(visits){ 
       map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
@@ -78,27 +82,31 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
 
 setMethod(f="BCIPlot", signature=c(object="data.frame"),
   function(object, plot_title, point_num){
-   ## comes in as year bci
-    BCIColors<-viridis_pal()(4)
-    names(BCIColors)<-c("Low Integrety", "Medium Integrity", "High Integrity", "Highest Integrity")
-    BCIscale<-scale_color_manual(name="BCI", values=BCIColors)
+  
+   BCIColors<-viridis_pal()(4)
+   names(BCIColors)<-c("Low Integrity", "Medium Integrity", "High Integrity", "Highest Integrity")
+   
     
-    
+
     SampEffort<-if(!all(is.na(point_num))) pmap(point_num, paste, sep=",") %>% unlist else NA
     
     integer_breaks<-min(object$Year):max(object$Year)
     YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", SampEffort,")") else integer_breaks
 
     
-    GraphOut<-ggplot(data=object, aes(x=Year, y=BCI, color=BCI_Category)) +
+    GraphOut<-ggplot(data=object, aes(x=Year, y=BCI,  color=BCI_Category)) +
+      annotate("rect", ymin=0,  ymax=40, xmin=-Inf, xmax=Inf, fill=BCIColors[1], alpha=0.3) +
+      annotate("rect", ymin=40, ymax=52, xmin=-Inf, xmax=Inf, fill=BCIColors[2], alpha=0.3) +
+      annotate("rect", ymin=52, ymax=60, xmin=-Inf, xmax=Inf, fill=BCIColors[3], alpha=0.3) +
+      annotate("rect", ymin=60, ymax=80, xmin=-Inf, xmax=Inf, fill=BCIColors[4], alpha=0.3) +
       geom_point(size=4) +
-      BCIscale +
+      scale_color_manual(values=BCIColors, drop=FALSE) +
+      guides(color=guide_legend(reverse=T, title ="BCI Category"))+
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks) +
-      scale_y_continuous(limits=c(0,70))+
+      scale_y_continuous(limits=c(0,80), expand=c(0,0)) +
       labs(y=" Bird Community Index", caption="Values in parentheses indicate the number of points monitored each year.") +
       {if(!is.na(plot_title)) ggtitle(plot_title)} +
-      theme_minimal() +
-      theme(axis.line=element_line(color="black"))
+      theme_classic()# +
     
     return(GraphOut)
 })
