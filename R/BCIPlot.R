@@ -22,14 +22,15 @@
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
-#' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
-#' provided by the user. 
+#' then this will be calculated automatically. If \code{object} is a \code{data.frame} or a \code {list} than this can be provided by the user. 
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' 
 #' @details This function produces a graph the Bird community Index  over time. It does this by using the output of 
 #' the \code{\link{BCI}} function, and averging the plot values for the park's yearly value. The data is then passed on 
-#' to ggplot2 for graphing.
+#' to ggplot2 for graphing. Typically this is done automatically by providing an \code{NCRNbirds} object or a \code{list}
+#' of such objects. If the user wishes to provide their own \code{data.frame} it should have 3 columns, \code{Year, BCI, BCI_Category}
+#' and each row should be data from single year.
 #'   
 #' @export
 
@@ -39,17 +40,42 @@ setGeneric(name="BCIPlot",function(object,years=NA, points=NA,visits=NA, times=N
 
 setMethod(f="BCIPlot", signature=c(object="list"),
   function(object,years,points,visits, times, plot_title, point_num, output, ...) {
-    # switch(output,
-    #   total={graphdata=birdRichness(object, years=years, points=points, byYear=T, output="total", ...)
-    #   if(all(is.na(point_num))) point_num<-getVisits(object, years=years,points=points) %>% 
-    #       group_by(Year) %>% summarise(Total=n_distinct(Point_Name)) %>% 
-    #       right_join(.,data.frame(Year=min(.$Year):max(.$Year)), by="Year") %>% pull(Total) %>% replace_na(0)
-    #     return(richnessPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
-    #   },
-    #   list={
-    #     return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num))
-    #   }
-    # )
+    
+     switch(output,
+       total={
+         
+        visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
+        years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
+           pull(Year) %>% unique %>% sort %>% full_seq(1) else years
+  
+        graphdata<-data.frame(Year=years,BCI=NA, BCI_Category=NA)
+    
+        graphdata$BCI<-(years %>% map(~BCI(object=object, years=.x, points=points, 
+                              visits=visits, times=times,output="dataframe",...),...) %>%
+          map("BCI") %>% map(mean) %>% unlist %>% round(0))
+        
+        
+        graphdata<-graphdata %>% 
+          mutate (BCI_Category=case_when( BCI <40.1 ~"Low Integrity",
+                  BCI>=40.1 & BCI<52.1 ~ "Medium Integrity",
+                  BCI>=52.1 & BCI < 60.1 ~ "High Integrity",   
+                  BCI>=60.1 ~ "Highest Integrity" ), 
+                  BCI_Category=factor(BCI_Category, levels=c("Low Integrity","Medium Integrity",
+                                                          "High Integrity","Highest Integrity")))
+        
+        
+        if (all(is.na(point_num))) point_num<-map(visits, function(visits){ 
+          map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
+            unlist(F)})
+        
+        return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
+       },
+    
+          list={
+         return(lapply(X=object, FUN=BCIPlot, years=years, points=points, visits=visits, times=times,
+                       plot_title=plot_title, point_num=point_num))
+       }
+     )
 })
 
 
@@ -63,8 +89,9 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
     
     graphdata<-data.frame(Year=years,BCI=NA, BCI_Category=NA)
     
-    graphdata$BCI<-(years %>% map(~BCI(object=object, years=.x, points=points, visits=visits, times=times,...),...)) %>%
-      map("BCI") %>% map(mean) %>% unlist %>% round(0)
+    graphdata$BCI<-(years %>% map(~BCI(object=object, years=.x, points=points, 
+                                    visits=visits, times=times,...),...) %>%
+      map("BCI") %>% map(mean) %>% unlist %>% round(0))
     
     graphdata<-graphdata %>% mutate (BCI_Category=case_when( BCI <40.1 ~"Low Integrity",
                                                           BCI>=40.1 & BCI<52.1 ~ "Medium Integrity",
@@ -77,6 +104,8 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
       map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
         unlist(F)})
     
+    plot_title<-if(is.na(plot_title)) paste0("Bird Community Index for ",getParkNames(object, name.class="long")) else plot_title
+                                             
     return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
 })
 
@@ -104,7 +133,7 @@ setMethod(f="BCIPlot", signature=c(object="data.frame"),
       guides(color=guide_legend(reverse=T, title ="BCI Category"))+
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks) +
       scale_y_continuous(limits=c(0,80), expand=c(0,0)) +
-      labs(y=" Bird Community Index", caption="Values in parentheses indicate the number of points monitored each year.") +
+      labs(y=" Bird Community Index", caption="Values in parentheses indicate the number of points monitored each visit of each year.") +
       {if(!is.na(plot_title)) ggtitle(plot_title)} +
       theme_classic()# +
     
