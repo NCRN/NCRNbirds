@@ -1,8 +1,8 @@
 Package: NCRNbirds
 Type: Package
 Title: Data analysis and visualzation for NCRN bird monitoring.
-Version: 0.2.26
-Date: 2018-11-05
+Version: 0.2.27
+Date: 2018-11-20
 Author: John Paul Schmit, Aaron Weed, Matt Marshall, Mark Johnson
 Maintainer: John Paul Schmit <john_schmit@nps.gov>
 Description: This package is designed to analyze and visualize data from the
@@ -18,12 +18,15 @@ Imports:
     tidyr(>= 0.2.0),
     unmarked(>= 0.10-6),
     leaflet(>= 0.0.16),
-    data.table(>= 1.10.4-3)
+    data.table(>= 1.10.4-3),
+    purrr(>= 0.2.5),
+    ggplot2(>= 3.0.0)
 Collate: 
     'NCRNbirds_Class_def.R'
     'getVisits.R'
     'getBirds.R'
     'BCI.R'
+    'BCIPlot.R'
     'getDesign.R'
     'CountXVisit.R'
     'getParkNames.R'
