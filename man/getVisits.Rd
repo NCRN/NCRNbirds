@@ -16,7 +16,7 @@ getVisits(object, times = NA, years = NA, points = NA, visits = NA,
 
 \item{points}{A character vector or point names. Only visits to these points will be returned.}
 
-\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
+\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
 
 \item{reps}{A length 1 numeric vector,d deflatus to NA, Returns only data form points and years where the point has been visited at least \code{reps} times in the year.}
 
