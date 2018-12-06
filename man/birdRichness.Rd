@@ -5,7 +5,7 @@
 \title{birdRichness}
 \usage{
 birdRichness(object, points = NA, AOU = NA, years = NA, byYear = FALSE,
-  output = "total", ...)
+  visits = NA, output = "total", ...)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects or a \code{data.frame} like that created by \code{\link{getBirds}}.}
@@ -22,6 +22,8 @@ how years where no visits took place are handeled.}
 
 \item{byYear}{Logical. If \code{FALSE} (the default) the total species richness across all years will be returned a single numeric value,
 if \code{TRUE} a data.frame will be returned with each row a different year and its correspoding species richnes}
+
+\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
 
 \item{output}{Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, 
 when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. 
