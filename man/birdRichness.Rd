@@ -4,8 +4,8 @@
 \alias{birdRichness}
 \title{birdRichness}
 \usage{
-birdRichness(object, points = NA, AOU = NA, years = NA, byYear = FALSE,
-  output = "total", ...)
+birdRichness(object, points = NA, AOU = NA, years = NA,
+  byYear = FALSE, output = "total", ...)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects or a \code{data.frame} like that created by \code{\link{getBirds}}.}

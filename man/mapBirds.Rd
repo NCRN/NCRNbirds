@@ -5,8 +5,9 @@
 \title{mapBirds}
 \usage{
 mapBirds(object, points, values, maptype = "basic", colorgroups = 8,
-  radius = 30, opacity = 1, colortype = "quantile", colors = c("cyan",
-  "magenta4", "orangered3"), title = deparse(substitute(values)), ...)
+  radius = 30, opacity = 1, colortype = "quantile",
+  colors = c("cyan", "magenta4", "orangered3"),
+  title = deparse(substitute(values)), ...)
 }
 \arguments{
 \item{object}{Either an object of class \code{NCRNbirds} or a list of such objects}
