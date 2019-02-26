@@ -23,7 +23,7 @@
 #' when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. 
 #' "list" will return a list, with each entry to the list corresponding to the species richness of one of the \code{NCRNbirds} objects in the input list.  
 #' @param ... additional arguments passed to \code{\link{getBirds}}. Any argument which is a valid argument for \code{\link{getBirds}} can be used here.
-#' 
+#' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
 #' @details This function calculates the species richness for a park, group of parks, group of monitoring points etc. 
 #' Species richness is the number of different species found, regardless of their abundance. The function works by first getting the monitoring data by 
 #' using the \code{\link{getBirds}} function and then counting the number of unique birds found. All of the options for combining or subsetting 
@@ -38,18 +38,18 @@
 #' 
 #' @export
 
-setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,byYear=FALSE,
+setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,byYear=FALSE, visits= NA,
                                         output="total",...){standardGeneric("birdRichness")}, signature="object")
 
 setMethod(f="birdRichness", signature=c(object="list"),
   function(object,points,AOU,years,byYear,output,...) {
     switch(output,
       list= return(
-        lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,byYear=byYear,output=output,...)
+        lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,byYear=byYear,visits= visits, output=output,...)
       ),
       total={
-        Data<-getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)
-        years<-getVisits(object=object, points=points, years=years, output="dataframe") %>% distinct(Year) %>% pull() 
+        Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...)
+        years<-getVisits(object=object, points=points, years=years, visits= visits, output="dataframe") %>% distinct(Year) %>% pull() 
         return(birdRichness(object=Data, years=years, byYear=byYear, output=output)      
       )}
     )
@@ -59,7 +59,7 @@ setMethod(f="birdRichness", signature=c(object="list"),
 setMethod(f="birdRichness", signature=c(object="NCRNbirds"),
   function(object,points,AOU,years,byYear,output,...){
 
-    Data<-getBirds(object=object,points=points,AOU=AOU,years=years,output="dataframe",...)
+    Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...)
     years<-getVisits(object=object, points=points, years=years, output="dataframe") %>% distinct(Year) %>% pull() 
     return(birdRichness(object=Data, years=years, byYear=byYear))
 })

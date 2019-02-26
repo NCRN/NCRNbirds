@@ -44,13 +44,12 @@ setMethod(f="BCI", signature=c(object="list"),
 
 setMethod(f="BCI", signature=c(object="NCRNbirds"),
   function(object,years, points,...){
-      
-    XPoints<-getPoints(object=object,years=years)$Point_Name
+    XPoints<-getPoints(object=object,years=years, points=points)$Point_Name
     XList<-lapply(X=XPoints, FUN=getChecklist, object=object, years=years, ...)
     names(XList)<-XPoints
     XGuilds<-getGuilds(object=object)
             
-    XBCI<-data.frame(getPoints(object=object,years=years)[c("Admin_Unit_Code","Point_Name")])
+    XBCI<-data.frame(getPoints(object=object,years=years, points=points)[c("Admin_Unit_Code","Point_Name")])
     if(nrow(XBCI)==0) return()
     XBCI<-XBCI %>% rowwise %>% 
     mutate(ForestGeneralist= sum(XList[[Point_Name]]%in% XGuilds[XGuilds$Primary.Habitat=="Forest Generalist",]$AOU_Code),
