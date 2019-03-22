@@ -20,9 +20,9 @@ getAKNData<- function(Dir){
 
 #### Import data downloaded from AKN (http://data.prbo.org/science/biologists/index.php)
 
-PointCounts<-read.csv(paste(Dir,"AKNPointCountObs.csv", sep="/"),as.is=T, header = T)
+PointCounts<-read.csv(paste(Dir,"./AKN/AKNPointCountObs.csv", sep="/"),as.is=T, header = T)
 
-SiteCond <- read.csv(paste(Dir,"AKNSiteConditions", sep="/"),as.is=T, header = T)
+SiteCond <- read.csv(paste(Dir,"./AKN/AKNSiteConditions.csv", sep="/"),as.is=T, header = T)
 
 NETNintervals<-read.csv(paste(Dir,"NETNintervals.csv", sep="/"),as.is=T, header = T)
 
@@ -31,6 +31,10 @@ NETNID_methods<-read.csv(paste(Dir,"tlu_ID_Methods.csv", sep="/"),as.is=T, heade
 DistBands<-read.csv(paste(Dir,"NETNbands.csv", sep="/"),as.is=T, header = T)
 
 sites<-read.csv(paste(Dir,"Points.csv", sep="/"),as.is=T, header = T)
+
+tlu_Obs<-read.csv(paste(Dir,"tlu_Obs.csv", sep="/"),as.is=T, header = T)
+  
+
 
 ####### Generate Visits file----
 #### CAUTION: note that the data downloaded from AKN contains many errors in regards to the "Visit" field.
@@ -57,15 +61,14 @@ visits_clean<-visits %>%
   dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect, Point_Name = Point, Year,EventDate= Date, StartTime= Start.Time, EndTime= End.Time, Visit, Observer=Researcher)
   
 
-  Write.table(visits_clean, paste(Dir,"Visits.csv", sep="/"), sep= ",", row.names = FALSE)
+  write.table(visits_clean, paste(Dir,"Visits.csv", sep="/"), sep= ",", row.names = FALSE)
 ####### Generate FieldData file----
-
 
 data<- PointCounts %>% 
   dplyr::filter(!Spp %in% c("CHIP","RESQ","EGSQ","GRSQ", "UNSQ", "---")) %>%  #remove mammal data and missing species codes
   dplyr::filter(!Visit %in% c(9)) %>% # remove QAQC visits
   select(-Visit) %>%  # now drop AKN's bad visit column to bind in derived visit nums from above
-  dplyr::left_join(.,NETNintervals[1:2],by= "Time.Bin.ID" ) %>% 
+  dplyr::left_join(.,NETNintervals[1:2],by= "Time.Bin.ID") %>% 
   dplyr::mutate(Date= as.Date(Date, "%m/%d/%Y")) %>% 
   dplyr::left_join(.,visits[,c("Point", "Date", "Visit")],by= c("Point", "Date") )%>% # add visit no. to data
   # add in field to distinguish between obs made within first 3 min of the count
@@ -75,14 +78,15 @@ data<- PointCounts %>%
   dplyr::mutate(Flyover_Observed= ifelse(Distance.Bin.ID == "FLY",1,0)) %>% 
   dplyr::rename(Point_Name = Point)%>%
   dplyr::left_join(.,sites[,c("Point_Name", "Survey_Type")],by= "Point_Name" ) %>% 
+  dplyr::left_join(.,tlu_Obs, by= "Researcher") %>% # add in observer skill
   dplyr::mutate(Park= stringr::str_sub(Point_Name, 1, 4)) %>%
   dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect,Point_Name, EventDate= Date, Visit,AOU_Code= Spp, Bird_Count= Count,
                 Scientific_Name= Scientific.Name, Common_Name= Common.Name, Interval= Time.Bin.ID, Interval_Length, ID_Method_Code, ID_Method, Distance_id, Distance =Label, 
-                Flyover_Observed, Initial_Three_Min_Cnt, Survey_Type)  # rename and select cols
+                Flyover_Observed, Initial_Three_Min_Cnt, Survey_Type, Data.Status, Point.Note, Observer= Researcher, Skill_Level, Skill_Notes)  # rename and select cols
   
   
   
-Write.table(data, paste(Dir,"FieldData.csv", sep="/"), sep= ",", row.names = FALSE)
+write.table(data, paste(Dir,"FieldData.csv", sep="/"), sep= ",", row.names = FALSE)
 
 NETN<-importNETNbirds(Dir)
 
