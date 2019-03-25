@@ -25,7 +25,7 @@ importMIDNbirds<-function(Dir){
   InVisits<-read.csv(paste(Dir,"Visits.csv",sep="/"),as.is=T, header=T)
   InVisits$EventDate<-mdy(InVisits$EventDate)
   InVisits$Year<-year(InVisits$EventDate)
-  InVisits$Visit<-as.character(InVisits$Visit)
+
   
   InFieldData<-read.csv(paste(Dir,"FieldData.csv", sep="/"),as.is=T, header=T)
   InFieldData$EventDate<-mdy(InFieldData$EventDate)
