@@ -29,7 +29,9 @@ importNETNbirds<-function(Dir){
   InFieldData$EventDate<-mdy(InFieldData$EventDate)
   InFieldData$Year<-year(InFieldData$EventDate)
   
-  InSpecies<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
+  InSpecies<-read.csv(paste(Dir,"BirdSpecies.csv", sep="/"), as.is=T, header=T )
+  InGuilds<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
+  
   
   ACAD<-new("NCRNbirds", 
             ParkCode="ACAD", 
@@ -44,7 +46,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="ACAD",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ACAD",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ACAD",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   
@@ -61,7 +64,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="ELRO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ELRO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ELRO",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   
@@ -78,7 +82,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="HOFR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="HOFR",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="HOFR",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   
@@ -95,7 +100,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="MABI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MABI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="MABI",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   MIMA<-new("NCRNbirds", 
@@ -111,7 +117,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="MIMA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MIMA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="MIMA",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   MORR<-new("NCRNbirds", 
@@ -128,7 +135,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="MORR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MORR",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="MORR",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   # ROVA<-new("NCRNbirds",
@@ -140,7 +148,8 @@ importNETNbirds<-function(Dir){
   #           Points=InPoints[InPoints$Admin_Unit_Code=="ROVA",],
   #           Visits=InVisits[InVisits$Admin_Unit_Code=="ROVA",],
   #           Birds=InFieldData[InFieldData$Admin_Unit_Code=="ROVA",],
-  #           Species=InSpecies
+  #           Species=InSpecies,
+              Guilds= InGuilds
   # )
   # 
   SAGA<-new("NCRNbirds", 
@@ -156,7 +165,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="SAGA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="SAGA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="SAGA",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   SARA<-new("NCRNbirds", 
@@ -172,7 +182,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="SARA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="SARA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="SARA",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   SAIR<-new("NCRNbirds", 
@@ -188,7 +199,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="SAIR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="SAIR",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="SAIR",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   VAMA<-new("NCRNbirds", 
@@ -204,7 +216,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="VAMA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="VAMA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="VAMA",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   WEFA<-new("NCRNbirds", 
@@ -220,7 +233,8 @@ importNETNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="WEFA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="WEFA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="WEFA",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   

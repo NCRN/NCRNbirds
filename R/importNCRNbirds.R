@@ -30,7 +30,8 @@ importNCRNbirds<-function(Dir){
   InFieldData$EventDate<-as.Date(as.character(InFieldData$EventDate), format="%m/%d/%Y")
   InFieldData$Year<-year(InFieldData$EventDate)
   
-  InSpecies<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
+  InSpecies<-read.csv(paste(Dir,"BirdSpecies.csv", sep="/"), as.is=T, header=T )
+  InGuilds<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
   
   ANTI<-new("NCRNbirds", 
             ParkCode="ANTI", 
@@ -45,7 +46,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="ANTI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ANTI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ANTI",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   
@@ -62,7 +64,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="CATO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="CATO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="CATO",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   CHOH<-new("NCRNbirds", 
@@ -78,7 +81,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="CHOH",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="CHOH",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="CHOH",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   GWMP<-new("NCRNbirds", 
@@ -94,7 +98,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="GWMP",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="GWMP",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="GWMP",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   HAFE<-new("NCRNbirds", 
@@ -110,7 +115,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="HAFE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="HAFE",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="HAFE",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   MANA<-new("NCRNbirds",
@@ -126,7 +132,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="MANA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MANA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="MANA",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   MONO<-new("NCRNbirds",
@@ -142,7 +149,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="MONO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="MONO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="MONO",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   NACE<-new("NCRNbirds",
@@ -158,7 +166,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="NACE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="NACE",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="NACE",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   PRWI<-new("NCRNbirds",
@@ -174,7 +183,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="PRWI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="PRWI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="PRWI",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   ROCR<-new("NCRNbirds",
@@ -190,7 +200,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="ROCR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ROCR",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ROCR",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   ) 
   
   WOTR<-new("NCRNbirds",
@@ -206,7 +217,8 @@ importNCRNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="WOTR",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="WOTR",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="WOTR",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds= InGuilds
   )
   
   
