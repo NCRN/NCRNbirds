@@ -103,6 +103,22 @@ importERMNbirds<-function(Dir){
             Guilds= InGuilds
   )
   
+  GARI<-new("NCRNbirds", 
+            ParkCode="GARI", 
+            ShortName="Gauley River NRA", 
+            LongName="Gauley River National Recreation Area", 
+            Network="ERMN", 
+            
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="GARI",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="GARI",],
+            Species=InSpecies,
+            Guilds= InGuilds
+  )
+  
   NERI<-new("NCRNbirds", 
             ParkCode="NERI", 
             ShortName="New River Gorge NR", 
@@ -138,5 +154,5 @@ importERMNbirds<-function(Dir){
   )
 
   
-  return(c(DEWA,ALPO,FONE,FRHI,NERI,BLUE))
+  return(c(ALPO,BLUE,DEWA,FONE,FRHI,GARI,NERI))
 }
