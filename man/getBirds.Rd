@@ -5,8 +5,8 @@
 \title{getBirds}
 \usage{
 getBirds(object, points = NA, AOU = NA, years = NA, min.count = NA,
-  max.count = NA, band = NA, interval = NA, visits = NA, times = NA,
-  reps = NA, output = "dataframe")
+  max.count = NA, band = NA, interval = NA, visits = NA,
+  times = NA, reps = NA, output = "dataframe")
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}

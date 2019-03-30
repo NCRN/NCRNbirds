@@ -4,8 +4,9 @@
 \alias{detectsPlot}
 \title{detectsPlot}
 \usage{
-detectsPlot(object, years = NA, points = NA, visits = NA, times = NA,
-  plot_title = NA, point_num = NA, se = FALSE, output = "total", ...)
+detectsPlot(object, years = NA, points = NA, visits = NA,
+  times = NA, plot_title = NA, point_num = NA, se = FALSE,
+  output = "total", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{CountXVisit()}.}
