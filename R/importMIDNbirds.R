@@ -31,8 +31,7 @@ importMIDNbirds<-function(Dir){
   InFieldData$EventDate<-mdy(InFieldData$EventDate)
   InFieldData$Year<-year(InFieldData$EventDate)
   
-  InSpecies<-read.csv(paste(Dir,"BirdSpecies.csv", sep="/"), as.is=T, header=T )
-  InGuilds<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
+  InSpecies<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
   
   APCO<-new("NCRNbirds", 
             ParkCode="APCO", 
@@ -47,8 +46,7 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="APCO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="APCO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="APCO",],
-            Species=InSpecies,
-            Guilds= InGuilds
+            Species=InSpecies
   )
   
   
@@ -65,8 +63,7 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="BOWA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="BOWA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="BOWA",],
-            Species=InSpecies,
-            Guilds= InGuilds
+            Species=InSpecies
   )
   
   FRSP<-new("NCRNbirds", 
@@ -82,8 +79,7 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="FRSP",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="FRSP",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="FRSP",],
-            Species=InSpecies,
-            Guilds= InGuilds
+            Species=InSpecies
   )
   
   PETE<-new("NCRNbirds", 
@@ -99,8 +95,7 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="PETE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="PETE",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="PETE",],
-            Species=InSpecies,
-            Guilds= InGuilds
+            Species=InSpecies
   )
   
   RICH<-new("NCRNbirds", 
@@ -116,8 +111,7 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="RICH",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="RICH",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="RICH",],
-            Species=InSpecies,
-            Guilds= InGuilds
+            Species=InSpecies
   )
   
   VAFO<-new("NCRNbirds",
@@ -133,8 +127,7 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="VAFO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="VAFO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="VAFO",],
-            Species=InSpecies,
-            Guilds= InGuilds
+            Species=InSpecies
   ) 
   
   
