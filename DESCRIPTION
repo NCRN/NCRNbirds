@@ -32,6 +32,8 @@ Collate:
     'getParkNames.R'
     'DetectsPlot.R'
     'birdRichness.R'
+    'importNETNbirds.R'
+    'getAKNData.R'
     'getBirdNames.R'
     'getChecklist.R'
     'getGuilds.R'
@@ -39,9 +41,8 @@ Collate:
     'importERMNbirds.R'
     'importMIDNbirds.R'
     'importNCRNbirds.R'
-    'importNETNbirds.R'
     'makeNCRNbirds.R'
     'mapBirds.R'
     'nmixBirds.R'
     'richnessPlot.R'
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
