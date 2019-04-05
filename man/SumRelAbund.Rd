@@ -16,31 +16,36 @@ SumRelAbund(object, points = NA, AOU = NA, years = NA, times = NA,
 \item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.
 Detections will be summed by each individual species.}
 
-\item{years}{A vector of numbers. will return only data from the indicated years.}
+\item{years}{A vector of numbers. Will return only data from the indicated years.}
 
-\item{times}{A numeric vector of length 1 passed on to \code{link{getVisits}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1 passed on to \code{\link{getVisits}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
+\item{band}{A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
 
 \item{visits}{The visits that will be used for the matrix. Defautls to \code{NA}. See Details below,}
 
+\item{CalcByYear}{If \code{TRUE}, will calculate mean detections across all visits per year. Defaults to calculating per visit.}
+
 \item{SortRelAbund}{If \code{TRUE}, when multiple species are selected it will calculate and sort relative abundance per species. See \code{abund}.}
 
-\item{abund}{When \code{SortRelAbund} = \code{TRUE} provide a numeric value to select the most abundant species.
+\item{abund}{When \code{SortRelAbund} = \code{TRUE}, used to provide a numeric value to select the most abundant species.
 E.g., abund = 10 will return mean detections of the top 10 species. You can use the returned  \code{data.frame} to provide species AOU.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 
 \item{...}{Additional arguments passed to \code{getBirds}}
-
-\item{band.}{A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
-
-\item{CalcBy}{If = \code{TRUE},will calculate mean detections across all visits per year. Defaults to calculating per visit.}
 }
 \description{
 Produces a summary of raw detections by species for plotting and analysis.
 }
 \details{
-Summaries relative abundance by species (avg detections per point) for a \code{NCRNbirds} object or a \code{list} of such objects. 
+Summaries relative abundance by species (mean detections per point) for a \code{NCRNbirds} object or a \code{list} of such objects. 
  
  If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot. 
- Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used.
+ Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used. 
+ 
+ \code{SumRelAbund} requires at least 2 monitoring points or at least 2 years of data to be specified, unless both \code{CalcByYear} and
+  \code{SortRelAbund} are \code{TRUE}. 
+ 
+ If \code{SortRelAbund} is \code{TRUE}, then data will be combined accross the visits, points and years indicated by the other arguments.
 }
