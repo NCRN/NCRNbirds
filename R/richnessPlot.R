@@ -1,5 +1,4 @@
-#' @include NCRNbirds_Class_def.R
-#' @include birdRichness.R
+#' @include NCRNbirds_Class_def.R birdRichness.R
 #'   
 #' @title richnessPlot
 #'
