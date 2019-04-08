@@ -16,7 +16,7 @@ CountXVisit(object, points = NA, AOU = NA, years = NA, times = NA,
 
 \item{years}{A vector of numbers. will return only data from the indicated years.}
 
-\item{times}{A numeric vector of length 1 passed on to \code{link{getVisits}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1 passed on to \code{\link{getVisits}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{visits}{The visits that will be used for the matrix. Defautls to \code{NA}. See Details below,}
 
@@ -33,8 +33,5 @@ Produces a Count X Visit matrix for use in analyses
 This produces a Count X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
  will correspond to a different pointt in a different year. The columns of the matrix will be the park code, the point name, the year 
  visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their 
- abundances will be totaled. 
- 
- If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot. 
- Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used.
+ abundances will be totaled. If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot.  Otherwise a numeric vector e.g. c(1,2) can be used to select which visits are used.
 }
