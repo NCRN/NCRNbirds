@@ -22,7 +22,7 @@
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
-#' then this will be calculated automatically. If \code{object} is a \code{data.frame} or a \code {list} than this can be provided by the user. 
+#' then this will be calculated automatically. If \code{object} is a \code{data.frame} or a \code{list} than this can be provided by the user. 
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' 
