@@ -62,6 +62,7 @@ importERMNbirds<-function(Dir){
             Visits=InVisits[InVisits$Admin_Unit_Code=="ALPO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ALPO",],
             Species=InSpecies
+            
   )
   
   
@@ -98,6 +99,21 @@ importERMNbirds<-function(Dir){
             Species=InSpecies
   )
   
+  GARI<-new("NCRNbirds", 
+            ParkCode="GARI", 
+            ShortName="Gauley River NRA", 
+            LongName="Gauley River National Recreation Area", 
+            Network="ERMN", 
+            
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="GARI",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="GARI",],
+            Species=InSpecies
+  )
+  
   NERI<-new("NCRNbirds", 
             ParkCode="NERI", 
             ShortName="New River Gorge NR", 
@@ -129,7 +145,7 @@ importERMNbirds<-function(Dir){
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="BLUE",],
             Species=InSpecies
   )
-
   
-  return(c(DEWA,ALPO,FONE,FRHI,NERI,BLUE))
+  
+  return(c(ALPO,BLUE,DEWA,FONE,FRHI,GARI,NERI))
 }

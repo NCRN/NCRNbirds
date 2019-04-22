@@ -12,5 +12,5 @@ getAKNData(Dir)
 #' @export}
 }
 \description{
-Takes NETN's AKN data download and updates Visits and FieldData files for NCRNbirds package import. Also imports in as NCRNbirds object
+Takes NETN's AKN point count survey data download and updates Visits and FieldData files for NCRNbirds package import. Also imports in as NCRNbirds object
 }
