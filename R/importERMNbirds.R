@@ -111,6 +111,7 @@ importERMNbirds<-function(Dir){
             
             Points=InPoints[InPoints$Admin_Unit_Code=="GARI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="GARI",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="GARI",],
             Species=InSpecies
   )
   
