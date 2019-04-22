@@ -44,8 +44,7 @@ importERMNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="DEWA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="DEWA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="DEWA",],
-            Species=InSpecies,
-            #Guilds= InGuilds
+            Species=InSpecies
   )
   
   
