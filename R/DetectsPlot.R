@@ -6,7 +6,7 @@
 #' @title detectsPlot
 #'
 #' @importFrom dplyr group_by pull summarise
-#' @importFrom ggplot2 aes element_text geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal scale_color_brewer geom_errorbar
+#' @importFrom ggplot2 aes element_text geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal scale_color_brewer geom_errorbar expand_limits
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map pmap
 #' @importFrom tidyr full_seq gather 
@@ -95,7 +95,7 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
             integer_breaks<-min(object$Year):max(object$Year)
             YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", SampEffort,")") else integer_breaks
             
-            GraphOut<-ggplot(data=object, aes(x=Year, y=Mean, colour = visit))+
+            GraphOut<-ggplot(data=object, aes(x=Year, y=Mean, colour = visit))+ expand_limits(y=0)+
               geom_point(size=4)+scale_color_brewer(palette="Dark2")+
               scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+            
               {if(!is.na(plot_title)) ggtitle(plot_title)}+
