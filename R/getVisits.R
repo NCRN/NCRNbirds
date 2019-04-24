@@ -7,7 +7,8 @@
 #' @importFrom dplyr filter group_by mutate select semi_join tbl_df
 #' 
 #' @param object An \code{NCRNbirds} object or a list of such objects.
-#' @param points A character vector or point names. Only visits to these points will be returned.
+#' @param parks A character vector of park codes. Only visits within these parks will be returned.
+#' @param points A character vector of point names. Only visits to these points will be returned.
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{EventDate} column.
 #' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
@@ -18,12 +19,12 @@
 #' @export
 
 
-setGeneric(name="getVisits",function(object,times=NA, years=NA, points=NA, visits=NA, reps=NA, output="dataframe"){standardGeneric("getVisits")}, signature="object")
+setGeneric(name="getVisits",function(object,parks = NA, times=NA, years=NA, points=NA, visits=NA, reps=NA, output="dataframe"){standardGeneric("getVisits")}, signature="object")
 
 
 setMethod(f="getVisits", signature=c(object="list"),
-          function(object,times,years,points,visits,reps,output) {
-            OutVisits<-lapply(X=object, FUN=getVisits, times=times, years=years, points=points, visits=visits,reps=reps)
+          function(object,parks, times,years,points,visits,reps,output) {
+            OutVisits<-lapply(X=object, FUN=getVisits, parks=parks, times=times, years=years, points=points, visits=visits,reps=reps)
             switch(output,
                    list={#names(OutPoints)<-getNames(object,name.class="code")
                      return(OutVisits)},
@@ -33,9 +34,11 @@ setMethod(f="getVisits", signature=c(object="list"),
 
 
 setMethod(f="getVisits", signature=c(object="NCRNbirds"),
-          function(object,times,years,points,visits,reps, output){
+          function(object,parks, times,years,points,visits,reps, output){
             
             XVisits<-object@Visits
+            
+            if(!anyNA(parks))XVisits<-XVisits[XVisits$Admin_Unit_Code %in% parks,]
             
             if(!anyNA(years))XVisits<-XVisits[XVisits$Year %in% years,]
             
