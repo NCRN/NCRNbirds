@@ -30,6 +30,9 @@
 
 \item{\code{Birds}}{A \code{data.frame} with the bird monitoring data. Each row is an observation of a number of individuals of a particular species at a particular point, visit, time interval and distance band.}
 
-\item{\code{Species}}{A \code{data.frame} with metadata about the bird species, including AOU (American Ornithological Union) Code, Latin and common names, as well as guild assignments for the BCI calculations.}
+\item{\code{Species}}{A \code{data.frame} with metadata about the bird species, including AOU (American Ornithological Union) Code, 
+Latin and common names, as well as the "Taxonomic Order" which indicates the order the species should be in to make lists familiar to birders.}
+
+\item{\code{Guilds}}{A \code{data.frame} which indicates which birds species are in which guild to allow calculation of the BCI.}
 }}
 

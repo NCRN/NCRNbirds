@@ -20,7 +20,8 @@ BCIPlot(object, years = NA, points = NA, visits = NA, times = NA,
 
 \item{plot_title}{Optional,  A title for the plot.}
 
-\item{point_num}{An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object then this will be calculated automatically. If \code{object} is a \code{data.frame} or a \code{list} than this can be provided by the user.}
+\item{point_num}{An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
+then this will be calculated automatically. If \code{object} is a \code{data.frame} or a \code{list} than this can be provided by the user.}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
 
