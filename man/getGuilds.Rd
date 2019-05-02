@@ -4,7 +4,7 @@
 \alias{getGuilds}
 \title{getGuilds}
 \usage{
-getGuilds(object, AOU = NA, types = NA, elements = NA,
+getGuilds(object, AOU = NA, type = NA, elements = NA,
   categories = NA, guilds = NA, output = "dataframe")
 }
 \arguments{
@@ -12,7 +12,7 @@ getGuilds(object, AOU = NA, types = NA, elements = NA,
 
 \item{AOU}{An optional character vector of AOU codes. Defaults to \code{NA} Each code should be in quotes. Only data from those birds will be returned.}
 
-\item{types}{An optional character vector that indicates which BCI you want guilds for. Options are:
+\item{type}{An optional character vector that indicates which BCI you want guilds for. Typically you would pick only 1, but you can pick more. Options are:
 \describe{
 \item{\code{NA}}{The default, returns data from all BCIs}
 \item{"Cent_Appal"}{Central Appalachians BCI}

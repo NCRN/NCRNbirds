@@ -4,14 +4,18 @@
 \alias{BCI}
 \title{BCI}
 \usage{
-BCI(object, years = NA, points = NA, output = "dataframe", ...)
+BCI(object, years = NA, points = NA, type = NA,
+  output = "dataframe", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}
 
-\item{years}{A vector of numbers. Will only return data from the indicated years. It is highly recommeded to only calculate the BCI over a single year's data.}
+\item{years}{A vector of numbers. Will only return data from the indicated years. It is highly recommeded to only 
+calculate the BCI over a single year's data.}
 
 \item{points}{A character vector. The names of one or more points where the data was collected.}
+
+\item{type}{A mandatory length 1 character \code{vector} that indicates the type of BCI to calculate. Can be "Cent_Appal" or "NETN_Forest_BCI"}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 

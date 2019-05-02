@@ -10,7 +10,7 @@
 #' 
 #' @param object An \code{NCRNbirds} object or a list of such objects.
 #' @param AOU An optional character vector of AOU codes. Defaults to \code{NA} Each code should be in quotes. Only data from those birds will be returned.
-#' @param types An optional character vector that indicates which BCI you want guilds for. Options are:
+#' @param type An optional character vector that indicates which BCI you want guilds for. Typically you would pick only 1, but you can pick more. Options are:
 #' \describe{
 #' \item{\code{NA}}{The default, returns data from all BCIs}
 #' \item{"Cent_Appal"}{Central Appalachians BCI}
@@ -44,13 +44,13 @@
 #' @export
 
 
-setGeneric(name="getGuilds",function(object,AOU=NA,types=NA,elements=NA, categories=NA, guilds=NA, 
+setGeneric(name="getGuilds",function(object,AOU=NA,type=NA,elements=NA, categories=NA, guilds=NA, 
                                      output="dataframe"){standardGeneric("getGuilds")}, signature="object")
 
 
  setMethod(f="getGuilds", signature=c(object="list"),
-           function(object,AOU,types,elements, categories, guilds, output) {
-             OutGuilds<-lapply(X=object, FUN=getGuilds, AOU=AOU, types=types,elements=elements, categories=categories, guilds=guilds)
+           function(object,AOU,type,elements, categories, guilds, output) {
+             OutGuilds<-lapply(X=object, FUN=getGuilds, AOU=AOU, type=type,elements=elements, categories=categories, guilds=guilds)
              switch(output,
                     list=return(OutGuilds),
                     dataframe=return(distinct(rbindlist(OutGuilds)))
@@ -59,12 +59,12 @@ setGeneric(name="getGuilds",function(object,AOU=NA,types=NA,elements=NA, categor
 
 
 setMethod(f="getGuilds", signature=c(object="NCRNbirds"),
-          function(object,AOU, types, elements, categories, guilds){
+          function(object,AOU, type, elements, categories, guilds){
             
             XGuilds<-object@Guilds
             
             if(!anyNA(AOU)) XGuilds<-XGuilds[XGuilds$AOU_Code %in% AOU,]
-            if(!anyNA(types)) XGuilds<-XGuilds[XGuilds$BCI_Type %in% types,]
+            if(!anyNA(type)) XGuilds<-XGuilds[XGuilds$BCI_Type %in% type,]
             if(!anyNA(elements)) XGuilds<-XGuilds[XGuilds$Int_Element %in% elements,]
             if(!anyNA(categories)) XGuilds<-XGuilds[XGuilds$Guild_Category %in% categories,]
             if(!anyNA(guilds)) XGuilds<-XGuilds[XGuilds$Response_Guild %in% guilds,]
