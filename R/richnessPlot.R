@@ -4,7 +4,7 @@
 #' @title richnessPlot
 #'
 #' @importFrom dplyr pull
-#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous theme theme_minimal
+#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous theme theme_minimal scale_colour_viridis_d
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map pmap
 #' @importFrom tidyr full_seq
@@ -85,10 +85,13 @@ setMethod(f="richnessPlot", signature=c(object="data.frame"),
     GraphOut<-ggplot(data=object, aes(x=Year, y=Richness))+
       geom_point(size=4, color="blue")+
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
-      labs(y=" Number of Species Observed", caption="Values in parentheses indicate the number of points monitored per visit in each year.")+
+      labs(y=" Number of Species Observed" )+
       {if(!is.na(plot_title)) ggtitle(plot_title)}+
-      theme_minimal()+
-      theme(axis.line=element_line(color="black"))
+      theme_classic()+  
+      theme(axis.title.y =element_text(size = 14, face ="bold", vjust= 1))+
+      theme(axis.title.x =element_text(size = 14, face ="bold", vjust= 1))+
+      theme(axis.text.y = element_text(color="black", vjust= 0.5,size = 12))+
+      theme(axis.text.x = element_text(color="black", size = 10))
     
     return(GraphOut)
 })

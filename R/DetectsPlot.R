@@ -107,10 +107,10 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
               theme(axis.text.x = element_text(color="black", size = 10))
               
             if(!se) {GraphOut<- (GraphOut+
-              labs(y=" Mean number of birds detected per point",caption="Values in parentheses indicate the number of points monitored per visit in each year."))
+              labs(y=" Mean number of birds detected per point", colour= ""))
             }else{
               GraphOut<- (GraphOut+ geom_errorbar(aes(ymin=Mean-se, ymax=Mean+se), width=.6)+
-                labs(y=" Mean + SE number of birds detected per point",caption="Values in parentheses indicate the number of points monitored per visit in each year."))
+                labs(y=" Mean + SE number of birds detected per point", colour= ""))
                 }
             
             return(GraphOut)
