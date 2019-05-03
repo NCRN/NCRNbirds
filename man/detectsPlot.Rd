@@ -4,12 +4,14 @@
 \alias{detectsPlot}
 \title{detectsPlot}
 \usage{
-detectsPlot(object, years = NA, points = NA, visits = NA,
-  times = NA, plot_title = NA, point_num = NA, se = FALSE,
-  output = "total", ...)
+detectsPlot(object, parks = NA, years = NA, points = NA,
+  visits = NA, times = NA, plot_title = NA, point_num = NA,
+  se = FALSE, output = "total", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{CountXVisit()}.}
+
+\item{parks}{A character vector of park codes. Only visits within these parks will be returned.}
 
 \item{years}{A numeric vector. Indicates which years should be graphed.}
 
