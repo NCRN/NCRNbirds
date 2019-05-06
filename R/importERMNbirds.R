@@ -3,8 +3,10 @@
 #' @title importERMNbirds
 #' 
 #' @importFrom lubridate year mdy
+#' @importFrom readr read_csv
 #' 
-#' @description  This function imports data from the standard ERMN.csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
+#' @description  This function imports data from the standard ERMN.csv files and saves it as \code{NCRNbirds} objects. 
+#' The required .csv files are: Points, Visits, FieldData , ERMNbands, ERMNintervals, BirdSpecies and BirdGuildAssignments.
 #' 
 #' @param Dir  The directory where the data are found. You should omit the trailing slash ("/") in the directory name.
 #' 
@@ -15,21 +17,22 @@
 
 importERMNbirds<-function(Dir){
  
-  InBands<-read.csv(paste(Dir,"ERMNbands.csv", sep="/"),as.is=T, header = T)
+  InBands<-read_csv(paste(Dir,"ERMNbands.csv", sep="/"))
   
-  InIntervals<-read.csv(paste(Dir,"ERMNintervals.csv", sep="/"),as.is=T, header = T)
+  InIntervals<-read_csv(paste(Dir,"ERMNintervals.csv", sep="/"))
   
-  InPoints<-read.csv(paste(Dir,"ERMNpoints.csv", sep="/"),as.is=T, header=T)
+  InPoints<-read_csv(paste(Dir,"ERMNpoints.csv", sep="/"))
   
-  InVisits<-read.csv(paste(Dir,"ERMNvisits.csv",sep="/"),as.is=T, header=T)
+  InVisits<-read_csv(paste(Dir,"ERMNvisits.csv",sep="/"))
   InVisits$EventDate<-as.Date(as.character(InVisits$EventDate), format="%m/%d/%Y")
   InVisits$Year<-year(InVisits$EventDate)
   
-  InFieldData<-read.csv(paste(Dir,"ERMNFieldData.csv", sep="/"),as.is=T, header=T)
+  InFieldData<-read_csv(paste(Dir,"ERMNFieldData.csv", sep="/"))
   InFieldData$EventDate<-as.Date(as.character(InFieldData$EventDate), format="%m/%d/%Y")
   InFieldData$Year<-year(InFieldData$EventDate)
   
-  InSpecies<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
+  InSpecies<-read_csv(paste(Dir,"BirdSpecies.csv", sep="/"))  
+  InGuilds<-read_csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"))
   
   DEWA<-new("NCRNbirds", 
             ParkCode="DEWA", 
@@ -44,7 +47,8 @@ importERMNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="DEWA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="DEWA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="DEWA",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   
@@ -61,7 +65,8 @@ importERMNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="ALPO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="ALPO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="ALPO",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
             
   )
   
@@ -79,7 +84,8 @@ importERMNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="FONE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="FONE",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="FONE",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   
@@ -96,7 +102,8 @@ importERMNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="FRHI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="FRHI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="FRHI",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   GARI<-new("NCRNbirds", 
@@ -112,7 +119,8 @@ importERMNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="GARI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="GARI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="GARI",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   NERI<-new("NCRNbirds", 
@@ -128,7 +136,8 @@ importERMNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="NERI",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="NERI",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="NERI",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   BLUE<-new("NCRNbirds", 
@@ -144,7 +153,8 @@ importERMNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="BLUE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="BLUE",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="BLUE",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   
