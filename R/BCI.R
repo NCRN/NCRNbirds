@@ -71,16 +71,6 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
     TempMi<-getGuilds(object=object, guilds = "TemperateMigrant")$AOU_Code
     SingBrood<-getGuilds(object=object, guilds = "SingleBrooded")$AOU_Code
     
-    # PrimHab<-getGuilds(object=object, categories =  "PrimaryHabitat")$AOU_Code
-    # NestPlac<-getGuilds(object=object, categories =  "NestPlacement")$AOU_Code
-    # InsForBe<-getGuilds(object=object, categories =  "InsectivoreForagingBehavior")$AOU_Code
-    # Troph<-getGuilds(object=object, categories =  "Trophic")$AOU_Code
-    # PopLim<-getGuilds(object=object, categories =  "PopulationLimiting")$AOU_Code
-    # Ori<-getGuilds(object=object, categories =  "Origin")$AOU_Code
-    # Mig<-getGuilds(object=object, categories =  "Migratory")$AOU_Code
-    # NumBrood<-getGuilds(object=object, categories =  "NumberofBroods")$AOU_Code
-    
-    
     # Count birds in each guild
     XBCI<-as_tibble(getPoints(object=object,years=years, points=points)[c("Admin_Unit_Code","Point_Name")]) %>% rename(points=Point_Name)
     
@@ -106,14 +96,6 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
             TemperateMigrant=map_int(CheckList,~.[. %in% TempMi] %>% length),
             SingleBrooded=map_int(CheckList,~.[. %in% SingBrood] %>% length),
             
-            # PrimaryHabitat=map_int(CheckList,~.[. %in% PrimHab] %>% length),
-            # NestPlacement=map_int(CheckList,~.[. %in% NestPlac] %>% length),
-            # InsectivoreForagingBehavior=map_int(CheckList,~.[. %in% InsForBe] %>% length),
-            # Trophic=map_int(CheckList,~.[. %in% Troph] %>% length),
-            # PopulationLimiting=map_int(CheckList,~.[. %in% PopLim] %>% length),
-            # Origin=map_int(CheckList,~.[. %in% Ori] %>% length),
-            # Migratory=map_int(CheckList,~.[. %in% Mig] %>% length),
-            # NumberofBroods=map_int(CheckList,~.[. %in% NumBrood] %>% length),
             Total=map_int(CheckList,length),
             
           # Proportions for BCI  
