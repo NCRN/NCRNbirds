@@ -5,7 +5,8 @@
 \title{BCIPlot}
 \usage{
 BCIPlot(object, years = NA, points = NA, visits = NA, times = NA,
-  plot_title = NA, point_num = NA, output = "total", ...)
+  plot_title = NA, point_num = NA, type = NA, output = "total",
+  ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.}
@@ -23,6 +24,8 @@ BCIPlot(object, years = NA, points = NA, visits = NA, times = NA,
 \item{point_num}{An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 then this will be calculated automatically. If \code{object} is a \code{data.frame} or a \code{list} than this can be provided by the user.}
 
+\item{type}{A mandatory length 1 character \code{vector} that indicates the type of BCI to calculate. Can be "Cent_Appal" or "NETN_Forest_BCI"}
+
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
 
 \item{...}{Additional arguments passed to \code{\link{birdRichness}}}
@@ -32,7 +35,8 @@ Plots BCI score over time.
 }
 \details{
 This function produces a graph the Bird community Index  over time. It does this by using the output of 
-the \code{\link{BCI}} function, and averging the plot values for the park's yearly value. The data is then passed on 
+the \code{\link{BCI}} function, and averging the plot values for the park's yearly value. The error bars on the plot represnt 95% 
+bootstrap confidence intervals. The data is then passed on 
 to ggplot2 for graphing. Typically this is done automatically by providing an \code{NCRNbirds} object or a \code{list}
 of such objects. If the user wishes to provide their own \code{data.frame} it should have 3 columns, \code{Year, BCI, BCI_Category}
 and each row should be data from single year.
