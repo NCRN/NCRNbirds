@@ -4,7 +4,7 @@
 #' 
 #' @description Calculates the Bird Conmmunity Index (BCI) of O'Connell et al 1998, 2000.
 #' 
-#' @importFrom dplyr mutate rename
+#' @importFrom dplyr mutate rename select
 #' @importFrom magrittr %>%
 #' @importFrom purrr map map_int
 #' @importFrom tibble as_tibble
@@ -15,16 +15,24 @@
 #' calculate the BCI over a single year's data.
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param type A mandatory length 1 character \code{vector} that indicates the type of BCI to calculate. Can be "Cent_Appal" , the default, or "NETN_Forest_BCI"
+#' @param checklist Locgical. Indicates if a list column with a checklist of birds for each point should be included in the output. Defaults to \code{FALSE}.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' @param ... Additional arguments passed to \code{\link{getChecklist}} and from there to \code{\link{getBirds}}
 #' 
-#' @return Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species present in each guild and guild type.
+#' @return Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species 
+#' present in each guild and guild type.
 #' 
-#' @details This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well. Typically a single years' data is used for the BCI, so it is recommended (but not strictly requried) that a single year be indicated in the \code{years} argument. The function calls \code{\link{getChecklist}} to get a species list of birds for each point.  That function, in turn, calls \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds from all distance bands and time intervals will be included in the calculation.
+#' @details This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well.
+#' Typically a single years' data is used for the BCI, so it is recommended (but not strictly requried) that a single year be indicated in 
+#' the \code{years} argument. The function calls \code{\link{getChecklist}} to get a species list of birds for each point.  
+#' That function, in turn, calls \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds 
+#' from all distance bands and time intervals will be included in the calculation.
 #' 
-#' @references O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool for Assessing Biotic Integrity in the Mid-Atlantic Highlands. Final Report prepared for U. S. Environmental Protection Agency, Region III.
+#' @references O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool for Assessing Biotic Integrity in the 
+#' Mid-Atlantic Highlands. Final Report prepared for U. S. Environmental Protection Agency, Region III.
 #' 
-#' O'Connell TJ, LE Jackson and RP Brooks. 2000. Bird guilds as indicators of ecological condition in the central Appalachians. Ecological Applications 10:1706-1721.
+#' O'Connell TJ, LE Jackson and RP Brooks. 2000. Bird guilds as indicators of ecological condition in the central Appalachians. 
+#' Ecological Applications 10:1706-1721.
 #'  
 #' @export
 
@@ -32,13 +40,13 @@
 ########################
 
 
-setGeneric(name="BCI",function(object,years=NA,points=NA,type="Cent_Appal", output="dataframe",...){standardGeneric("BCI")}, signature="object")
+setGeneric(name="BCI",function(object,years=NA,points=NA,type="Cent_Appal", checklist=F, output="dataframe",...){standardGeneric("BCI")}, signature="object")
 
 
 
 setMethod(f="BCI", signature=c(object="list"),
           function(object, years, points, type, output,...) {
-            OutMat<-lapply(X=object, FUN=BCI, years=years, points=points,type=type, ...)
+            OutMat<-lapply(X=object, FUN=BCI, years=years, points=points,type=type, checklist=checklist, ...)
             switch(output,
                    list= return(OutMat),
                    dataframe=return(do.call("rbind",OutMat))
@@ -145,6 +153,9 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
         BCI_Category=c("Low Integrity", "Medium Integrity","High Integrity","Highest Integrity")[findInterval(BCI,
               vec=c(0,40.1,52.1,60.1,77.1))]
     )
+if(!checklist) XBCI<-XBCI %>% select(-CheckList)  
+    
+    XBCI<-XBCI %>% rename(Point_Name=points)
     
     return(XBCI)
 
