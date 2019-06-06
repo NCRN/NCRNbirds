@@ -45,7 +45,7 @@ setGeneric(name="BCI",function(object,years=NA,points=NA,type="Cent_Appal", chec
 
 
 setMethod(f="BCI", signature=c(object="list"),
-          function(object, years, points, type, output,...) {
+          function(object, years, points, type,checklist, output,...) {
             OutMat<-lapply(X=object, FUN=BCI, years=years, points=points,type=type, checklist=checklist, ...)
             switch(output,
                    list= return(OutMat),
@@ -55,7 +55,7 @@ setMethod(f="BCI", signature=c(object="list"),
 
 
 setMethod(f="BCI", signature=c(object="NCRNbirds"),
-  function(object,years, points,type,...){
+  function(object,years, points,type,checklist,...){
     
     #Get all guild info first so it does not have to be retrieved for every point
     

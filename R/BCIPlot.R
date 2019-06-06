@@ -5,13 +5,11 @@
 #'
 #' @importFrom dplyr case_when group_by mutate n_distinct pull right_join summarize
 #' @importFrom ggplot2 aes annotate element_line geom_pointrange ggplot ggtitle guides guide_legend labs mean_cl_boot
-#' @importFrom ggplot2 scale_color_manual scale_x_continuous scale_y_continuous theme theme_classic
+#' @importFrom ggplot2 scale_color_manual scale_x_continuous scale_y_continuous theme theme_classic ylab
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map map_dbl pmap
-#' @importFrom tidyr full_seq
-#' @importFrom viridis viridis_pal
-
-#' @importFrom tidyr replace_na
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom tidyr full_seq replace_na
 #' 
 #' @description Plots BCI score over time.
 #' 
@@ -23,7 +21,11 @@
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 #' then this will be calculated automatically. If \code{object} is a \code{data.frame} or a \code{list} than this can be provided by the user. 
-#' @param type A mandatory length 1 character \code{vector} that indicates the type of BCI to calculate. Can be "Cent_Appal" or "NETN_Forest_BCI"
+#' @param type A mandatory length 1 character \code{vector} that indicates the type of BCI to calculate. Can be "Cent_Appal" (default) 
+#' or "NETN_Forest_BCI"
+#' @param caption Logcial. Indicates if the default caption "Values in parentheses indicate the number of points monitored each visit of each year."
+#' should be included.
+#' @param palette Color pallete for the background of the graph. Defaults to "BuGn" (blue green) but will accept any RColorBrewer palette
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' 
@@ -37,11 +39,12 @@
 #' @export
 
 
-setGeneric(name="BCIPlot",function(object,years=NA, points=NA,visits=NA, times=NA, plot_title=NA, point_num=NA, type=NA,output="total", ...){standardGeneric("BCIPlot")}, signature="object")
+setGeneric(name="BCIPlot",function(object,years=NA, points=NA,visits=NA, times=NA, plot_title=NA, point_num=NA, type="Cent_Appal",caption=T,
+                                   palette="BuGn", output="total", ...){standardGeneric("BCIPlot")}, signature="object")
 
 
 setMethod(f="BCIPlot", signature=c(object="list"),
-  function(object,years,points,visits, times, plot_title, point_num, type, output, ...) {
+  function(object,years,points,visits, times, plot_title, point_num, type, caption,palette, output, ...) {
     
      switch(output,
        total={
@@ -68,19 +71,19 @@ setMethod(f="BCIPlot", signature=c(object="list"),
           map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
             unlist(F)})
         
-        return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
+        return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num, caption=caption,palette=palette))
        },
     
           list={
          return(lapply(X=object, FUN=BCIPlot, years=years, points=points, visits=visits, times=times,
-                       plot_title=plot_title, point_num=point_num, type=type))
+                       plot_title=plot_title, point_num=point_num, type=type, caption=caption, palette=palette))
        }
      )
 })
 
 
 setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
-  function(object,years,points,visits, times, plot_title=NA,type, ...){
+  function(object,years,points,visits, times, plot_title=NA,type,caption,palette, ...){
 
     visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
     years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
@@ -105,15 +108,16 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
       map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
         unlist(F)})
     
-    plot_title<-if(is.na(plot_title)) paste0("Bird Community Index for ",getParkNames(object, name.class="long")) else plot_title
+    plot_title<-if(is.na(plot_title)) paste0("Bird Community Index for ",getParkNames(object, name.class="long"), " (+/- 95%CI)") else plot_title
                                              
-    return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num))
+    return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num, caption=caption, palette=palette))
 })
 
 setMethod(f="BCIPlot", signature=c(object="data.frame"),
-  function(object, plot_title, point_num){
+  function(object, plot_title, point_num, caption, palette){
   
-   BCIColors<-viridis_pal()(4)
+   BCIColors<-brewer.pal(4,palette) 
+   
    names(BCIColors)<-c("Low Integrity", "Medium Integrity", "High Integrity", "Highest Integrity")
    
     
@@ -125,16 +129,18 @@ setMethod(f="BCIPlot", signature=c(object="data.frame"),
 
     
     GraphOut<-ggplot(data=object, aes(x=Year, y=BCI, color=BCI_Category)) +
-      annotate("rect", ymin=0,  ymax=40, xmin=-Inf, xmax=Inf, fill=BCIColors[1], alpha=0.3) +
-      annotate("rect", ymin=40, ymax=52, xmin=-Inf, xmax=Inf, fill=BCIColors[2], alpha=0.3) +
-      annotate("rect", ymin=52, ymax=60, xmin=-Inf, xmax=Inf, fill=BCIColors[3], alpha=0.3) +
-      annotate("rect", ymin=60, ymax=80, xmin=-Inf, xmax=Inf, fill=BCIColors[4], alpha=0.3) +
+      annotate("rect", ymin=0,  ymax=40, xmin=-Inf, xmax=Inf, fill=BCIColors[1]) +
+      annotate("rect", ymin=40, ymax=52, xmin=-Inf, xmax=Inf, fill=BCIColors[2]) +
+      annotate("rect", ymin=52, ymax=60, xmin=-Inf, xmax=Inf, fill=BCIColors[3]) +
+      annotate("rect", ymin=60, ymax=80, xmin=-Inf, xmax=Inf, fill=BCIColors[4]) +
       geom_pointrange(aes(ymin=Low, ymax=High),fatten=4, size=1) +
       scale_color_manual(values=BCIColors, drop=FALSE) +
       guides(color=guide_legend(reverse=T, title ="BCI Category"))+
+      geom_pointrange(aes(ymin=Low, ymax=High),fatten=4, size=1, color="black", show.legend=F) +
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks) +
       scale_y_continuous(limits=c(0,80), expand=c(0,0)) +
-      labs(y=" Bird Community Index", caption="Values in parentheses indicate the number of points monitored each visit of each year.") +
+      ylab("Bird Community Index") +
+      {if(caption) labs(caption="Values in parentheses indicate the number of points monitored each visit of each year.") }+
       {if(!is.na(plot_title)) ggtitle(plot_title)} +
       theme_classic()# +
     
