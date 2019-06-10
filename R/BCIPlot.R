@@ -108,7 +108,7 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
       map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
         unlist(F)})
     
-    plot_title<-if(is.na(plot_title)) paste0("Bird Community Index for ",getParkNames(object, name.class="long"), " (+/- 95%CI)") else plot_title
+    plot_title<-if(is.na(plot_title)) paste0("Bird Community Index for ",getParkNames(object, name.class="long"), " (+/- 95% CI)") else plot_title
                                              
     return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num, caption=caption, palette=palette))
 })
@@ -139,7 +139,7 @@ setMethod(f="BCIPlot", signature=c(object="data.frame"),
       geom_pointrange(aes(ymin=Low, ymax=High),fatten=4, size=1, color="black", show.legend=F) +
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks) +
       scale_y_continuous(limits=c(0,80), expand=c(0,0)) +
-      ylab("Bird Community Index") +
+      ylab("Bird Community Index (+/- 95% CI)") +
       {if(caption) labs(caption="Values in parentheses indicate the number of points monitored each visit of each year.") }+
       {if(!is.na(plot_title)) ggtitle(plot_title)} +
       theme_classic()# +
