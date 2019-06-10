@@ -4,11 +4,13 @@
 \alias{CountXVisit}
 \title{CountXVisit}
 \usage{
-CountXVisit(object, points = NA, AOU = NA, years = NA, times = NA,
-  band = 1, visits = NA, output = "dataframe", ...)
+CountXVisit(object, parks = NA, points = NA, AOU = NA, years = NA,
+  times = NA, band = 1, visits = NA, output = "dataframe", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}
+
+\item{parks}{A character vector of park codes. Only visits within these parks will be returned.}
 
 \item{points}{A character vector. The names of one or more points where the data was collected.}
 

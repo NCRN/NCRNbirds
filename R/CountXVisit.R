@@ -10,6 +10,7 @@
 #' @importFrom data.table rbindlist
 #' 
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
+#' @param parks A character vector of park codes. Only visits within these parks will be returned.
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
 #' @param years  A vector of numbers. will return only data from the indicated years.
@@ -33,14 +34,14 @@
 ########################
 
 
-setGeneric(name="CountXVisit",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,
+setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,
                                        output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")
 
 
 
 setMethod(f="CountXVisit", signature=c(object="list"),
-          function(object, points, AOU, years, band, visits, output,...) {
-            OutMat<-lapply(X=object, FUN=CountXVisit, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,...)
+          function(object, parks, points, AOU, years, band, visits, output,...) {
+            OutMat<-lapply(X=object, FUN=CountXVisit,parks=parks, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,...)
             switch(output,
                    list= return(OutMat),
                    dataframe= return(rbindlist(OutMat, use.names=TRUE, fill=TRUE)) #return(bind_rows(OutMat))
@@ -49,13 +50,13 @@ setMethod(f="CountXVisit", signature=c(object="list"),
 
 
 setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
-          function(object,points,AOU,years,band,visits,output,...){
+          function(object,parks, points,AOU,years,band,visits,output,...){
             
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
             ##  visiting a point once instead of twice)
             visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
             
-            VisitMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits) %>%
+            VisitMat<-getVisits(object=object,parks=parks, points=points,years=years,times=times,visits=visits) %>%
               mutate(Visit=paste0("Visit",Visit),Visited=1) %>%
               dplyr::select(Admin_Unit_Code,Point_Name,Year,Visit,Visited) %>%
               spread(key=Visit, value=Visited)
@@ -64,7 +65,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             ## data there will be a "0", but this will occur for both missed visits and zero counts.
 
             
-            CountMat<-getVisits(object=object,points=points,years=years,times=times,visits=visits)%>%
+            CountMat<-getVisits(object=object,parks=parks, points=points,years=years,times=times,visits=visits)%>%
               dplyr::select(Admin_Unit_Code,Point_Name,EventDate,Visit,Year) %>%
               left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
               mutate(Visit=paste0("Visit",Visit)) %>%
