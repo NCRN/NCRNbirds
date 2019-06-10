@@ -4,30 +4,43 @@
 \alias{BCI}
 \title{BCI}
 \usage{
-BCI(object, years = NA, points = NA, output = "dataframe", ...)
+BCI(object, years = NA, points = NA, type = "Cent_Appal",
+  checklist = F, output = "dataframe", ...)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}
 
-\item{years}{A vector of numbers. Will only return data from the indicated years. It is highly recommeded to only calculate the BCI over a single year's data.}
+\item{years}{A vector of numbers. Will only return data from the indicated years. It is highly recommeded to only 
+calculate the BCI over a single year's data.}
 
 \item{points}{A character vector. The names of one or more points where the data was collected.}
+
+\item{type}{A mandatory length 1 character \code{vector} that indicates the type of BCI to calculate. Can be "Cent_Appal" , the default, or "NETN_Forest_BCI"}
+
+\item{checklist}{Locgical. Indicates if a list column with a checklist of birds for each point should be included in the output. Defaults to \code{FALSE}.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 
 \item{...}{Additional arguments passed to \code{\link{getChecklist}} and from there to \code{\link{getBirds}}}
 }
 \value{
-Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species present in each guild and guild type.
+Returns a \code{data.frame} with the BCI, the BCI category (Low Integrity, High Integrity etc.), the number and percent of species 
+present in each guild and guild type.
 }
 \description{
 Calculates the Bird Conmmunity Index (BCI) of O'Connell et al 1998, 2000.
 }
 \details{
-This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well. Typically a single years' data is used for the BCI, so it is recommended (but not strictly requried) that a single year be indicated in the \code{years} argument. The function calls \code{\link{getChecklist}} to get a species list of birds for each point.  That function, in turn, calls \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds from all distance bands and time intervals will be included in the calculation.
+This calculates the Bird Community Index (BCI - O'Connell et al 1998, 2000) for a park or parks, and can be restricted by point as well.
+Typically a single years' data is used for the BCI, so it is recommended (but not strictly requried) that a single year be indicated in 
+the \code{years} argument. The function calls \code{\link{getChecklist}} to get a species list of birds for each point.  
+That function, in turn, calls \code{\link{getBirds}}. Any valid argument for getBirds can be inluded as part of \code{...}. By default birds 
+from all distance bands and time intervals will be included in the calculation.
 }
 \references{
-O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool for Assessing Biotic Integrity in the Mid-Atlantic Highlands. Final Report prepared for U. S. Environmental Protection Agency, Region III.
+O'Connell, TJ, LE Jackson and RP Brooks. 1998. The Bird Community Index: A Tool for Assessing Biotic Integrity in the 
+Mid-Atlantic Highlands. Final Report prepared for U. S. Environmental Protection Agency, Region III.
 
-O'Connell TJ, LE Jackson and RP Brooks. 2000. Bird guilds as indicators of ecological condition in the central Appalachians. Ecological Applications 10:1706-1721.
+O'Connell TJ, LE Jackson and RP Brooks. 2000. Bird guilds as indicators of ecological condition in the central Appalachians. 
+Ecological Applications 10:1706-1721.
 }

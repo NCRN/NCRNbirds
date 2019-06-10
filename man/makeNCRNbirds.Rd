@@ -5,7 +5,8 @@
 \title{makeNCRNBbirds}
 \usage{
 makeNCRNbirds(object, ParkCode, ShortName, LongName, Network,
-  points = NA, ...)
+  VisitNumber = NA, Bands = NA, Intervals = NA, Species = NA,
+  Guilds = NA, points = NA)
 }
 \arguments{
 \item{object}{Either an \code{NCRNbirds} object or a \code{list} of such objects}
@@ -24,5 +25,22 @@ makeNCRNbirds(object, ParkCode, ShortName, LongName, Network,
 makes a new \code{NCRNbirds} object from one or more existing objects
 }
 \details{
-This function creates new \code{NCRNbirds} objects by combining two or more previously existing objects and/or by subsetting exisitng objects. If more than one object is provided then the data for these objects is combined. Providing a \code{points} argument will indicate which points are in the new object. The user must indicate the new network code, park code and park names.
+This function creates new \code{NCRNbirds} objects by combining two or more previously existing objects and/or by 
+subsetting exisitng objects. If more than one object is provided then the data for these objects is combined. Providing a \code{points} 
+argument will indicate which points are in the new object. The user must indicate the new network code, park code and park names. 
+
+The \code{VisitNumber}, \code{Bands}, \code{Intervals}, \code{Species} and \code{Guilds} arguments are all optional. If they are not specified,
+and \code{object} is a single \code{NCRNbirds} object then the contents of these slots will be inherited from the original \code{object}. If 
+\code{object} is a \code{list} of \code{NCRNbirds} objects then the default is to use the content of the first object in the \code{list}
+to fill the output \code{object}.
 }
+\section{Slots}{
+
+\describe{
+\item{\code{VisitNumber}}{An optional  \code{numeric} vector of length 1. The number of visits that is typically made to each point. This serves as the default number of visits for other functions.}
+
+\item{\code{Bands}}{An optional \code{data.frame} with metadata for the distance bands used during monitoring. Includes a name, min distance and max distance for each band.}
+
+\item{\code{Intervals}}{An optional \code{data.frame} with mmeatdata for the time intervals used during monitroing. Includes a name start time in minutes and end time in minutes for each interval.}
+}}
+

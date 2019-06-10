@@ -3,8 +3,10 @@
 #' @title importMIDNbirds
 #' 
 #' @importFrom lubridate year mdy
+#' @importFrom readr read_csv
 #' 
-#' @description  This function imports data from the standard MIDN .csv files and saves it as \code{NCRNbirds} objects. The required .csv files are: Points, Visits, FieldData and BirdGuildAssignments.
+#' @description  This function imports data from the standard MIDN .csv files and saves it as \code{NCRNbirds} objects. 
+#' The required .csv files are: Points, Visits, FieldData MIDNbands, MIDNintervals, BirdSpecies, and BirdGuildAssignments.
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
 #' 
@@ -16,22 +18,22 @@
 importMIDNbirds<-function(Dir){
 
   
-  InBands<-read.csv(paste(Dir,"MIDNbands.csv", sep="/"),as.is=T, header = T)
+  InBands<-read_csv(paste(Dir,"MIDNbands.csv", sep="/"))
+  InIntervals<-read_csv(paste(Dir,"MIDNintervals.csv", sep="/"))
   
-  InIntervals<-read.csv(paste(Dir,"MIDNintervals.csv", sep="/"),as.is=T, header = T)
+  InPoints<-read_csv(paste(Dir,"Points.csv", sep="/"))
   
-  InPoints<-read.csv(paste(Dir,"Points.csv", sep="/"),as.is=T, header=T)
-  
-  InVisits<-read.csv(paste(Dir,"Visits.csv",sep="/"),as.is=T, header=T)
+  InVisits<-read_csv(paste(Dir,"Visits.csv",sep="/"))
   InVisits$EventDate<-mdy(InVisits$EventDate)
   InVisits$Year<-year(InVisits$EventDate)
 
   
-  InFieldData<-read.csv(paste(Dir,"FieldData.csv", sep="/"),as.is=T, header=T)
+  InFieldData<-read_csv(paste(Dir,"FieldData.csv", sep="/"))
   InFieldData$EventDate<-mdy(InFieldData$EventDate)
   InFieldData$Year<-year(InFieldData$EventDate)
   
-  InSpecies<-read.csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"), as.is=T, header=T )
+  InSpecies<-read_csv(paste(Dir,"BirdSpecies.csv", sep="/"))  
+  InGuilds<-read_csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"))
   
   APCO<-new("NCRNbirds", 
             ParkCode="APCO", 
@@ -46,7 +48,8 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="APCO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="APCO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="APCO",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   
@@ -63,7 +66,8 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="BOWA",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="BOWA",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="BOWA",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   FRSP<-new("NCRNbirds", 
@@ -79,7 +83,8 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="FRSP",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="FRSP",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="FRSP",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   PETE<-new("NCRNbirds", 
@@ -95,7 +100,8 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="PETE",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="PETE",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="PETE",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   RICH<-new("NCRNbirds", 
@@ -111,7 +117,8 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="RICH",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="RICH",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="RICH",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   )
   
   VAFO<-new("NCRNbirds",
@@ -127,7 +134,8 @@ importMIDNbirds<-function(Dir){
             Points=InPoints[InPoints$Admin_Unit_Code=="VAFO",], 
             Visits=InVisits[InVisits$Admin_Unit_Code=="VAFO",],
             Birds=InFieldData[InFieldData$Admin_Unit_Code=="VAFO",],
-            Species=InSpecies
+            Species=InSpecies,
+            Guilds=InGuilds
   ) 
   
   

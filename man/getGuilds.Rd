@@ -4,31 +4,51 @@
 \alias{getGuilds}
 \title{getGuilds}
 \usage{
-getGuilds(object, AOU = NA, categories = NA, output = "dataframe")
+getGuilds(object, AOU = NA, type = NA, elements = NA,
+  categories = NA, guilds = NA, output = "dataframe")
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a list of such objects.}
 
-\item{AOU, }{an optional character vector of AOU codes. Each code should be in quotes. Only data from those birds will be returned.}
+\item{AOU}{An optional character vector of AOU codes. Defaults to \code{NA} Each code should be in quotes. Only data from those birds will be returned.}
 
-\item{categories}{A character vector of guild categories. Only data for those categories will be returned. Options are:
+\item{type}{An optional character vector that indicates which BCI you want guilds for. Typically you would pick only 1, but you can pick more. Options are:
 \describe{
-\item{"Migratory"}{Migratory status of the species}
-\item{"Brood.Numbers"}{Is the speices single or double brooded}
-\item{"Primary.Habitat"}{Is the species a forest generalist or an interior forest obligate?}
-\item{"Exotic"}{Is the species exotic or native?}
-\item{"Nest.Placement"}{Where is the species' nest found? Possibilities include canopy, shrub, open ground nester etc.}
-\item{"Foraging.Behavior"}{What tyoe of foraging behavior does the species show? Possibilites include wate plunger, bark prober,upper canopy forager, etc.}
-\item{"Tropic.Level"}{What does the species feed on? Can be omnivore, carnivore, insectivore etc.}
-\item{"Nest.Height"}{How high does the species nest? High, low or highly variable.}
-\item{"Pred_Para_Desc"}{Is the species a nest predator or brood parasite.Yes or no.}
+\item{\code{NA}}{The default, returns data from all BCIs}
+\item{"Cent_Appal"}{Central Appalachians BCI}
+\item{"NETN_Forest_BCI"}{The Northeast Temperate Network's forest BCI}
 }}
 
-\item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function. When a list of \code{NCRNbirds} object is used, and the output is "dataframe" then a each unique conbination of species and guidls will only be listed once in the resulting dataframe. If some species have ifferent guild assingments in the different \code{NCRNbirds} objects in the list, then those species will be listed twice which could have unintended consiquences}
+\item{elements}{An optional character vector that indicates which will filter the Guild dat aby integrity elements from the BCI. 
+Defaults to \code{NA} which returns all integrity elements. Other options are "Compositional", "Functional", "Structural"}
+
+\item{categories}{A character vector of guild categories. Defaults to \code{NA}. Only data for those categories will be returned. Options are:
+\describe{
+\item{"InsectavoreForagingBehavior"}{What tyoe of foraging behavior does the species show? Possibilites include wate plunger, 
+bark prober,upper canopy forager, etc.}
+\item{"Migratory"}{Migratory status of the species}
+\item{"NestPlacement"}{Where is the species' nest found? Possibilities include canopy, shrub, open ground nester etc.}
+\item{"NumberofBroods"}{Is the speices single or double brooded}
+\item{"Origin"}{Is the species exotic or native?}
+\item{"PopulationLimitingCode"}{Is the species a nest predator or brood parasite.Yes or no.}
+\item{"PrimaryHabitat"}{Is the species a forest generalist or an interior forest obligate?}
+\item{"Trophic"}{What does the species feed on? Can be omnivore, carnivore, insectivore etc.}
+}}
+
+\item{guilds}{A character vector that defualts to \code{NA}. When not \code{NA} it will filter the guild infomraiton by this field. Options include
+"BarkProbler", "CanopyNester", "Exotic", "ForestGeneralist", "ForestGroundNester", "GroundGleaner", "InteriorForestObligate", "LowerCanopyForger",
+"NetPredator_BroodParasite", "Omnivore", "OpenGroundNester","Resident,"ShrubNester","SingleBrooded","TemperateMigrant" and "UpperCanopyForager".}
+
+\item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function. 
+When a list of \code{NCRNbirds} object is used, and the output is "dataframe" then a each unique conbination of species and guidls 
+will only be listed once in the resulting dataframe. If some species have different guild assingments in the different \code{NCRNbirds} objects
+in the list, then those species will be listed twice which could have unintended consiquences}
 }
 \description{
-Returns the guild data from the \code{Species} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
+Returns the guild data from the \code{Guilds} slot of an NCRNbirds object. The returned data can be filtered to meet 
+various criteria.
 }
 \details{
-This function returns data on bird guilds from an \code{NPSForVeg} object or a list of such objects. This data is stored in the \code{Species} slot.
+This function returns data on bird guilds from an \code{NPSForVeg} object or a list of such objects. This data is stored in the 
+\code{Guilds} slot.
 }

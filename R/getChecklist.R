@@ -32,7 +32,7 @@ setMethod(f="getChecklist", signature=c(object="list"),
 setMethod(f="getChecklist", signature=c(object="NCRNbirds"),
           function(object,years,points, out.style, output,...){
             
-            return( sort( getBirdNames(object=object, names=unique( getBirds(object=object, years=years, points=points,...)$AOU),
+            return( sort( getBirdNames(object=object, names=unique( getBirds(object=object, years=years, points=points,...)$AOU_Code),
                                        in.style="AOU", out.style=out.style) ))
             
           }
