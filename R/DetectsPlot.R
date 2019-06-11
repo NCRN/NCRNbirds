@@ -19,6 +19,8 @@
 #' @param points A character vector of point names. Only these points will be used.
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
+#' @param max Logical. If \code{FALSE}, the default, then data from each visit will be dispalyed separately. 
+#' If \code{TRUE} then the maximum detected across all visits will be displayed.
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional list of numeric vector indicating the number of points sampled each visit of each year. Each visit is a separte elemnet in the list. If \code{object} is a \code{NCRNbirds} object
 #' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
@@ -33,13 +35,11 @@
 #' @export
 
 
-setGeneric(name="detectsPlot",function(object,parks= NA,years=NA,  points=NA, visits=NA, times=NA, plot_title=NA, point_num= NA, se= FALSE, output="total", ...){standardGeneric("detectsPlot")}, signature="object")
+setGeneric(name="detectsPlot",function(object,parks= NA,years=NA,  points=NA, visits=NA, times=NA, max=F, plot_title=NA, point_num= NA, se= FALSE, output="total", ...){standardGeneric("detectsPlot")}, signature="object")
 
 
 setMethod(f="detectsPlot", signature=c(object="list"),
-  function(object,parks,years,points,visits,times,plot_title, point_num,se, output, ...) {
-
-    
+  function(object,parks,years,points,visits,times, max, plot_title, point_num,se, output, ...) {
     
     switch(output,
        total={    visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
@@ -47,10 +47,13 @@ setMethod(f="detectsPlot", signature=c(object="list"),
        years<-if(anyNA(years)) getVisits(object, parks=parks, points=points, visits=visits, times=times) %>% 
          pull(Year) %>% unique %>% sort %>% full_seq(1) else years
        
-         graphdata<-CountXVisit(object=object, parks= parks, years=years, points=points,visits=visits,times=times, ...)%>%
-                    gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%  # rearrange to sum by visit to handle varying visits per point
-                    group_by(Year, visit) %>% 
-                    dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3), se= round(sd(count, na.rm=T)/sqrt(n()),digits=3))
+         graphdata<-CountXVisit(object=object, parks= parks, years=years, points=points,visits=visits,times=times, max=max,...)
+         graphdata<-if (max){graphdata %>% dplyr::select (Admin_Unit_Code, Point_Name, Year, count=Max) %>% mutate(visit="Maximum") %>% 
+            group_by(Year, visit) } else{
+                    graphdata %>% gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%  # rearrange to sum by visit to handle varying visits per point
+                    group_by(Year, visit)
+           }
+          graphdata<-graphdata %>% dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3), se= round(sd(count, na.rm=T)/sqrt(n()),digits=3))
                    
          if (all(is.na(point_num))) point_num<-purrr::map(visits, function(visits){ 
            purrr::map(years, function(years) getVisits(object=object,parks=parks,  years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
@@ -59,7 +62,8 @@ setMethod(f="detectsPlot", signature=c(object="list"),
                  return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se))
                 },
       list={
-         return(lapply(X=object, FUN=detectsPlot, years=years, points=points, plot_title=plot_title,point_num=point_num, se= se))
+         return(lapply(X=object, FUN=detectsPlot, years=years, points=points, visits=visits, times=times, max=max,
+                       plot_title=plot_title,point_num=point_num, se=se,...))
       }
     )
 })
@@ -75,17 +79,20 @@ setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
     
     
     
-    graphdata<-CountXVisit(object=object, years=years, points=points,visits=visits,times=times,  ...) %>% 
-        gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%    # rearrange to sum by visit to handle varying visits per point
-        group_by(Year, visit) %>% 
-        dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3),se= round(sd(count, na.rm=T)/sqrt(n()),digits=3))
+    graphdata<-CountXVisit(object=object, parks= parks, years=years, points=points,visits=visits,times=times, max=max,...)
+    graphdata<-if (max){graphdata %>% dplyr::select (Admin_Unit_Code, Point_Name, Year, count=Max) %>% mutate(visit="Maximum") %>% 
+        group_by(Year, visit) } else{
+          graphdata %>% gather(visit, count, -Admin_Unit_Code, -Point_Name, -Year) %>%  # rearrange to sum by visit to handle varying visits per point
+            group_by(Year, visit)
+        }
+    graphdata<-graphdata %>% dplyr::summarise(Mean= round(mean(count, na.rm=T),digits=3), se= round(sd(count, na.rm=T)/sqrt(n()),digits=3))
     
     if(is.na(plot_title)) plot_title<-paste0("Mean number of Birds Detected in ", getParkNames(object,name.class = "long")) 
     
     if (all(is.na(point_num))) point_num<-purrr::map(visits, function(visits){ 
       purrr::map(years, function(years) getVisits(object=object, parks=parks,  years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
     
-    return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se= se))
+    return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se))
 })
 
 setMethod(f="detectsPlot", signature=c(object="data.frame"),
