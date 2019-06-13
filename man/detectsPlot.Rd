@@ -21,8 +21,8 @@ detectsPlot(object, parks = NA, years = NA, points = NA,
 
 \item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{max}{Logical. If \code{FALSE}, the default, then data from each visit will be dispalyed separately. 
-If \code{TRUE} then the maximum detected across all visits will be displayed.}
+\item{max}{Logical. If \code{FALSE}, the default, then the annual mean will be calculated from each visit separately in each year. 
+If \code{TRUE} then the annual mean will be calculated from the maximum no. detected across all visits in each year.}
 
 \item{plot_title}{Optional,  A title for the plot.}
 

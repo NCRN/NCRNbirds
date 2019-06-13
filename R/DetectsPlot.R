@@ -19,8 +19,8 @@
 #' @param points A character vector of point names. Only these points will be used.
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
-#' @param max Logical. If \code{FALSE}, the default, then data from each visit will be dispalyed separately. 
-#' If \code{TRUE} then the maximum detected across all visits will be displayed.
+#' @param max Logical. If \code{FALSE}, the default, then the annual mean will be calculated from each visit separately in each year. 
+#' If \code{TRUE} then the annual mean will be calculated from the maximum no. detected across all visits in each year.
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional list of numeric vector indicating the number of points sampled each visit of each year. Each visit is a separte elemnet in the list. If \code{object} is a \code{NCRNbirds} object
 #' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
@@ -72,12 +72,9 @@ setMethod(f="detectsPlot", signature=c(object="list"),
 setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
   function(object,parks,years,points,visits,times, plot_title,point_num, ...){
       
-    
     visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
     years<-if(anyNA(years)) getVisits(object, parks=parks, points=points,  visits=visits, times=times) %>% 
       pull(Year) %>% unique %>% sort %>% full_seq(1) else years
-    
-    
     
     graphdata<-CountXVisit(object=object, parks= parks, years=years, points=points,visits=visits,times=times, max=max,...)
     graphdata<-if (max){graphdata %>% dplyr::select (Admin_Unit_Code, Point_Name, Year, count=Max) %>% mutate(visit="Maximum") %>% 
@@ -121,5 +118,4 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
                 }
             
             return(GraphOut)
-          })
-
+})
