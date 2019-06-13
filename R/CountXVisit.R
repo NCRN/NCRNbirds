@@ -4,26 +4,30 @@
 #' 
 #' @description Produces a Count X Visit matrix for use in analyses
 #' 
-#' @importFrom dplyr group_by left_join mutate select summarize ungroup bind_rows
+#' @importFrom dplyr group_by left_join matches mutate select summarize ungroup vars
 #' @importFrom magrittr %>%
+#' @importFrom rlang !!! syms
 #' @importFrom tidyr spread 
 #' @importFrom data.table rbindlist
 #' 
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
 #' @param parks A character vector of park codes. Only visits within these parks will be returned.
 #' @param points A character vector. The names of one or more points where the data was collected.
-#' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
-#' @param years  A vector of numbers. will return only data from the indicated years.
-#' @param times  A numeric vector of length 1 passed on to \code{link{getVisits}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
-#' @param band. A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
-#' @param visits  The visits that will be used for the matrix. Defautls to \code{NA}. See Details below,
+#' @param AOU A character vector. One or more AOU (American Onothological Union) codes of bird species.
+#' @param years A vector of numbers. will return only data from the indicated years.
+#' @param times A numeric vector of length 1 passed on to \code{link{getVisits}}. Returns only data from points where the number of years that a point has 
+#' been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
+#' @param band A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
+#' @param visits The visits that will be used for the matrix. Defautls to \code{NA}. See Details below.
+#' @param max Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at each 
+#' point#' accross all the visits specified in the \code{visits} argument.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' @param ... Additional arguments passed to \code{getBirds}
 #' 
 #' @details This produces a Count X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
-#'  will correspond to a different pointt in a different year. The columns of the matrix will be the park code, the point name, the year 
+#'  will correspond to a different point in a different year. The columns of the matrix will be the park code, the point name, the year 
 #'  visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their 
-#'  abundances will be totaled. 
+#'  abundances will be totaled. If \code{max=T} then the maximum accross all visits will be returned as well as the indvidual visit totals.
 #'  
 #'  If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot. 
 #'  Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used. 
@@ -34,23 +38,23 @@
 ########################
 
 
-setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,
+setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,max=F,
                                        output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")
 
 
 
 setMethod(f="CountXVisit", signature=c(object="list"),
-          function(object, parks, points, AOU, years, band, visits, output,...) {
-            OutMat<-lapply(X=object, FUN=CountXVisit,parks=parks, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,...)
+          function(object, parks, points, AOU, years, band, visits, max, output,...) {
+            OutMat<-lapply(X=object, FUN=CountXVisit,parks=parks, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,max=max,...)
             switch(output,
                    list= return(OutMat),
-                   dataframe= return(rbindlist(OutMat, use.names=TRUE, fill=TRUE)) #return(bind_rows(OutMat))
+                   dataframe= return(rbindlist(OutMat, use.names=TRUE, fill=TRUE)) 
             )
           })
 
 
 setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
-          function(object,parks, points,AOU,years,band,visits,output,...){
+          function(object,parks, points,AOU,years,band,visits,max, output,...){
             
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
             ##  visiting a point once instead of twice)
@@ -84,6 +88,12 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
            
             
             CountMat<-CountMat %>% ungroup  # to fix errors with dplyr when maniplating grouped tables
+            
+            if(max){
+              VisitCols<-CountMat %>% dplyr::select(-c(Admin_Unit_Code, Point_Name, Year)) %>% names
+              CountMat<-CountMat %>%mutate(Max=pmax(!!!syms(VisitCols), na.rm=T))
+            }
+                                                                 
             return(CountMat)
             
             
