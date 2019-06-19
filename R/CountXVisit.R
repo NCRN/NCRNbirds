@@ -89,7 +89,7 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             
             CountMat<-CountMat %>% ungroup  # to fix errors with dplyr when maniplating grouped tables
             
-            if(max){
+            if(max & nrow(CountMat)>0){
               VisitCols<-CountMat %>% dplyr::select(-c(Admin_Unit_Code, Point_Name, Year)) %>% names
               CountMat<-CountMat %>%mutate(Max=pmax(!!!syms(VisitCols), na.rm=T))
             }
