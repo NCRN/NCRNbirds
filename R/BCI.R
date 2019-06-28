@@ -83,17 +83,17 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
     XBCI<-as_tibble(getPoints(object=object,years=years, points=points)[c("Admin_Unit_Code","Point_Name")]) %>% rename(points=Point_Name)
     
     if(nrow(XBCI)==0) return()
-
+    
     XBCI<-XBCI %>% mutate(CheckList=map(points,.f=getChecklist, object=object, years=years, AOU=GuildSpecies, ...))
     
     XBCI<-XBCI %>% mutate(
-            ForestGeneralist = map_int(CheckList,~.[. %in% ForGen] %>% length),
-            InteriorForestObligate=map_int(CheckList,~.[. %in% InForOb] %>% length),
-            ForestGroundNester=map_int(CheckList,~.[. %in% ForGroNest] %>% length),
-            OpenGroundNester=map_int(CheckList,~.[. %in% OpenGroNest] %>% length),
-            ShrubNester=map_int(CheckList,~.[. %in% ShrubNest] %>% length),
-            CanopyNester=map_int(CheckList,~.[. %in% CanNest] %>% length),
-            BarkProber=map_int(CheckList,~.[. %in% BarkPro] %>% length),
+      ForestGeneralist = map_int(CheckList,~.[. %in% ForGen] %>% length),
+      InteriorForestObligate=map_int(CheckList,~.[. %in% InForOb] %>% length),
+      ForestGroundNester=map_int(CheckList,~.[. %in% ForGroNest] %>% length),
+      OpenGroundNester=map_int(CheckList,~.[. %in% OpenGroNest] %>% length),
+      ShrubNester=map_int(CheckList,~.[. %in% ShrubNest] %>% length),
+      CanopyNester=map_int(CheckList,~.[. %in% CanNest] %>% length),
+      BarkProber=map_int(CheckList,~.[. %in% BarkPro] %>% length),
             GroundGleaner=map_int(CheckList,~.[. %in% GroundGl] %>% length),
             UpperCanopyForager=map_int(CheckList,~.[. %in% UpperCanFor] %>% length),
             LowerCanopyForager=map_int(CheckList,~.[. %in% LowCanFor] %>% length),

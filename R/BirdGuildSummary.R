@@ -1,15 +1,16 @@
-#' @include NCRNbirds_Class_def.R, BCI.R
+#' @include NCRNbirds_Class_def.R BCI.R
 #'   
 #' @title BirdGuildSummary
 #'
 #' @importFrom dplyr group_by mutate left_join right_join summarise_if select
 #' @importFrom magrittr %>% 
 #' @importFrom tidyr gather
+#' @importFrom data.table rbindlist
 #' 
 #' @description Calculates a summary of guild membership across point counts.
 #' 
 #' @param object An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.
-#' @param years  A numeric vector. Indicates which years should be graphed.
+#' @param years  A numeric vector. Indicates which years should be summarized.
 #' @param points A character vector of point names. Only these points will be used.
 #' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits. 
 #' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
@@ -28,16 +29,25 @@
 
 #' @export
 
-setGeneric(name="BirdGuildSummary",function(object,years=NA,points=NA, times= NA,output="dataframe",...){standardGeneric("BirdGuildSummary")}, signature="object")
+setGeneric(name="BirdGuildSummary",function(object,years=NA,points=NA, visits=NA, times= NA,output="dataframe",...){standardGeneric("BirdGuildSummary")}, signature="object")
+
+setMethod(f="BirdGuildSummary", signature=c(object="list"),
+          function(object, years, points,visits, times, output ,...) {
+            OutMat<-lapply(X=object, FUN=BirdGuildSummary, years=years, points=points, visits= visits,times= times, ...)
+            switch(output,
+                   list= return(OutMat),
+                   dataframe= return(rbindlist(OutMat, use.names=TRUE, fill=TRUE))
+            )
+          })
+
 
 setMethod(f="BirdGuildSummary", signature=c(object="NCRNbirds"),
-          function(object,years, points,times, ...){
+          function(object,years, points,visits, times,output,...){
     
         #### Summarize Guild info----          
         
-     Guildlist<-BCI(object=object, years=years, points=points, type=type, visits=visits, times=times, output="dataframe",...)
+     Guildlist<-BCI(object=object, years=years, points=points, visits=visits, times=times, output="dataframe",...)
     
-        
         MeanProp<- Guildlist %>% # calc mean percentage guild membership across points
           dplyr::select(Admin_Unit_Code,starts_with("Pro_")) %>% # just grab the proportions from BCI
           dplyr::group_by(Admin_Unit_Code) %>% 
@@ -57,7 +67,7 @@ setMethod(f="BirdGuildSummary", signature=c(object="NCRNbirds"),
           dplyr::mutate(Response_Guild= str_remove(Response_Guild,"Pro_")) %>% # remove header for joining
           dplyr::right_join(unique(object@Guilds[c("Int_Element","Guild_Category", "Response_Guild")]),., by= "Response_Guild") %>% 
           dplyr::arrange(Int_Element,Guild_Category,Response_Guild) %>% 
-          dplyr::select(-Admin_Unit_Code, "Integrity Element" = Int_Element, "Guild Category" = Guild_Category, "Response Guild" = Response_Guild)
+          dplyr::select(Admin_Unit_Code, "Integrity Element" = Int_Element, "Guild Category" = Guild_Category, "Response Guild" = Response_Guild, mean,sd)
         
         return(GuildProp)
         
