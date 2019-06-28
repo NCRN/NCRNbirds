@@ -97,7 +97,7 @@ setMethod(f="BCIMap", signature=c(object="NCRNbirds"),
             bci.map <- ggmap(park.map, darken = c(0.3, "white"))+
               #geom_polygon(data=park.map.df, aes(x=long, y=lat, group=group),fill="darkgreen",color="black",alpha=0.6)+
               #geom_point(data=Abun.Table, shape=1,aes(x=Longitude,y=Latitude, size=Predicted+SE),color="red",alpha=0.9)+
-              geom_point(data=bci.coords, size=1.5, aes(x=Longitude,y=Latitude, color=BCI), alpha=0.6)+
+              geom_point(data=bci.coords, size=5, aes(x=Longitude,y=Latitude, color=BCI), alpha=0.9)+
               scale_color_gradient(low = "white", high = color,na.value="gray",
                                   limits=c(0, max(bci.coords$BCI, na.rm=TRUE)),
                                   breaks=c(seq(0,max(bci.coords$BCI,na.rm=TRUE), length.out=5),0))+
@@ -112,7 +112,7 @@ setMethod(f="BCIMap", signature=c(object="NCRNbirds"),
                     axis.title.y = element_text(angle = 90, vjust=1.2, size=11),
                     title=element_text(size=14))+
               labs(x="Longitude",y="Latitude", size=paste("Species Richness"))+
-              ggtitle(paste(strwrap(paste("Map of species richness in ", object@LongName," from ", min(object@Visits$Year,na.rm=TRUE), " to ", max(object@Visits$Year, na.rm=TRUE)), width=70),collapse = "\n"))
+              ggtitle(paste(strwrap(paste("Map of Bird Community Index (BCI) scores ", object@LongName," from ", min(object@Visits$Year,na.rm=TRUE), " to ", max(object@Visits$Year, na.rm=TRUE)), width=70),collapse = "\n"))
             bci.map
             
             
@@ -121,12 +121,12 @@ setMethod(f="BCIMap", signature=c(object="NCRNbirds"),
             
 unique(bci.coords$BCI_Category)
             
-            mycolors<-c("seagreen4","yellow","orange","red")
+            mycolors<-c("seagreen4","goldenrod1","orange","red")
             
             #make map with categorical BCI
             bci.map.cat <- ggmap(park.map, darken = c(0.3, "white"))+
-              geom_point(data=bci.coords, size=1.5, aes(x=Longitude,y=Latitude, color=BCI_Category), alpha=0.6)+
-              scale_color_manual(values=mycolors)+
+              geom_point(data=bci.coords, size=5, aes(x=Longitude,y=Latitude, color=BCI_Category), alpha=0.9)+
+              scale_color_manual(values=mycolors,drop=FALSE)+
               theme(panel.border=element_rect(fill="transparent",color="black"))+
               theme(panel.background=element_rect(fill='white',color="black"))+
               theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank())+
@@ -136,7 +136,7 @@ unique(bci.coords$BCI_Category)
                     axis.title.x = element_text(size=11, hjust=0.5, vjust=1.9),
                     axis.title.y = element_text(angle = 90, vjust=1.2, size=11),
                     title=element_text(size=14))+
-              labs(x="Longitude",y="Latitude", size=paste("Species Richness"))+
+              labs(x="Longitude",y="Latitude", size=paste("BCI"))+
               ggtitle(paste(strwrap(paste("Map of bird community index categories ", object@LongName," from ", min(object@Visits$Year,na.rm=TRUE), " to ", max(object@Visits$Year, na.rm=TRUE)), width=70),collapse = "\n"))
             bci.map.cat
             

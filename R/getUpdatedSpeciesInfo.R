@@ -104,7 +104,7 @@ getUpdatedSpeciesInfo<-function(Dir,...){
             pif.names<-names(pif.data.2)[-1]
             names(pif.data.2)<-pif.names
             
-            #get desired columns
+            #get desired columns (in the future, could desire bringing in other information from these data)
             pif.data.3<-pif.data.2[,c("common_name","continental_importance","iucn_red_list_2016")]
             colnames(pif.data.3)<-c("Common_Name","Continental_Concern","IUCN_Red_List_2016")
             pif.data.3$Common_Name<-trimws(as.character(pif.data.3$Common_Name))

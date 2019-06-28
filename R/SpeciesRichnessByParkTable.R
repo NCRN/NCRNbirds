@@ -247,7 +247,9 @@ setMethod(f="SpeciesRichnessByParkTable", signature=c(object="NCRNbirds"),
             
             heat.map.pif
             
-            
+            #get info for creating file names
+            parkCodes<-paste(unique(object@ParkCode),collapse="_")
+
             ###############
             response<-readline(prompt="Would you like to save these results? (y/n)")
                      ifelse(response=="y",
@@ -255,15 +257,15 @@ setMethod(f="SpeciesRichnessByParkTable", signature=c(object="NCRNbirds"),
                               suppressWarnings(dir.create(path=paste(getwd(), paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/")))
                               
                               #save table of species richness for all species
-                              write.csv(species.count.all.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_SpeciesRichnessByParkAndYear",object@ParkCode,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                              write.csv(species.count.all.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_SpeciesRichnessByParkAndYear",parkCodes,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
                               
                               #save table of species richness for PIF species
-                              write.csv(species.count.pif.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_SpeciesRichnessByParkAndYear_PIF",object@ParkCode,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                              write.csv(species.count.pif.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_SpeciesRichnessByParkAndYear_PIF",parkCodes,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
                               
                               
-                              ggsave(heat.map.all, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(object@ParkCode, "HeatMapSpeciesRichnessParkAndYear",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
+                              ggsave(heat.map.all, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, "HeatMapSpeciesRichnessParkAndYear",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
                               
-                              ggsave(heat.map.pif, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(object@ParkCode, "HeatMapSpeciesRichnessParkAndYear_PIF",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
+                              ggsave(heat.map.pif, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, "HeatMapSpeciesRichnessParkAndYear_PIF",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
                               
                               
                               #return table and fig

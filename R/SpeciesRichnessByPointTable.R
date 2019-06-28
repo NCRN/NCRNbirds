@@ -260,7 +260,9 @@ setMethod(f="SpeciesRichnessByPointTable", signature=c(object="NCRNbirds"),
             }
             
             
-            
+            #get info for creating file names
+            parkCodes<-paste(unique(object@ParkCode),collapse="_")
+
             ###############
             response<-readline(prompt="Would you like to save these results? (y/n)")
                      ifelse(response=="y",
@@ -268,10 +270,10 @@ setMethod(f="SpeciesRichnessByPointTable", signature=c(object="NCRNbirds"),
                               suppressWarnings(dir.create(path=paste(getwd(), paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/")))
                               
                               #save table of species richness for all species
-                              write.csv(species.count.all.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_SpeciesRichnessByPointAndYear",object@ParkCode,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                              write.csv(species.count.all.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_SpeciesRichnessByPointAndYear",parkCodes,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
                               
                               #save table of species richness for PIF species
-                              write.csv(species.count.pif.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_SpeciesRichnessByPointAndYear_PIF",object@ParkCode,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                              write.csv(species.count.pif.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_SpeciesRichnessByPointAndYear_PIF",parkCodes,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
                               
                               for(j in 1:length(parkCodeList)){
                               ggsave(heat.map.all.list[[j]], file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodeList[j], "HeatMapSpeciesRichnessPointAndYear",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=14, units="in", dpi=300)

@@ -76,12 +76,15 @@ setMethod(f="PointsTable", signature=c(object="NCRNbirds"),
             table1.out<-cbind(LongName=table1.comb$LongName, Admin_Unit_Code=table1.comb$Admin_Unit_Code, table1.comb[,-1:-2])
             colnames(table1.out)[1:2]<-c("LongName","Admin_Unit_Code")
             
+            #get info for creating file names
+            parkCodes<-paste(unique(object@ParkCode),collapse="_")
+            
             response<-readline(prompt="Would you like to save these results? (y/n)")
             ifelse(response=="y",
                    {
                      suppressWarnings(dir.create(path=paste(getwd(), paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/")))
 
-                     write.csv(table1.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_Count_of_Sampling_Points",object@ParkCode,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                     write.csv(table1.out, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_Count_of_Sampling_Points",parkCodes,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
 
                    #return table
                      return({

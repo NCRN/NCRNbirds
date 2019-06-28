@@ -34,9 +34,9 @@ setMethod(f="ParkTable", signature=c(object="NCRNbirds"),
             #create UnitNames.df
             parkNames <- unique(data[,c("LongName","Admin_Unit_Code")])
             
-            networkName<-data.frame(LongName=object@LongName, Admin_Unit_Code=object@ParkCode)
+            #networkName<-data.frame(LongName=data$LongName, Admin_Unit_Code=object@ParkCode)
             
-            parkNames<-unique(rbind(networkName, parkNames))
+            #parkNames<-unique(rbind(networkName, parkNames))
           
             
             response<-readline(prompt="Would you like to save these results? (y/n)")

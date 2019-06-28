@@ -195,12 +195,14 @@ setMethod(f="mapOccupancy", signature=c(object="NCRNbirds"),
               ggtitle(paste(strwrap(paste("Map of Point-Level Mean Occupancy for the ", myBirdName, " in ", myParkName," from ", min(years), " to ", max(years)), width=70),collapse = "\n"))
             #park.map.out
             
+            parkCodes<-paste(unique(object@ParkCode),collapse="_")
+            
             response<-readline(prompt="Would you like to save these results? (y/n)")
             ifelse(response=="y",
                    {
                      suppressWarnings(dir.create(path=paste(getwd(), paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/")))
 
-                     write.csv(Occu.Table, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(myParkName, myBirdName, "OccupancyTableByPoint",Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                     write.csv(Occu.Table, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, myBirdName, "OccupancyTableByPoint",Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
 
                      ggsave(occuPlot, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(myParkName, myBirdName, "OccupancyPlotByPoint",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
 

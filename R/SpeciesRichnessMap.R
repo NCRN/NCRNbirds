@@ -42,6 +42,7 @@ setMethod(f="SpeciesRichnessMap", signature=c(object="list"),
 setMethod(f="SpeciesRichnessMap", signature=c(object="NCRNbirds"),
           function(object,Dir,PIFspecies,color,APIkey,...){
             
+            require(ggmap)
 
             data=object@Birds
             
@@ -243,7 +244,7 @@ setMethod(f="SpeciesRichnessMap", signature=c(object="NCRNbirds"),
             park.map.out.all <- ggmap(park.map, darken = c(0.3, "white"))+
               #geom_polygon(data=park.map.df, aes(x=long, y=lat, group=group),fill="darkgreen",color="black",alpha=0.6)+
               #geom_point(data=Abun.Table, shape=1,aes(x=Longitude,y=Latitude, size=Predicted+SE),color="red",alpha=0.9)+
-              geom_point(data=tableAll.coords, size=1.5, aes(x=Longitude,y=Latitude, color=CountOfAOU_Code), alpha=0.6)+
+              geom_point(data=tableAll.coords, size=5, aes(x=Longitude,y=Latitude, color=CountOfAOU_Code), alpha=0.9)+
               scale_color_gradient(low = "white", high = color,na.value="gray",
                                   limits=c(0, ceiling(maxSpecies)),
                                   breaks=c(round(seq(0,maxSpecies, length.out=5),0)))+
@@ -303,7 +304,7 @@ setMethod(f="SpeciesRichnessMap", signature=c(object="NCRNbirds"),
             park.map.out.pif <- ggmap(park.map, darken = c(0.3, "white"))+
               #geom_polygon(data=park.map.df, aes(x=long, y=lat, group=group),fill="darkgreen",color="black",alpha=0.6)+
               #geom_point(data=Abun.Table, shape=1,aes(x=Longitude,y=Latitude, size=Predicted+SE),color="red",alpha=0.9)+
-              geom_point(data=tablePIF.coords, size=1.5,aes(x=Longitude,y=Latitude, color=CountOfAOU_Code), alpha=0.6)+
+              geom_point(data=tablePIF.coords, size=5,aes(x=Longitude,y=Latitude, color=CountOfAOU_Code), alpha=0.9)+
               scale_color_gradient(low = "white", high = color,na.value="gray",
                                    limits=c(0, ceiling(maxSpeciesPIF)),
                                    breaks=c(seq(0,maxSpeciesPIF, length.out=5)))+
@@ -324,6 +325,8 @@ setMethod(f="SpeciesRichnessMap", signature=c(object="NCRNbirds"),
             #facet map by year
             #park.map.facet.pif<-park.map.out.pif+facet_wrap(~Year)
             
+            #get names of parks in string for saving files
+            parkCodes<-paste(unique(object@ParkCode),collapse="_")
             
             ###############
             response<-readline(prompt="Would you like to your map? (y/n)")
@@ -332,9 +335,9 @@ setMethod(f="SpeciesRichnessMap", signature=c(object="NCRNbirds"),
                               suppressWarnings(dir.create(path=paste(getwd(), paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/")))
                             
                               #save map
-                              ggsave(park.map.out.all, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(object@ParkCode, "MapSpeciesRichnessPoint",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
+                              ggsave(park.map.out.all, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, "MapSpeciesRichnessPoint",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
                               
-                              ggsave(park.map.out.pif, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(object@ParkCode, "MapSpeciesRichnessPoint_PIF",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
+                              ggsave(park.map.out.pif, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, "MapSpeciesRichnessPoint_PIF",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=10, height=10, units="in", dpi=300)
                               
                               
                               #return table and fig

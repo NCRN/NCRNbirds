@@ -125,14 +125,16 @@ setMethod(f="estimateAbundance", signature=c(object="NCRNbirds"),
               ggtitle(paste(strwrap(paste("Estimated Abundance for the ", myBirdName, " in ", myParkName, " from ", min(years), " to ", max(years)), width=50),collapse = "\n"))
             abunPlot
            
+           parkCodes<-paste(unique(object@ParkCode),collapse="_")
+           
             response<-readline(prompt="Would you like to save these results? (y/n)" )
             ifelse(response=="y",
                    {
                      dir.create(path=paste(getwd(), paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/"))
                      
-                     write.csv(Abun.Table, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(myParkName, myBirdName, "AbundanceTableByYear",Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                     write.csv(Abun.Table, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, myBirdName, "AbundanceTableByYear",Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
                      
-                     ggsave(abunPlot, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(myParkName, myBirdName, "AbundancePlotByYear",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=5, height=5, units="in", dpi=300)
+                     ggsave(abunPlot, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, myBirdName, "AbundancePlotByYear",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=5, height=5, units="in", dpi=300)
                      
                      #return table and fig
                      if(isTRUE(Table) & isFALSE(Figure)){

@@ -58,13 +58,15 @@ setMethod(f="SpeciesTable", signature=c(object="NCRNbirds"),
            #reorder columns
             birds.merge<-birds.merge[,c("Common_Name","Scientific_Name","AOU_Code","Continental_Concern","IUCN_Red_List_2016")]
             
+            #get info for creating file names
+            parkCodes<-paste(unique(object@ParkCode),collapse="_")
             
             response<-readline(prompt="Would you like to save these results? (y/n)")
             ifelse(response=="y",
                    {
                      suppressWarnings(dir.create(path=paste(Dir, paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/")))
                      
-                     write.csv(birds.merge, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_Species_List",object@ParkCode,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                     write.csv(birds.merge, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Table_Species_List",parkCodes,Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
                      
                      #return table
                      return({

@@ -111,6 +111,8 @@ setMethod(f="SpeciesRichnessByParkFig", signature=c(object="NCRNbirds"),
             
             species.count.merge$Type<-factor(species.count.merge$Type, levels=c("Total","Continental Concern"))
             
+            species.count.merge<-unique(species.count.merge)
+            
             spp.plot<-ggplot(data=species.count.merge)+
               # geom_errorbar(aes(ymin=mean-SE, ymax=mean+SE),color="darkolivegreen", width=0)+
               geom_bar(data=species.count.merge, stat="identity",aes(x=LongName, y=Count, fill=Type, group=Type))+
@@ -130,7 +132,9 @@ setMethod(f="SpeciesRichnessByParkFig", signature=c(object="NCRNbirds"),
               coord_flip()
             spp.plot
             
-            
+            #get info for creating file names
+            parkCodes<-paste(unique(object@ParkCode),collapse="_")
+
             
             
             response<-readline(prompt="Would you like to save these results? (y/n)")
@@ -139,7 +143,7 @@ setMethod(f="SpeciesRichnessByParkFig", signature=c(object="NCRNbirds"),
                      suppressWarnings(dir.create(path=paste(getwd(), paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/")))
 
                      #save plot
-                     ggsave(spp.plot, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Figure_Species_Richness",object@ParkCode,Sys.Date(), sep="_"),".png", sep=""),  sep="/"),width=8, height=7, dpi=600)
+                     ggsave(spp.plot, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste("Figure_Species_Richness",parkCodes,Sys.Date(), sep="_"),".png", sep=""),  sep="/"),width=8, height=7, dpi=600)
                      
 
                      #return table

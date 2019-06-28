@@ -6,7 +6,7 @@
 #' 
 #' @importFrom unmarked occu unmarkedFrameOccu predict 
 #' @importFrom ggplot2 ggplot ggsave geom_smooth geom_path geom_point geom_errorbar element_rect coord_cartesian ggtitle
-#'
+#' 
 #' @param object An NCRNbirds object or a list of such objects.
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
@@ -68,7 +68,7 @@ setMethod(f="estimateOccupancy", signature=c(object="NCRNbirds"),
               mod.occu.predict.out.1<-unique(mod.occu.predict[,c("Year","Predicted","SE","lower","upper")])
               mod.occu.predict.out.1$Admin_Unit_Code<-parkData@Network
               },
-              mod.occu.predict.out.1<-unique(mod.occu.predict[,c("Admin_Unit_Code","Year","Predicted","SE","lower","upper")])
+              mod.occu.predict.out.1<-unique(mod.occu.predict[,c("Admin_Unit_Code","Year","Predicted","SE","lower","upper","y.1","y.2")])
             )
             
             #add species AOU_Code
@@ -81,11 +81,23 @@ setMethod(f="estimateOccupancy", signature=c(object="NCRNbirds"),
             
             #add Long Park Unit name and Common Name of bird species
             myParkName<-getParkNames(parkData, name.class="long")
+            #combine park names, if more than one
+            myParkNameOut<-ifelse(length(myParkName)>1,substr(paste0(unlist(trimws(myParkName)),sep="_",collapse = ""),1,nchar(paste0(unlist(trimws(myParkName)),sep="_",collapse = ""))-1),myParkName)
+                                  
+            mod.occu.predict.out.1$Park_Name<-myParkNameOut
             
-            mod.occu.predict.out.1$Park_Name<-myParkName
+            #combine Unit Codes
+            myAdminUnitCodes<-unlist(as.character(unique(mod.occu.predict.out.1$Admin_Unit_Code)))
+            myAdminUnitCodeOut<-ifelse(length(myAdminUnitCodes)>1,substr(paste0(unlist(trimws(myAdminUnitCodes)),sep="_",collapse = ""),1,nchar(paste0(unlist(trimws(myAdminUnitCodes)),sep="_",collapse = ""))-1),myAdminUnitCodes)
+            
+            mod.occu.predict.out.1$Admin_Unit_Code<-myAdminUnitCodeOut
+            
+            #get Max count
+            count.df<-data.frame(mod.occu.predict.out.1$y.1, mod.occu.predict.out.1$y.2)
+            mod.occu.predict.out.1$Raw_Max_Count<-apply(count.df,1,function(x) max(x,na.rm=TRUE))
             
             #reorder columns
-            mod.occu.predict.out<-mod.occu.predict.out.1[,c("Common_Name","AOU_Code","Park_Name","Admin_Unit_Code","Year","Predicted","SE","lower","upper")]
+            mod.occu.predict.out<-unique(mod.occu.predict.out.1[,c("Common_Name","AOU_Code","Park_Name","Admin_Unit_Code","Year","Raw_Max_Count","Predicted","SE","lower","upper")])
             
             #sort by Year
             mod.occu.predict.out<-mod.occu.predict.out[order(mod.occu.predict.out$Year, decreasing=FALSE),]
@@ -116,21 +128,24 @@ setMethod(f="estimateOccupancy", signature=c(object="NCRNbirds"),
               geom_point(color=color)+
               theme(panel.background=element_rect(fill="white"),
                     panel.border=element_rect(color="black",fill="transparent"))+
-              scale_x_continuous(breaks=c(as.numeric(as.character(Occu.Table$Year))),labels = unique(as.character(Occu.Table$Year)))+
+              scale_x_continuous(breaks=unique(c(as.numeric(as.character(Occu.Table$Year)))),labels = unique(as.character(Occu.Table$Year)))+
               scale_y_continuous(breaks=seq(0,1,length.out=5), expand=c(0.1,0.1), limits=c(-10,10))+
               coord_cartesian(xlim=c(min(years),max(years)), ylim=c(0,1))+
               labs(x="Year", y="Estimated Probability of Site Occupancy")+
-              ggtitle(paste(strwrap(paste("Estimated Prob. of Occupancy for the ", myBirdName, " in ", myParkName, " from ", min(years), " to ", max(years)), width=50),collapse = "\n"))
+              ggtitle(paste(strwrap(paste("Estimated Prob. of Occupancy for the ", myBirdName, " in ", myParkNameOut, " from ", min(years), " to ", max(years)), width=50),collapse = "\n"))
             occuPlot
+            
+            
+            parkCodes<-paste(unique(object@ParkCode),collapse="_")
             
             response<-readline(prompt="Would you care to save these results? (y/n)" )
             ifelse(response=="y",
                    {
                      dir.create(path=paste(getwd(), paste("NCRNbirds_Output", Sys.Date(), sep="_"), sep="/"))
                      
-                     write.csv(Occu.Table, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(myParkName, myBirdName, "OccupancyTableByYear",Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
+                     write.csv(Occu.Table, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, myBirdName, "OccupancyTableByYear",Sys.Date(), sep="_"),".csv", sep=""),  sep="/"), row.names=FALSE)
                      
-                     ggsave(occuPlot, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(myParkName, myBirdName, "OccupancyPlotByYear",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=5, height=5, units="in", dpi=300)
+                     ggsave(occuPlot, file=paste(paste("NCRNbirds_Output", Sys.Date(), sep="_"), paste(paste(parkCodes, myBirdName, "OccupancyPlotByYear",Sys.Date(), sep="_"),".png", sep=""),sep="/"), width=5, height=5, units="in", dpi=300)
                      
                      #return table and fig
                      if(isTRUE(Table) & isFALSE(Figure)){
