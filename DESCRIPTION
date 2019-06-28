@@ -28,6 +28,8 @@ Collate:
     'getBirds.R'
     'BCI.R'
     'BCIPlot.R'
+    'NCRNbirds_Class_def.R,'
+    'BirdGuildSummary.R'
     'getDesign.R'
     'CountXVisit.R'
     'getParkNames.R'
