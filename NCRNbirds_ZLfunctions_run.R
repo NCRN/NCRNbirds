@@ -4,7 +4,8 @@
 rm(list=ls())
 
 #set working directory
-setwd("YOUR WORKING DIRECTORY")
+#setwd("YOUR WORKING DIRECTORY")
+setwd("/Users/zach/Dropbox (ZachTeam)/Projects/NPS/NCRN/NCRNbirds_R_package/NCRNbirds-master/")
 
 #load packages
 library(devtools)
@@ -28,7 +29,7 @@ library(NCRNbirds)
 #test estimateOccupancy function
 
 #get all network data
-NCRN<-getParkData("./Data/",UnitCode="NCRN")
+NCRN<-getParkData("./Data/",UnitCode="NCRN", CombineData=TRUE)
 
 #Load park or network-wide data
 ANTI<-getParkData("./Data/",UnitCode="ANTI")
@@ -45,21 +46,32 @@ PRWI<-getParkData("./Data/",UnitCode="PRWI")
 ROCR<-getParkData("./Data/",UnitCode="ROCR")
 WOTR<-getParkData("./Data/",UnitCode="WOTR")
 
+NACEcomb<-getParkData("./Data/",UnitCode=c("NACE","GREE","PISC_FOWA"))
+
 #####################################################################################################################
 #generate table of Park unit names and codes
-park.table<-ParkTable(object=NCRN)
-park.table<-ParkTable(object=ANTI)
+park.table<-ParkTable(object=NACEcomb)
 
 #generate table of unique species detected in network, park, and subset by points, years, visits, etc.
-species.table<-SpeciesTable(object=NCRN, Dir="./Data")
-species.table<-SpeciesTable(object=ANTI, Dir="./Data")
+species.table<-SpeciesTable(object=NACE, Dir="./Data")
+species.table<-SpeciesTable(object=GREE, Dir="./Data")
+species.table<-SpeciesTable(object=PISC_FOWA, Dir="./Data")
+
+species.table<-SpeciesTable(object=NACEcomb, Dir="./Data")
 
 #generate a table of total number of survey points within each park unit and network-wide
-point.table<-PointsTable(object=NCRN)
-point.table<-PointsTable(object=ANTI)
+point.table<-PointsTable(object=NACE)
+point.table<-PointsTable(object=GREE)
+point.table<-PointsTable(object=PISC_FOWA)
+
+point.table<-PointsTable(object=NACEcomb)
 
 #generate a table of total number of visits to each point by park unit and year
-visit.table<-PointsXVisitsTable(object=NCRN)
+visit.table<-PointsXVisitsTable(object=NACE)
+visit.table<-PointsXVisitsTable(object=GREE)
+visit.table<-PointsXVisitsTable(object=PISC_FOWA)
+
+visit.table<-PointsXVisitsTable(object=NACEcomb)
 
 #update species info
 getUpdatedSpeciesInfo(Dir="./Data")
@@ -85,36 +97,50 @@ sort(unique(NCRNnew@Birds$Common_Name))
 CheckSpeciesInfo(object=NCRNnew,Dir="./Data")
 
 #make species richniess figure
-SpeciesRichnessByParkFig(object=NCRN, Dir="./Data",color1="skyblue3")
+SpeciesRichnessByParkFig(object=NACE, Dir="./Data",color1="skyblue3")
+SpeciesRichnessByParkFig(object=GREE, Dir="./Data",color1="skyblue3")
+SpeciesRichnessByParkFig(object=PISC_FOWA, Dir="./Data",color1="skyblue3")
+
+SpeciesRichnessByParkFig(object=NACEcomb, Dir="./Data",color1="skyblue3")
 
 #generate tables and heatmaps of species richness by park and year
 SpeciesRichnessByParkTable(object=NCRN, Dir="./Data", Figure=TRUE, color="goldenrod")
 SpeciesRichnessByParkTable(object=ANTI, Dir="./Data", Figure=TRUE, color="goldenrod")
 
+SpeciesRichnessByParkTable(object=NACEcomb, Dir="./Data", Figure=TRUE, color="goldenrod")
+
 #generate tables and heatmaps of species richness by point and year
 SpeciesRichnessByPointTable(object=NCRN, Dir="./Data", Figure=TRUE, color="royalblue3")
 SpeciesRichnessByPointTable(object=ANTI, Dir="./Data", Figure=TRUE, color="royalblue3")
 
+SpeciesRichnessByPointTable(object=NACEcomb, Dir="./Data", Figure=TRUE, color="royalblue3")
+
 #map species richness
-SpeciesRichnessMap(object=NCRN, Dir="./Data",APIkey ="YOUR_API_CODE_HERE", color="red")
+SpeciesRichnessMap(object=NACE, Dir="./Data", color="red")
+SpeciesRichnessMap(object=GREE, Dir="./Data", color="red")
+SpeciesRichnessMap(object=PISC_FOWA, Dir="./Data", color="red")
 
 #estimate Occupancy
 estimateOccupancy(object=NCRN, AOU="NOCA", site.covs="Year",color="royalblue3")
 estimateOccupancy(object=ANTI, AOU="NOCA", site.covs="Year",color="royalblue3")
+estimateOccupancy(object=NACEcomb, AOU="NOCA", site.covs="Year",color="royalblue3")
 
 #map Occupancy (models have difficult time fitting at Network level)
 mapOccupancy(object=NCRN, AOU="AMRO", mixture="P",color="red",APIkey ="YOUR_API_CODE_HERE")
 
 #estimate Abundance
-estimateAbundance(object=NCRN, AOU="NOCA", site.covs="Year", mixture="P",color="royalblue3") 
-estimateAbundance(object=ANTI, AOU="NOCA", site.covs="Year", mixture="P",color="royalblue3") 
+estimateAbundance(object=NCRN, AOU="NOCA", site.covs="Year", mixture="P",color="royalblue3",obs.covs="Visit",band=c(1,2)) 
+estimateAbundance(object=ANTI, AOU="NOCA", site.covs="Year", mixture="NB",color="royalblue3",obs.covs="Visit",band=c(1,2)) 
+estimateAbundance(object=NACEcomb, AOU="NOCA", site.covs="Year", mixture="P",color="royalblue3",obs.covs="Visit",band=c(1,2)) 
 
 #map Abundance (models have hard time fitting when passing NCRN as object, but parks work OK.)
 mapAbundance(object=NCRN, AOU="NOCA", mixture="P",color="royalblue3", APIkey ="YOUR_API_CODE_HERE")
 mapAbundance(object=ANTI, AOU="NOCA", mixture="P",color="royalblue3", APIkey ="YOUR_API_CODE_HERE")
 
 #map BCI
-BCIMap(object=ANTI, Dir="./Data",color="royalblue3")
+BCIMap(object=NACE, Dir="./Data",color="royalblue3")
+BCIMap(object=GREE, Dir="./Data",color="royalblue3")
+BCIMap(object=PISC_FOWA, Dir="./Data",color="royalblue3")
 
 
 
