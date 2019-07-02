@@ -51,7 +51,7 @@ setMethod(f="getBirds", signature=c(object="NCRNbirds"),
             if(!anyNA(interval)) XBirds<-XBirds %>%  filter(Interval %in% interval)
             if(!anyNA(times) || !anyNA(visits) || !anyNA(reps)) XBirds<-XBirds %>% 
                 semi_join(getVisits(object=object, points=points, years=years,visits=visits,times=times, reps=reps) %>% 
-                            dplyr::select(Point_Name,Year,EventDate), by=c("Point_Name","Year","EventDate")
+                            dplyr::select(Point_Name,Year,EventDate, Visit), by=c("Point_Name","Year","EventDate", "Visit")
                 )
             return(XBirds)
             

@@ -2,8 +2,9 @@
 #'   
 #' @title BirdGuildSummary
 #'
-#' @importFrom dplyr group_by mutate left_join right_join summarise_if select
+#' @importFrom dplyr group_by mutate left_join right_join summarise_if select starts_with
 #' @importFrom magrittr %>% 
+#' @importFrom stringr str_remove
 #' @importFrom tidyr gather
 #' @importFrom data.table rbindlist
 #' 
