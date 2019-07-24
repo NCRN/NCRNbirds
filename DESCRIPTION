@@ -1,7 +1,7 @@
 Package: NCRNbirds
 Type: Package
 Title: Data analysis and visualization for NPS I&M bird monitoring.
-Version: 0.4.3
+Version: 0.4.4
 Date: 2019-06-28
 Author: John Paul Schmit, Aaron Weed, Matt Marshall, Mark Johnson
 Maintainer: John Paul Schmit <john_schmit@nps.gov>
@@ -28,8 +28,9 @@ Collate:
     'getBirds.R'
     'BCI.R'
     'BCIPlot.R'
-    'BirdGuildSummary.R'
     'getDesign.R'
+    'BirdGuildSummary.R'
+    'BirdGuildPlot.R'
     'CountXVisit.R'
     'getParkNames.R'
     'DetectsPlot.R'
