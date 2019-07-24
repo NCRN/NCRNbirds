@@ -83,17 +83,17 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
     XBCI<-as_tibble(getPoints(object=object,years=years, points=points)[c("Admin_Unit_Code","Point_Name")]) %>% rename(points=Point_Name)
     
     if(nrow(XBCI)==0) return()
-
+    
     XBCI<-XBCI %>% mutate(CheckList=map(points,.f=getChecklist, object=object, years=years, AOU=GuildSpecies, ...))
     
     XBCI<-XBCI %>% mutate(
-            ForestGeneralist = map_int(CheckList,~.[. %in% ForGen] %>% length),
-            InteriorForestObligate=map_int(CheckList,~.[. %in% InForOb] %>% length),
-            ForestGroundNester=map_int(CheckList,~.[. %in% ForGroNest] %>% length),
-            OpenGroundNester=map_int(CheckList,~.[. %in% OpenGroNest] %>% length),
-            ShrubNester=map_int(CheckList,~.[. %in% ShrubNest] %>% length),
-            CanopyNester=map_int(CheckList,~.[. %in% CanNest] %>% length),
-            BarkProber=map_int(CheckList,~.[. %in% BarkPro] %>% length),
+      ForestGeneralist = map_int(CheckList,~.[. %in% ForGen] %>% length),
+      InteriorForestObligate=map_int(CheckList,~.[. %in% InForOb] %>% length),
+      ForestGroundNester=map_int(CheckList,~.[. %in% ForGroNest] %>% length),
+      OpenGroundNester=map_int(CheckList,~.[. %in% OpenGroNest] %>% length),
+      ShrubNester=map_int(CheckList,~.[. %in% ShrubNest] %>% length),
+      CanopyNester=map_int(CheckList,~.[. %in% CanNest] %>% length),
+      BarkProber=map_int(CheckList,~.[. %in% BarkPro] %>% length),
             GroundGleaner=map_int(CheckList,~.[. %in% GroundGl] %>% length),
             UpperCanopyForager=map_int(CheckList,~.[. %in% UpperCanFor] %>% length),
             LowerCanopyForager=map_int(CheckList,~.[. %in% LowCanFor] %>% length),
@@ -108,7 +108,7 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
             
           # Proportions for BCI  
             Pro_ForestGeneralist=round(ForestGeneralist/Total,digits=3),
-            Pro_InteriorForest=round(InteriorForestObligate/Total,digits=3),
+            Pro_InteriorForestObligate=round(InteriorForestObligate/Total,digits=3),
             Pro_ForestGroundNester=round(ForestGroundNester/Total,digits=3),
             Pro_OpenGroundNester=round(OpenGroundNester/Total,digits=3),
             Pro_ShrubNester=round(ShrubNester/Total,digits=3),
@@ -129,7 +129,7 @@ setMethod(f="BCI", signature=c(object="NCRNbirds"),
    
     XBCI<-XBCI %>% 
       mutate(BCI_ForestGeneralist=c(4.5, 2.5)[findInterval(Pro_ForestGeneralist,vec=c(0, 0.281, 1.001))],
-        BCI_InteriorForest=c(1, 1.5, 3, 4, 5)[findInterval(Pro_InteriorForest, vec=c(0,0.011,0.081,0.261,0.431,1.001))],
+        BCI_InteriorForest=c(1, 1.5, 3, 4, 5)[findInterval(Pro_InteriorForestObligate, vec=c(0,0.011,0.081,0.261,0.431,1.001))],
         BCI_ForestGroundNester=c(1, 1.5, 3, 4.5, 5)[findInterval(Pro_ForestGroundNester, vec=c(0,0.001,0.021,0.161,0.241,1.001))],
         BCI_OpenGroundNester=c(1, 2.5, 5)[findInterval(Pro_OpenGroundNester, vec=c(0,0.021,0.111,1.001))],
         BCI_ShrubNester=c(4, 1.5, 1)[findInterval(Pro_ShrubNester, vec=c(0,0.211,0.331,1.001))],
