@@ -42,6 +42,7 @@ Collate:
     'getGuilds.R'
     'getPoints.R'
     'importERMNbirds.R'
+    'importERMNbirds2007.R'
     'importMIDNbirds.R'
     'importNCRNbirds.R'
     'makeNCRNbirds.R'
