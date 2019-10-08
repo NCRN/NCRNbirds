@@ -41,7 +41,7 @@ importMIDNbirds<-function(Dir){
             LongName="Appomattox Court House National Historical Park", 
             Network="MIDN", 
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -59,7 +59,7 @@ importMIDNbirds<-function(Dir){
             LongName="Booker T. Washington National Monument", 
             Network="MIDN", 
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -76,7 +76,7 @@ importMIDNbirds<-function(Dir){
             LongName="Fredericksburg and Spotsylvania National Military Park", 
             Network="MIDN", 
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -93,7 +93,7 @@ importMIDNbirds<-function(Dir){
             LongName="Petersburg National Battlefield", 
             Network="MIDN", 
             
-            VisitNumber=2 ,
+            VisitNumber=4 ,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -110,7 +110,7 @@ importMIDNbirds<-function(Dir){
             LongName="Richmond National Battlefield Park", 
             Network="MIDN", 
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -127,7 +127,7 @@ importMIDNbirds<-function(Dir){
             LongName="Valley Forge National Historical Park", 
             Network="MIDN", 
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
