@@ -36,6 +36,7 @@ Collate:
     'getParkNames.R'
     'DetectsPlot.R'
     'HumidXVisit.R'
+    'ObsXVisit.R'
     'SumRelAbund.R'
     'birdRichness.R'
     'importNETNbirds.R'

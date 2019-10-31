@@ -15,6 +15,7 @@ same format at the ouptut of \code{\link{getVisits}}}
 \describe{
 \item{"day"}{Provides the Julian day (aka ordinal day) for each visit}
 \item{"humidity"}{Provides the humidity measured for each visit}
+\item{"observer}{Provides the observer for a each visit}
 }}
 
 \item{parks}{A character vector of park codes. Only data from these parks will be returned.}

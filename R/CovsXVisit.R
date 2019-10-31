@@ -17,6 +17,7 @@
 #' \describe{
 #' \item{"day"}{Provides the Julian day (aka ordinal day) for each visit}
 #' \item{"humidity"}{Provides the humidity measured for each visit}
+#' \item{"observer}{Provides the observer for a each visit}
 #' }
 #' 
 #' @details This produces a Day X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
@@ -64,7 +65,9 @@ setMethod(f="CovsXVisit", signature=c(object="data.frame"),
       {if ("day" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
                                       names_prefix="Day",values_from=EventDate, values_fn=list(EventDate=yday) )},
       {if ("humidity" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
-                                      names_prefix = "Humidity",values_from=Humidity )} 
+                                      names_prefix = "Humidity",values_from=Humidity )},
+      {if ("observer" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
+                                             names_prefix = "Observer",values_from=Observer )} 
       )
     OutMats<-compact(OutMats)
     
