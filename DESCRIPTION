@@ -37,6 +37,7 @@ Collate:
     'DetectsPlot.R'
     'HumidXVisit.R'
     'ObsXVisit.R'
+    'SkyXVisit.R'
     'SumRelAbund.R'
     'birdRichness.R'
     'importNETNbirds.R'

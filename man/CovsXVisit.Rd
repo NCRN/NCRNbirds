@@ -15,7 +15,8 @@ same format at the ouptut of \code{\link{getVisits}}}
 \describe{
 \item{"day"}{Provides the Julian day (aka ordinal day) for each visit}
 \item{"humidity"}{Provides the humidity measured for each visit}
-\item{"observer}{Provides the observer for a each visit}
+\item{"observer"}{Provides the observer for each visit}
+\item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit}
 }}
 
 \item{parks}{A character vector of park codes. Only data from these parks will be returned.}
@@ -40,12 +41,13 @@ at least \code{reps} times in the year.}
 Produces a Covariate X Visit matrix for use in analyses
 }
 \details{
-This produces a Day X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
+This produces a Covariate(s) X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
  will correspond to a different point in a different year. The columns of the matrix will be the park code, the point name, the year 
- visited, and a column for each visit that indicates the ordinal day of the visit. These columns will be called "Day1", "Day2" etc. 
+ visited, and a column for each covariate at each visit. These columns will be called "Day1", "Day2"  or  "Humidity1", "Humidity2" etc. to indicate
+ the covariate and the visit.  
  
  If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot. 
- Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used. 
+ Otherwise a numeric vector e.g. c(1,2) can be used to select which visits are used. 
  
  If the input \code{object} is an \code{NCRNbirds} object or a list of such objects, the function will use the \code{\link{getVisits}} function to 
  retrieve the visit data. Currently if you supply a \code{data.frame} as the \code{object} the filtering by parks, points etc. will not occur, 
