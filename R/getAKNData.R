@@ -13,17 +13,17 @@
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
 #' 
-#' #' @export
+#' @export
 
 
 getAKNData<- function(Dir){
   
   #### Import data downloaded from AKN (http://data.prbo.org/science/biologists/index.php)
   
-  PointCounts<-read.csv(paste(Dir,"./AKN/AKNPointCountObs.csv", sep="/"),as.is=T, header = T) %>% 
+  PointCounts<-read.csv(paste(Dir,"AKN/AKNPointCountObs.csv", sep="/"),as.is=T, header = T) %>% 
     mutate(AOU_Code = Spp)
   
-  SiteCond <- read.csv(paste(Dir,"./AKN/AKNSiteConditions.csv", sep="/"),as.is=T, header = T)
+  SiteCond <- read.csv(paste(Dir,"AKN/AKNSiteConditions.csv", sep="/"),as.is=T, header = T)
   
   NETNintervals<-read.csv(paste(Dir,"NETNintervals.csv", sep="/"),as.is=T, header = T)
   
@@ -47,13 +47,17 @@ getAKNData<- function(Dir){
   visits<-PointCounts %>% 
     filter(!Visit %in% c(9)) %>% # remove QAQC visits
     dplyr::select(Transect, Point, Date, Start.Time, End.Time, Researcher) %>%
-    dplyr::mutate(Date= as.Date(Date, "%m/%d/%Y")) %>% 
+    dplyr::mutate(Date= mdy(Date)) %>% 
     dplyr::mutate(Year= year(Date))%>% 
     dplyr::distinct(.) 
   
   visits<-setDT(visits)   ## change format
-  # assign visit number per year based on number of events per year per point.
-  visits<-visits[, Visit:=seq(from = 1, along = list(Transect,Point, Date), by = 1), by= c("Point","Year")] 
+  
+  # assign visit number in each year based on number of events per year per point.
+  #(the line below doesn't work any longer so replaced with line 60, which seems to be working)
+  #visits<-visits[, Visit:= seq.int(from = 1, along = list(Transect,Point, Date), by = 1), by= c("Point","Year")] 
+  
+  visits<-visits[ , Visit := seq(.N), by = c("Point","Year")]
   
   # rename columnsto align with R package
   visits_clean<-visits %>% 
@@ -114,13 +118,13 @@ getAKNData<- function(Dir){
     dplyr::left_join(.,sites[,c("Point_Name", "Survey_Type")],by= "Point_Name" ) %>% ## add survey type (forest vs grassland)
     dplyr::left_join(.,tlu_Obs, by= "Researcher") %>% # add in observer skill
     dplyr::mutate(Park= stringr::str_sub(Point_Name, 1, 4)) %>% ## Add ParkCode to data
-    dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect,Point_Name, EventDate= Date, Visit,AOU_Code= Spp, Bird_Count= Count,
+    dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect,Point_Name, EventDate= Date, Visit,AOU_Code, Bird_Count= Count,
                   Scientific_Name= Scientific.Name, Common_Name= Common.Name, Interval= Time.Bin.ID, Interval_Length, ID_Method_Code, ID_Method, Distance_id, Distance =Label, 
                   Flyover_Observed, Initial_Three_Min_Cnt, Survey_Type, Data.Status, Point.Note, Observer= pwrc_ObsID, Skill_Level, Skill_Notes)  # rename and select cols
   
   
 #### Check species name matching after inital match ---- 
-  NETN_AOU<-data %>% select(AOU_Code, Common_Name=Common.Name,Scientific_Name=Scientific.Name) %>%
+  NETN_AOU<-data %>% select(AOU_Code, Common_Name,Scientific_Name) %>%
     dplyr:: distinct(.)
   
   CommMatch<-anti_join(NETN_AOU,Species_AOU, by="AOU_Code")

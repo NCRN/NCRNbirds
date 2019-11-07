@@ -4,7 +4,7 @@
 #' @title richnessPlot
 #'
 #' @importFrom dplyr pull
-#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous theme theme_minimal scale_colour_viridis_d expand_limits
+#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous theme theme_minimal scale_colour_viridis_d expand_limits geom_line
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map pmap
 #' @importFrom tidyr full_seq
@@ -82,7 +82,7 @@ setMethod(f="richnessPlot", signature=c(object="data.frame"),
     integer_breaks<-min(object$Year):max(object$Year)
     YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", SampEffort,")") else integer_breaks
     
-    GraphOut<-ggplot(data=object, aes(x=Year, y=Richness))+expand_limits(y=0)+
+    GraphOut<-ggplot(data=object, aes(x=Year, y=Richness))+expand_limits(y=0)+geom_line(color="blue")+
       geom_point(size=4, color="blue")+
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
       labs(y=" Number of Species Observed" )+

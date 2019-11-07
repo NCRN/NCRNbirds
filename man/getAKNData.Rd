@@ -7,9 +7,7 @@
 getAKNData(Dir)
 }
 \arguments{
-\item{Dir}{The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
-
-#' @export}
+\item{Dir}{The directory where the data is found. You should omit the trailing slash ("/") in the directory name.}
 }
 \description{
 Takes NETN's AKN point count survey data download and updates Visits and FieldData files for NCRNbirds package import. Also imports in as NCRNbirds object
