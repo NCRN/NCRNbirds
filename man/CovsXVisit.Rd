@@ -17,6 +17,7 @@ same format at the ouptut of \code{\link{getVisits}}}
 \item{"humidity"}{Provides the humidity measured for each visit}
 \item{"observer"}{Provides the observer for each visit}
 \item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit}
+\item{"temp"}{Provides the temperature for each visit}
 }}
 
 \item{parks}{A character vector of park codes. Only data from these parks will be returned.}

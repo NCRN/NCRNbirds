@@ -19,6 +19,7 @@
 #' \item{"humidity"}{Provides the humidity measured for each visit}
 #' \item{"observer"}{Provides the observer for each visit}
 #' \item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit}
+#' \item{"temp"}{Provides the temperature for each visit}
 #' }
 #' 
 #' @details This produces a Covariate(s) X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
@@ -71,7 +72,9 @@ setMethod(f="CovsXVisit", signature=c(object="data.frame"),
       {if ("observer" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
                                              names_prefix = "Observer",values_from=Observer )},
       {if ("sky" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
-                                             names_prefix = "Sky",values_from=Sky )}
+                                             names_prefix = "Sky",values_from=Sky )},
+      {if ("temp" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
+                                        names_prefix = "Temperature",values_from=Temperature )}
       )
     OutMats<-compact(OutMats)
     
