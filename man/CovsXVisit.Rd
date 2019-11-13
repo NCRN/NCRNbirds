@@ -13,11 +13,12 @@ same format at the ouptut of \code{\link{getVisits}}}
 
 \item{covs}{A character vector of one or more covariate names. Options inlcude:
 \describe{
-\item{"day"}{Provides the Julian day (aka ordinal day) for each visit}
-\item{"humidity"}{Provides the humidity measured for each visit}
-\item{"observer"}{Provides the observer for each visit}
-\item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit}
-\item{"temp"}{Provides the temperature for each visit}
+\item{"day"}{Provides the Julian day (aka ordinal day) for each visit.}
+\item{"humidity"}{Provides the humidity measured for each visit.}
+\item{"observer"}{Provides the observer for each visit.}
+\item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit.}
+\item{"temp"}{Provides the temperature for each visit.}
+\item{"time"}{Provides the time of day when each visit began. This is expressed in minutes since the start of the day.}
 }}
 
 \item{parks}{A character vector of park codes. Only data from these parks will be returned.}

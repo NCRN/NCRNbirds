@@ -5,8 +5,8 @@
 #' 
 #' @description Produces a Covariate X Visit matrix for use in analyses
 #' 
-#' @importFrom dplyr left_join distinct
-#' @importFrom lubridate yday
+#' @importFrom dplyr distinct left_join mutate
+#' @importFrom lubridate hour minute second yday
 #' @importFrom magrittr %>%
 #' @importFrom purrr compact reduce
 #' @importFrom tidyr pivot_wider
@@ -15,11 +15,12 @@
 #' same format at the ouptut of \code{\link{getVisits}}
 #' @param covs A character vector of one or more covariate names. Options inlcude:
 #' \describe{
-#' \item{"day"}{Provides the Julian day (aka ordinal day) for each visit}
-#' \item{"humidity"}{Provides the humidity measured for each visit}
-#' \item{"observer"}{Provides the observer for each visit}
-#' \item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit}
-#' \item{"temp"}{Provides the temperature for each visit}
+#' \item{"day"}{Provides the Julian day (aka ordinal day) for each visit.}
+#' \item{"humidity"}{Provides the humidity measured for each visit.}
+#' \item{"observer"}{Provides the observer for each visit.}
+#' \item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit.}
+#' \item{"temp"}{Provides the temperature for each visit.}
+#' \item{"time"}{Provides the time of day when each visit began. This is expressed in minutes since the start of the day.}
 #' }
 #' 
 #' @details This produces a Covariate(s) X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
@@ -63,6 +64,9 @@ setMethod(f="CovsXVisit", signature=c(object="NCRNbirds"),
 
 setMethod(f="CovsXVisit", signature=c(object="data.frame"),
   function(object,covs){
+    
+    if("time" %in% covs) {object<-object %>% mutate(StartTimeDec = 60*hour(StartTime) + minute(StartTime) + second(StartTime)/60 )}
+    
     OutMats<-list(
       distinct(object, Admin_Unit_Code, Point_Name, Year),
       {if ("day" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
@@ -74,7 +78,9 @@ setMethod(f="CovsXVisit", signature=c(object="data.frame"),
       {if ("sky" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
                                              names_prefix = "Sky",values_from=Sky )},
       {if ("temp" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
-                                        names_prefix = "Temperature",values_from=Temperature )}
+                                        names_prefix = "Temperature",values_from=Temperature )},
+      {if ("time" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
+                                         names_prefix = "Time",values_from=StartTimeDec)}
       )
     OutMats<-compact(OutMats)
     
