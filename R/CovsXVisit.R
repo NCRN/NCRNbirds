@@ -21,8 +21,9 @@
 #' \item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit.}
 #' \item{"temp"}{Provides the temperature for each visit.}
 #' \item{"time"}{Provides the time of day when each visit began. This is expressed in minutes since the start of the day.}
-#' \item{"visit}{Indicates if a visit occurred or not. Each visit column will either have the visit number if a visit occured or \code{NA}
+#' \item{"visit"}{Indicates if a visit occurred or not. Each visit column will either have the visit number if a visit occured or \code{NA}
 #' if it did not.}
+#' \item{"wind"}{Provides the wind level for each visit (e.g. Calm, Light breeze).}
 #' }
 #' 
 #' @details This produces a Covariate(s) X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
@@ -84,7 +85,9 @@ setMethod(f="CovsXVisit", signature=c(object="data.frame"),
       {if ("time" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
                                          names_prefix = "Time",values_from=StartTimeDec)},
       {if ("visit" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
-                                         names_prefix = "Visit",values_from=Visit)}
+                                         names_prefix = "Visit",values_from=Visit)},
+      {if ("wind" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
+                                          names_prefix = "Wind",values_from=Wind)}
       )
     OutMats<-compact(OutMats)
     
