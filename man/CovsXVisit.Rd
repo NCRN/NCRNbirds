@@ -19,6 +19,8 @@ same format at the ouptut of \code{\link{getVisits}}}
 \item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit.}
 \item{"temp"}{Provides the temperature for each visit.}
 \item{"time"}{Provides the time of day when each visit began. This is expressed in minutes since the start of the day.}
+\item{"visit}{Indicates if a visit occurred or not. Each visit column will either have the visit number if a visit occured or \code{NA}
+if it did not.}
 }}
 
 \item{parks}{A character vector of park codes. Only data from these parks will be returned.}
