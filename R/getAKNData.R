@@ -3,20 +3,20 @@
 #' 
 #' @title getAKNData
 #'
-#' @importFrom dplyr distinct
+#' @importFrom dplyr distinct anti_join tally
 #' @importFrom magrittr %>% 
 #' @importFrom data.table setDT
-#' @importFrom stringr str_sub
-#' @importFrom lubridate year
+#' @importFrom stringr str_sub str_detect
+#' @importFrom lubridate year 
 #' 
-#' @description Takes NETN's AKN point count survey data download and updates Visits and FieldData files for NCRNbirds package import. Also imports in as NCRNbirds object
+#' @description Takes NETN's AKN point count survey data download and updates Visits and FieldData files for NCRNbirds package import. Also has option to import into workspace as NCRNbirds object ("NETN").
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
-#' 
+#' @param import Logical. If \code{TRUE} will import data as "NETN" NCRNbirds object.
 #' @export
 
 
-getAKNData<- function(Dir){
+getAKNData<- function(Dir, import= FALSE){
   
   #### Import data downloaded from AKN (http://data.prbo.org/science/biologists/index.php)
   
@@ -143,10 +143,11 @@ getAKNData<- function(Dir){
    filter(Flyover_Observed %in% 0 & is.na(ID_Method_Code))
   print(unique(NA_Det[,c("Admin_Unit_Code","Point_Name")]))
  
-### write data to directory ----
+### write data to directory and import as NCRNbirds object----
   write.table(data, paste(Dir,"FieldData.csv", sep="/"), sep= ",", row.names = FALSE)
   
-  NETN<-importNETNbirds(Dir)
+ if(import == TRUE){
+   NETN<-importNETNbirds(Dir)}
   
   
 }

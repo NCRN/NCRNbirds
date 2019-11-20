@@ -2,7 +2,7 @@
 #' 
 #' @title importNETNbirds
 #' 
-#' @importFrom lubridate year mdy ymd
+#' @importFrom lubridate year
 #' @importFrom readr read_csv
 #' 
 #' @description  This function imports data from the standard NETN .csv files and saves it as \code{NCRNbirds} objects. 

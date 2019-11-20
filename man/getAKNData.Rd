@@ -4,11 +4,13 @@
 \alias{getAKNData}
 \title{getAKNData}
 \usage{
-getAKNData(Dir)
+getAKNData(Dir, import = FALSE)
 }
 \arguments{
 \item{Dir}{The directory where the data is found. You should omit the trailing slash ("/") in the directory name.}
+
+\item{import}{Logical. If \code{TRUE} will import data as "NETN" NCRNbirds object.}
 }
 \description{
-Takes NETN's AKN point count survey data download and updates Visits and FieldData files for NCRNbirds package import. Also imports in as NCRNbirds object
+Takes NETN's AKN point count survey data download and updates Visits and FieldData files for NCRNbirds package import. Also has option to import into workspace as NCRNbirds object ("NETN").
 }
