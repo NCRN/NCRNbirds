@@ -5,8 +5,8 @@
 #'   
 #' @title detectsPlot
 #'
-#' @importFrom dplyr group_by pull summarise
-#' @importFrom ggplot2 aes element_text geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal scale_color_brewer geom_errorbar expand_limits
+#' @importFrom dplyr group_by pull summarise 
+#' @importFrom ggplot2 aes element_text geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal scale_color_brewer geom_errorbar expand_limits geom_line
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map pmap
 #' @importFrom tidyr full_seq gather 
@@ -25,7 +25,8 @@
 #' @param point_num An optional list of numeric vector indicating the number of points sampled each visit of each year. Each visit is a separte elemnet in the list. If \code{object} is a \code{NCRNbirds} object
 #' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 #' provided by the user. 
-#' @param se Add Standard error to the plot. \code{TRUE} or \code{FALSE}, defaults to  \code{FALSE}
+#' @param se Logical. Add Standard error to the plot. \code{TRUE} or \code{FALSE}, defaults to \code{FALSE}
+#' @param add_line Logical. Connects points in plot when \code{TRUE}. Defaults to \code{TRUE}.
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{CountXVisit}}
 #' 
@@ -35,11 +36,11 @@
 #' @export
 
 
-setGeneric(name="detectsPlot",function(object,parks= NA,years=NA,  points=NA, visits=NA, times=NA, max=F, plot_title=NA, point_num= NA, se= FALSE, output="total", ...){standardGeneric("detectsPlot")}, signature="object")
+setGeneric(name="detectsPlot",function(object,parks= NA,years=NA,  points=NA, visits=NA, times=NA, max=F, plot_title=NA, point_num= NA, se= FALSE, add_line = TRUE, output="total", ...){standardGeneric("detectsPlot")}, signature="object")
 
 
 setMethod(f="detectsPlot", signature=c(object="list"),
-  function(object,parks,years,points,visits,times, max, plot_title, point_num,se, output, ...) {
+  function(object,parks,years,points,visits,times, max, plot_title, point_num,se,add_line,output, ...) {
     
     switch(output,
        total={    visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
@@ -59,18 +60,18 @@ setMethod(f="detectsPlot", signature=c(object="list"),
            purrr::map(years, function(years) getVisits(object=object,parks=parks,  years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
          
                    
-                 return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se))
+                 return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se, add_line=add_line))
                 },
       list={
          return(lapply(X=object, FUN=detectsPlot, years=years, points=points, visits=visits, times=times, max=max,
-                       plot_title=plot_title,point_num=point_num, se=se,...))
+                       plot_title=plot_title,point_num=point_num, se=se,add_line=add_line...))
       }
     )
 })
 
 
 setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
-  function(object,parks,years,points,visits,times, plot_title,point_num, ...){
+  function(object,parks,years,points,visits,times, plot_title,point_num,add_line, ...){
       
     visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
     years<-if(anyNA(years)) getVisits(object, parks=parks, points=points,  visits=visits, times=times) %>% 
@@ -89,11 +90,11 @@ setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
     if (all(is.na(point_num))) point_num<-purrr::map(visits, function(visits){ 
       purrr::map(years, function(years) getVisits(object=object, parks=parks,  years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
     
-    return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se))
+    return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se, add_line=add_line))
 })
 
 setMethod(f="detectsPlot", signature=c(object="data.frame"),
-          function(object, plot_title, point_num, se){
+          function(object, plot_title, point_num, se,add_line){
             
             SampEffort<-if(!all(is.na(point_num))) pmap(point_num, paste, sep=",") %>% unlist else NA
             
@@ -101,7 +102,9 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
             YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", SampEffort,")") else integer_breaks
             
             GraphOut<-ggplot(data=object, aes(x=Year, y=Mean, colour = visit))+ expand_limits(y=0)+
-              geom_point(size=4)+scale_color_brewer(palette="Dark2")+
+              geom_point(size=4)+
+              {if(add_line == TRUE) geom_line()}+
+              scale_color_brewer(palette="Dark2")+
               scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+            
               {if(!is.na(plot_title)) ggtitle(plot_title)}+
               theme_classic()+  
@@ -110,7 +113,7 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
               theme(axis.text.y = element_text(color="black", vjust= 0.5,size = 12))+
               theme(axis.text.x = element_text(color="black", size = 10))
               
-            if(!se) {GraphOut<- (GraphOut+
+             if(!se) {GraphOut<- (GraphOut+
               labs(y=" Mean number of birds detected per point", colour= ""))
             }else{
               GraphOut<- (GraphOut+ geom_errorbar(aes(ymin=Mean-se, ymax=Mean+se), width=.6)+

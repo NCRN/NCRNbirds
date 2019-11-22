@@ -4,9 +4,20 @@
 \alias{SumRelAbund}
 \title{SumRelAbund}
 \usage{
-SumRelAbund(object, points = NA, AOU = NA, years = NA, times = NA,
-  band = 1, visits = NA, CalcByYear = FALSE, SortRelAbund = FALSE,
-  abund = 10, output = "dataframe", ...)
+SumRelAbund(
+  object,
+  points = NA,
+  AOU = NA,
+  years = NA,
+  times = NA,
+  band = 1,
+  visits = NA,
+  CalcByYear = FALSE,
+  SortRelAbund = FALSE,
+  abund = 10,
+  output = "dataframe",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}

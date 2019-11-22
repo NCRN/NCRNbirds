@@ -4,8 +4,14 @@
 \alias{getChecklist}
 \title{getChecklist}
 \usage{
-getChecklist(object, years = NA, points = NA, out.style = "AOU",
-  output = "dataframe", ...)
+getChecklist(
+  object,
+  years = NA,
+  points = NA,
+  out.style = "AOU",
+  output = "dataframe",
+  ...
+)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}

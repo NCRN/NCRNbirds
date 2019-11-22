@@ -4,8 +4,15 @@
 \alias{BirdGuildSummary}
 \title{BirdGuildSummary}
 \usage{
-BirdGuildSummary(object, years = NA, points = NA, visits = NA,
-  times = NA, output = "dataframe", ...)
+BirdGuildSummary(
+  object,
+  years = NA,
+  points = NA,
+  visits = NA,
+  times = NA,
+  output = "dataframe",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.}

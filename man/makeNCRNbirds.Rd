@@ -4,9 +4,19 @@
 \alias{makeNCRNbirds}
 \title{makeNCRNBbirds}
 \usage{
-makeNCRNbirds(object, ParkCode, ShortName, LongName, Network,
-  VisitNumber = NA, Bands = NA, Intervals = NA, Species = NA,
-  Guilds = NA, points = NA)
+makeNCRNbirds(
+  object,
+  ParkCode,
+  ShortName,
+  LongName,
+  Network,
+  VisitNumber = NA,
+  Bands = NA,
+  Intervals = NA,
+  Species = NA,
+  Guilds = NA,
+  points = NA
+)
 }
 \arguments{
 \item{object}{Either an \code{NCRNbirds} object or a \code{list} of such objects}

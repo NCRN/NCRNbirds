@@ -2,7 +2,7 @@
 #' 
 #' @title importNETNbirds
 #' 
-#' @importFrom lubridate year mdy
+#' @importFrom lubridate year
 #' @importFrom readr read_csv
 #' 
 #' @description  This function imports data from the standard NETN .csv files and saves it as \code{NCRNbirds} objects. 
@@ -24,11 +24,11 @@ importNETNbirds<-function(Dir){
   InPoints<-read_csv(paste(Dir,"Points.csv", sep="/"))
   
   InVisits<-read_csv(paste(Dir,"Visits.csv",sep="/"))
-  InVisits$EventDate<-mdy(InVisits$EventDate)
+  #InVisits$EventDate<-mdy(InVisits$EventDate)
   InVisits$Year<-year(InVisits$EventDate)
   
   InFieldData<-read_csv(paste(Dir,"FieldData.csv", sep="/"))
-  InFieldData$EventDate<-mdy(InFieldData$EventDate)
+  #InFieldData$EventDate<-mdy(InFieldData$EventDate)
   InFieldData$Year<-year(InFieldData$EventDate)
   
   InSpecies<-read_csv(paste(Dir,"BirdSpecies.csv", sep="/"))  

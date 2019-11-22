@@ -4,8 +4,7 @@
 \alias{getBirdNames}
 \title{getBirdNames}
 \usage{
-getBirdNames(object, names = NA, in.style = "AOU",
-  out.style = "common")
+getBirdNames(object, names = NA, in.style = "AOU", out.style = "common")
 }
 \arguments{
 \item{object}{A \code{NCRNbirds} object or a \code{list} of such objects.}
