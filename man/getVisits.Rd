@@ -18,17 +18,21 @@ getVisits(
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a list of such objects.}
 
-\item{parks}{A character vector of park codes. Only visits within these parks will be returned.}
+\item{parks}{A character vector of park codes. Only data from these parks will be returned.}
 
-\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{points}{A character vector of point names. Only data from these points will be returned.}
 
-\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{EventDate} column.}
+\item{years}{A numeric vector. Returns data only from points where the years the point was visited matches one of the 
+values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot 
+which is derived from the information in the \code{EventDate} column.}
 
-\item{points}{A character vector of point names. Only visits to these points will be returned.}
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied 
+is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
 
-\item{reps}{A length 1 numeric vector,d deflatus to NA, Returns only data form points and years where the point has been visited at least \code{reps} times in the year.}
+\item{reps}{A length 1 numeric vector,defaults to \code{NA}, Returns only data from points and years where the point has been visited 
+at least \code{reps} times in the year.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 }
