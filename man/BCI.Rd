@@ -4,8 +4,15 @@
 \alias{BCI}
 \title{BCI}
 \usage{
-BCI(object, years = NA, points = NA, type = "Cent_Appal",
-  checklist = F, output = "dataframe", ...)
+BCI(
+  object,
+  years = NA,
+  points = NA,
+  type = "Cent_Appal",
+  checklist = F,
+  output = "dataframe",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}

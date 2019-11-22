@@ -4,8 +4,17 @@
 \alias{nmixBirds}
 \title{nmixBirds}
 \usage{
-nmixBirds(object, points = NA, AOU = NA, years = NA, times = NA,
-  band = 1, visits = c(1, 2), mixture = "P", ...)
+nmixBirds(
+  object,
+  points = NA,
+  AOU = NA,
+  years = NA,
+  times = NA,
+  band = 1,
+  visits = c(1, 2),
+  mixture = "P",
+  ...
+)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}

@@ -4,9 +4,20 @@
 \alias{BCIPlot}
 \title{BCIPlot}
 \usage{
-BCIPlot(object, years = NA, points = NA, visits = NA, times = NA,
-  plot_title = NA, point_num = NA, type = "Cent_Appal",
-  caption = T, palette = "BuGn", output = "total", ...)
+BCIPlot(
+  object,
+  years = NA,
+  points = NA,
+  visits = NA,
+  times = NA,
+  plot_title = NA,
+  point_num = NA,
+  type = "Cent_Appal",
+  caption = T,
+  palette = "BuGn",
+  output = "total",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.}

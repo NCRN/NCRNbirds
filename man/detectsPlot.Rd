@@ -4,10 +4,21 @@
 \alias{detectsPlot}
 \title{detectsPlot}
 \usage{
-detectsPlot(object, parks = NA, years = NA, points = NA,
-  visits = NA, times = NA, max = F, plot_title = NA,
-  point_num = NA, se = FALSE, add_line = TRUE, output = "total",
-  ...)
+detectsPlot(
+  object,
+  parks = NA,
+  years = NA,
+  points = NA,
+  visits = NA,
+  times = NA,
+  max = F,
+  plot_title = NA,
+  point_num = NA,
+  se = FALSE,
+  add_line = TRUE,
+  output = "total",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{CountXVisit()}.}

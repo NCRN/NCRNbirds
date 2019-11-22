@@ -33,7 +33,7 @@ setGeneric(name="richnessPlot",function(object,years=NA, points=NA, visits = NA,
 
 
 setMethod(f="richnessPlot", signature=c(object="list"),
-  function(object,years,points,visits, times, plot_title, point_num, output, ...) {
+  function(object,years,points,visits, times, plot_title, point_num, add_line, output, ...) {
     switch(output,
       total={
         visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
@@ -47,10 +47,10 @@ setMethod(f="richnessPlot", signature=c(object="list"),
           map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
             unlist(F)})
         
-        return(richnessPlot(object=graphdata, plot_title=plot_title, point_num = point_num,visits = visits))
+        return(richnessPlot(object=graphdata, visits=visits, plot_title=plot_title, point_num = point_num, add_line=add_line))
       },
       list={
-        return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num))
+        return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num, add_line=add_line))
       }
     )
 })

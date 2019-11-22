@@ -4,8 +4,16 @@
 \alias{getVisits}
 \title{getVisits}
 \usage{
-getVisits(object, parks = NA, times = NA, years = NA, points = NA,
-  visits = NA, reps = NA, output = "dataframe")
+getVisits(
+  object,
+  parks = NA,
+  times = NA,
+  years = NA,
+  points = NA,
+  visits = NA,
+  reps = NA,
+  output = "dataframe"
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a list of such objects.}

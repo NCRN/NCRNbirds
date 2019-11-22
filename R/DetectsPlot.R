@@ -5,7 +5,7 @@
 #'   
 #' @title detectsPlot
 #'
-#' @importFrom dplyr group_by pull summarise recode
+#' @importFrom dplyr group_by pull summarise 
 #' @importFrom ggplot2 aes element_text geom_point ggplot ggtitle labs scale_x_continuous theme_classic theme_minimal scale_color_brewer geom_errorbar expand_limits geom_line
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map pmap
@@ -40,7 +40,7 @@ setGeneric(name="detectsPlot",function(object,parks= NA,years=NA,  points=NA, vi
 
 
 setMethod(f="detectsPlot", signature=c(object="list"),
-  function(object,parks,years,points,visits,times, max, plot_title, point_num,se, output, ...) {
+  function(object,parks,years,points,visits,times, max, plot_title, point_num,se,add_line,output, ...) {
     
     switch(output,
        total={    visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
@@ -60,11 +60,11 @@ setMethod(f="detectsPlot", signature=c(object="list"),
            purrr::map(years, function(years) getVisits(object=object,parks=parks,  years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
          
                    
-                 return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se))
+                 return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se, add_line=add_line))
                 },
       list={
          return(lapply(X=object, FUN=detectsPlot, years=years, points=points, visits=visits, times=times, max=max,
-                       plot_title=plot_title,point_num=point_num, se=se,...))
+                       plot_title=plot_title,point_num=point_num, se=se,add_line=add_line...))
       }
     )
 })
