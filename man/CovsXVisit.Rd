@@ -4,8 +4,17 @@
 \alias{CovsXVisit}
 \title{CovsXVisit}
 \usage{
-CovsXVisit(object, covs, parks = NA, points = NA, years = NA,
-  times = NA, visits = NA, reps = NA, output = "dataframe")
+CovsXVisit(
+  object,
+  covs,
+  parks = NA,
+  points = NA,
+  years = NA,
+  times = NA,
+  visits = NA,
+  reps = NA,
+  output = "dataframe"
+)
 }
 \arguments{
 \item{object}{A \code{data.frame},  \code{NCRNbirds} object or a list of such objects. If the input is a \code{data.frame} in should be in the 

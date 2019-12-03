@@ -7,9 +7,9 @@
 getVisits(
   object,
   parks = NA,
-  times = NA,
-  years = NA,
   points = NA,
+  years = NA,
+  times = NA,
   visits = NA,
   reps = NA,
   output = "dataframe"
