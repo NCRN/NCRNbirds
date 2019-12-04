@@ -4,20 +4,16 @@
 \alias{makeUMF}
 \title{makeUMF}
 \usage{
-makeUMF(
-  object,
-  points = NA,
-  AOU = NA,
-  years = NA,
-  times = NA,
-  band = 1,
-  visits = c(1, 2),
-  mixture = "P",
-  ...
-)
+makeUMF(object, output = "umf", ...)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
+
+\item{output}{Either "umf" (the defautlt) or "list". Controls the output when \code{object} is a list. If "umf" the data from all \code{NCRNbirds}
+objects in the list will be combined into a single unmarked frame. If "list" then the output will be a list of unmarked frames - one for 
+each \code{NCRNbirds} object in the input list.}
+
+\item{...}{Additonal arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.}
 
 \item{points}{A character vector. The names of one or more points where the data was collected.}
 
@@ -34,8 +30,6 @@ This is determined based on the data found in the \code{Visits} slot.}
 \item{visits}{A length 1 numeric vector. Will only use data from points with that number of visits.}
 
 \item{mixture}{Defaults to "P". One of either "P", "NB", or "ZIP". Indicates which latent abundace distibution to use, either Poisson, Negative Binomial or Zero Inflated Poinsson.  Passed on to the \code{mixture} argumnet of \code{pcount} in the \code{unmarked} package.}
-
-\item{...}{Additonal arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.}
 }
 \description{
 Makes an unmarked framre for analysis using the unmarekd package
