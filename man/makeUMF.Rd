@@ -4,7 +4,7 @@
 \alias{makeUMF}
 \title{makeUMF}
 \usage{
-makeUMF(object, output = "umf", ...)
+makeUMF(object, obscovslist = NULL, output = "umf", ...)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
@@ -30,6 +30,9 @@ This is determined based on the data found in the \code{Visits} slot.}
 \item{visits}{A length 1 numeric vector. Will only use data from points with that number of visits.}
 
 \item{mixture}{Defaults to "P". One of either "P", "NB", or "ZIP". Indicates which latent abundace distibution to use, either Poisson, Negative Binomial or Zero Inflated Poinsson.  Passed on to the \code{mixture} argumnet of \code{pcount} in the \code{unmarked} package.}
+
+\item{ovbscovlist}{A named \code{list} of \code{data.frame}s with observation covariates. Typically this will include covarites that are not returned 
+by the \code{\link{CovsXVisit}} function.}
 }
 \description{
 Makes an unmarked framre for analysis using the unmarekd package

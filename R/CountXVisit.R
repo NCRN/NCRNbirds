@@ -4,7 +4,7 @@
 #' 
 #' @description Produces a Count X Visit matrix for use in analyses
 #' 
-#' @importFrom dplyr case_when group_by left_join matches mutate select summarize ungroup vars
+#' @importFrom dplyr group_by left_join matches mutate select summarize ungroup vars
 #' @importFrom magrittr %>%
 #' @importFrom rlang !!! syms
 #' @importFrom tidyr spread 
@@ -80,9 +80,9 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
               left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
               mutate(Visit=paste0("Visit",Visit)) %>%
               group_by(Admin_Unit_Code,Point_Name, Year, Visit) %>%
-              summarize(Counts=case_when(
-                        type =="count"~ sum(Bird_Count),
-                        type=="occupancy"~ min(Bird_Count,1) )) %>% #if Bird_Count is 0, Count will be 0, otherwise it will be 1 
+              summarize(Counts=switch(type,
+                        count= sum(Bird_Count),
+                        occupancy=  min(Bird_Count,1) )) %>% #if Bird_Count is 0, Count will be 0, otherwise it will be 1 
               spread(key=Visit,value=Counts,fill=0) 
               
             

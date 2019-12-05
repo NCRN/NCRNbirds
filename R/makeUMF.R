@@ -5,6 +5,7 @@
 #' @description Makes an unmarked framre for analysis using the unmarekd package
 #' 
 #' @importFrom dplyr select
+#' @importFrom purrr pmap
 #' @importFrom  unmarked unmarkedFrameOccu
 #'
 #' @param object An NCRNbirds object or a list of such objects.
@@ -18,6 +19,9 @@
 #' @param visits A length 1 numeric vector. Will only use data from points with that number of visits.
 #' 
 #' @param mixture  Defaults to "P". One of either "P", "NB", or "ZIP". Indicates which latent abundace distibution to use, either Poisson, Negative Binomial or Zero Inflated Poinsson.  Passed on to the \code{mixture} argumnet of \code{pcount} in the \code{unmarked} package. 
+#' 
+#' @param ovbscovlist A named \code{list} of \code{data.frame}s with observation covariates. Typically this will include covarites that are not returned 
+#' by the \code{\link{CovsXVisit}} function.
 #' @param output   Either "umf" (the defautlt) or "list". Controls the output when \code{object} is a list. If "umf" the data from all \code{NCRNbirds}
 #' objects in the list will be combined into a single unmarked frame. If "list" then the output will be a list of unmarked frames - one for 
 #' each \code{NCRNbirds} object in the input list. 
@@ -33,16 +37,20 @@
 
 ########################
 
-setGeneric(name="makeUMF",function(object,output="umf",#points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),mixture="P",
+setGeneric(name="makeUMF",function(object,obscovslist=NULL, output="umf",#points=NA,AOU=NA,years=NA,times=NA,band=1,visits=c(1,2),mixture="P",
                                    ... ){standardGeneric("makeUMF")},  signature="object")
 
 setMethod(f="makeUMF", signature=c(object="list"),
-           function(object,output,...) {
+           function(object,obscovslist, output,...) {
              switch(output,
                umf= return(CountXVisit(object=object, type="occupancy",output="dataframe",...) %>% 
                              dplyr::select(-c(Admin_Unit_Code, Point_Name, Year)) %>% 
                              makeUMF),
-               list= return(lapply(X=object, FUN=makeUMF,...))
+               list={
+                  umflist<-list(object=object, obscovslist=obscovslist)
+                  umflist<-umflist[!sapply(umflist, is.null)] # removes any null elements so pmap will wrok
+                  return(pmap(.l=umflist, makeUMF, ...) )
+               }
               )
              
             }
@@ -50,7 +58,7 @@ setMethod(f="makeUMF", signature=c(object="list"),
  
  
 setMethod(f="makeUMF", signature=c(object="NCRNbirds"),
-    function(object, ...){
+    function(object,obscovslist, ...){
            
       VisitMat<-CountXVisit(object=object, type="occupancy",...) %>% 
         dplyr::select(-c(Admin_Unit_Code, Point_Name, Year))
@@ -63,19 +71,19 @@ setMethod(f="makeUMF", signature=c(object="NCRNbirds"),
 #             PcountFormula<-if(length(unique(VisitMat$Year))==1) formula(~1~1) else formula(~1~Year)
 #             
 #             #run pcount
-    return(makeUMF(object=VisitMat))
+    return(makeUMF(object=VisitMat, obscovslist = obscovslist))
     }
  )
 
 setMethod(f="makeUMF", signature=c(object="data.frame"),
-          function(object){
+          function(object, obscovslist){
             
-            #1 Need data frame with occupancy only - this is the object for this function - if we assume this comes from CountXVisit need to trim
+            #1 Need data frame with occupancy only - this is the object for this function 
             #2 need site covarite data
-            #3 need  observatio ncovariate data
+            #3 need  observation covariate data
             #4 call unmarkedFrameOccu from unmareked package
             
 
-            return(unmarkedFrameOccu(y=object))
+            return(unmarkedFrameOccu(y=object, obsCovs=obscovslist))
           }
 )
