@@ -32,16 +32,21 @@ getBirds(
 
 \item{max.count}{A numeric vector of length one. Will only return data with a bird count equal to or less than \code{max.count}}
 
+\item{band}{A numeirc vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned. Options are \code{1} 
+for birds closer than 50m to the observer, \code{2} for birds between 50 and 100 meters from the observer, \code{c(1,2)} for birds between 0 and 100 
+meters of the observer, or \code{NA} for all birds regardless of distance.}
+
 \item{interval}{A numeirc vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.}
 
 \item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
 
-\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
-@param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal
+to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
+\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
+visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
-
-\item{band.}{A numeirc vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned. Options are \code{1} for birds closer than 50m to the observer, \code{2} for birds between 50 and 100 meters from the observer, \code{c(1,2)} for birds between 0 and 100 meters of the observer, or \code{NA} for all birds regardless of distance.}
 }
 \description{
 Returns bird monitoring data from the \code{Birds} slot of an \code{NCRNbirds} object.

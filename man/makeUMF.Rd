@@ -4,41 +4,63 @@
 \alias{makeUMF}
 \title{makeUMF}
 \usage{
-makeUMF(object, obscovslist = NULL, output = "umf", ...)
+makeUMF(
+  object,
+  parks = NA,
+  points = NA,
+  AOU = NA,
+  years = NA,
+  times = NA,
+  visits = NA,
+  reps = NA,
+  sitecovs = NULL,
+  visitcovs = NA,
+  obscovslist = NULL,
+  output = "umf",
+  ...
+)
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
+
+\item{points}{A character vecotr. The names of one or more points where the data was collected.}
+
+\item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
+
+\item{years}{A vector of number. will return only data from the indicated years.}
+
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal
+to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
+\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
+
+\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
+visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
+\item{sitecovs}{A \code{data.frame} of site covariates created by the user.Each covariate shoulb be in a separate olumn and point in its own row.
+This should not include a column of point names. Make sure that the order of the points in this \code{data.frame} math the order in the observation data. 
+If the input \code{object} is a \code{list} and the desired output is a \code{list} than \code{sitecovs} should also be a \code{list} of \code{data.frames}
+with one \code{data.frame} for each park.}
+
+\item{visitcovs}{A characeter vector with names of visit covariates to be used which ARE obtained from the \code{\link{CovsXVisit}} function.\code{makeUMF}
+will automtically format these for use in unmarkedFrames. These will be formatted at a list of named \code{data.frames}}
+
+\item{obscovslist}{A named \code{list} of \code{data.frame}s with observation covariates. Typically this will include covariates that ARE NOT returned 
+by the \code{\link{CovsXVisit}} function.This will be used in conjuciton with the visit covariates specified by \code{visitcovs}.If the input \code{object}
+is a \code{list} and the desired output is a \code{list} than \code{obscovslist} should also be a \code{list} of \code{lists}
+with one \code{list} of observation covariates for each park.}
 
 \item{output}{Either "umf" (the defautlt) or "list". Controls the output when \code{object} is a list. If "umf" the data from all \code{NCRNbirds}
 objects in the list will be combined into a single unmarked frame. If "list" then the output will be a list of unmarked frames - one for 
 each \code{NCRNbirds} object in the input list.}
 
 \item{...}{Additonal arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.}
-
-\item{points}{A character vector. The names of one or more points where the data was collected.}
-
-\item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
-
-\item{years}{A vector of number. will return only data from the indicated years.}
-
-\item{times}{A numeric vector of length 1 passed on to \code{\link{CountXVisit}} and from there to \code{link{getVisits}}. 
-Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. 
-This is determined based on the data found in the \code{Visits} slot.}
-
-\item{band}{A numeirc vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
-
-\item{visits}{A length 1 numeric vector. Will only use data from points with that number of visits.}
-
-\item{mixture}{Defaults to "P". One of either "P", "NB", or "ZIP". Indicates which latent abundace distibution to use, either Poisson, Negative Binomial or Zero Inflated Poinsson.  Passed on to the \code{mixture} argumnet of \code{pcount} in the \code{unmarked} package.}
-
-\item{ovbscovlist}{A named \code{list} of \code{data.frame}s with observation covariates. Typically this will include covarites that are not returned 
-by the \code{\link{CovsXVisit}} function.}
 }
 \description{
 Makes an unmarked framre for analysis using the unmarekd package
 }
 \details{
-This function simplifed the process for fitting a N-mixture model (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to the \code{\link[unmarked]{pcount}} function and the resutls of the analysis are returned.
+This function simplifies the process for fitting a N-mixture model (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to the \code{\link[unmarked]{pcount}} function and the resutls of the analysis are returned.
 }
 \references{
 Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated counts using binomail mixutre models. Ecological Applications. 15: 1450-1461.
