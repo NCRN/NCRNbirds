@@ -3,14 +3,15 @@
 #' 
 #' @title makeUMF
 #' 
-#' @description Makes an unmarked framre for analysis using the unmarekd package
+#' @description Makes an unmarked frame for analysis using the unmarked package
 #' 
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
 #' @importFrom purrr map pmap
 #' @importFrom  unmarked unmarkedFrameOccu
 #'
-#'  
+#' @param frametype Indicates the type of \code{unmarkedFrame} to make. Options are "pcount" the default incudes number of decections for n-mixture modeling. 
+#' "occu" is used for occupancy modeling. 
 #' @param sitecovs A \code{data.frame} of site covariates created by the user.Each covariate shoulb be in a separate olumn and point in its own row.
 #' This should not include a column of point names. Make sure that the order of the points in this \code{data.frame} math the order in the observation data. 
 #' If the input \code{object} is a \code{list} and the desired output is a \code{list} than \code{sitecovs} should also be a \code{list} of \code{data.frames}
@@ -27,6 +28,8 @@
 #' each \code{NCRNbirds} object in the input list. 
 #' @param ... Additonal arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.
 #' 
+#' @return Either an \code{unmarkedFrameOccu} or an \code{unmarkedFramePcount} object. 
+#' 
 #' @details This function simplifies the process for fitting a N-mixture model (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to the \code{\link[unmarked]{pcount}} function and the resutls of the analysis are returned. 
 #' 
 #' @references Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated counts using binomail mixutre models. Ecological Applications. 15: 1450-1461. 
@@ -37,15 +40,15 @@
 
 ########################
 
-setGeneric(name="makeUMF",function(object, parks=NA, points=NA, AOU=NA, years=NA, times=NA, visits=NA, reps=NA, sitecovs=NULL, visitcovs=NA, 
+setGeneric(name="makeUMF",function(object, parks=NA, points=NA, AOU=NA, years=NA, times=NA, visits=NA, reps=NA, frametype="pcount",sitecovs=NULL, visitcovs=NA, 
                                    obscovslist=NULL, output="umf",... ){standardGeneric("makeUMF")},  signature="object")
 
 setMethod(f="makeUMF", signature=c(object="list"),
-  function(object, parks, points, AOU, years, times, visits, reps, sitecovs, visitcovs, obscovslist, output, ...) {
+  function(object, parks, points, AOU, years, times, visits, reps, frametype, sitecovs, visitcovs, obscovslist, output, ...) {
     switch(output,
       umf= {
             BirdMat<-CountXVisit(object=object, parks=parks, points=points, AOU=AOU, years=years, times=times, visits=visits, reps=reps,
-                                 type="occupancy",output="dataframe", ...) %>% 
+                                 type=switch(frametype, pcount="count", occu="occupancy"),output="dataframe", ...) %>% 
             dplyr::select(-c(Admin_Unit_Code, Point_Name, Year))
                  
             VisitData<- if(!anyNA(visitcovs)){
@@ -54,13 +57,14 @@ setMethod(f="makeUMF", signature=c(object="list"),
                             select(-Admin_Unit_Code,-Point_Name,-Year)) %>% 
                            setNames(visitcovs)
             }else NULL
-            return(makeUMF(object=BirdMat, sitecovs=sitecovs, obscovslist = c(VisitData, obscovslist)))
+            return(makeUMF(object=BirdMat,frametype=frametype, sitecovs=sitecovs, obscovslist = c(VisitData, obscovslist)))
       },
                
       list={
             umflist<-list(object, sitecovs, obscovslist)
             umflist<-umflist[!sapply(umflist, is.null)] # removes any null elements so pmap will work
-            return(pmap(.l=umflist, makeUMF, parks=parks, points=points, years=years,times=times, visits=visits, reps=reps, visitcovs=visitcovs) )
+            return(pmap(.l=umflist, makeUMF, parks=parks, points=points, years=years,times=times, visits=visits, reps=reps, frametype=frametype, 
+                        visitcovs=visitcovs) )
       }
     )
    }
@@ -68,10 +72,10 @@ setMethod(f="makeUMF", signature=c(object="list"),
  
  
 setMethod(f="makeUMF", signature=c(object="NCRNbirds"),
-    function(object, parks, points, AOU, years, times, visits, sitecovs, visitcovs, obscovslist, ...){
+    function(object, parks, points, AOU, years, times, visits, reps, frametype, sitecovs, visitcovs, obscovslist, ...){
            
       BirdMat<-CountXVisit(object=object, parks=parks, points=points, AOU=AOU, years=years, times=times, visits=visits,
-                           reps=reps, type="occupancy", ...) %>% 
+                           reps=reps,  type=switch(frametype, pcount="count", occu="occupancy"), ...) %>% 
         dplyr::select(-c(Admin_Unit_Code, Point_Name, Year))
       
       VisitData<- if(!anyNA(visitcovs)){
@@ -80,13 +84,21 @@ setMethod(f="makeUMF", signature=c(object="NCRNbirds"),
           setNames(visitcovs)
       }else NULL
  
-   return(makeUMF(object=BirdMat, sitecovs=sitecovs, obscovslist = c(VisitData, obscovslist)))
+   return(makeUMF(object=BirdMat, frametype=frametype,sitecovs=sitecovs, obscovslist = c(VisitData, obscovslist)))
   }
  )
 
 setMethod(f="makeUMF", signature=c(object="data.frame"),
-  function(object, sitecovs, obscovslist){
-              
-    return(unmarkedFrameOccu(y=object, siteCovs=sitecovs, obsCovs=obscovslist))
+  function(object, frametype, sitecovs, obscovslist){
+        
+    
+          
+    UMFrame<-switch(frametype,
+                  pcount=unmarkedFramePCount(y=object, siteCovs=sitecovs, obsCovs=obscovslist),
+                  occu=unmarkedFrameOccu(y=object, siteCovs=sitecovs, obsCovs=obscovslist)
+                  )
+    
+    return(UMFrame)
+    
   }
 )

@@ -13,6 +13,7 @@ makeUMF(
   times = NA,
   visits = NA,
   reps = NA,
+  frametype = "pcount",
   sitecovs = NULL,
   visitcovs = NA,
   obscovslist = NULL,
@@ -37,6 +38,9 @@ to the value of \code{times}. This is determined based on the data found in the 
 \item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
 visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
+\item{frametype}{Indicates the type of \code{unmarkedFrame} to make. Options are "pcount" the default incudes number of decections for n-mixture modeling. 
+"occu" is used for occupancy modeling.}
+
 \item{sitecovs}{A \code{data.frame} of site covariates created by the user.Each covariate shoulb be in a separate olumn and point in its own row.
 This should not include a column of point names. Make sure that the order of the points in this \code{data.frame} math the order in the observation data. 
 If the input \code{object} is a \code{list} and the desired output is a \code{list} than \code{sitecovs} should also be a \code{list} of \code{data.frames}
@@ -56,8 +60,11 @@ each \code{NCRNbirds} object in the input list.}
 
 \item{...}{Additonal arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.}
 }
+\value{
+Either an \code{unmarkedFrameOccu} or an \code{unmarkedFramePcount} object.
+}
 \description{
-Makes an unmarked framre for analysis using the unmarekd package
+Makes an unmarked frame for analysis using the unmarked package
 }
 \details{
 This function simplifies the process for fitting a N-mixture model (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to the \code{\link[unmarked]{pcount}} function and the resutls of the analysis are returned.
