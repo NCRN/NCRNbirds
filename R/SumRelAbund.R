@@ -8,8 +8,7 @@
 #' @importFrom dplyr arrange group_by  mutate n select slice summarize ungroup filter
 #' @importFrom magrittr %>%
 #' @importFrom tidyr  gather
-#' @importFrom purrr map_dfr
-#' 
+#' @importFrom purrr map_dfr 
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
@@ -44,8 +43,7 @@ setGeneric(name="SumRelAbund",function(object,points=NA,AOU=NA,years=NA,times=NA
 setMethod(f="SumRelAbund", signature=c(object="list"),
           function(object, points, AOU, years,times, band, visits, CalcByYear,max, sort, abund, output,...) {
             OutMat<-lapply(X=object, FUN=SumRelAbund, points=points, AOU=AOU, years=years, 
-                           times=times,band=band,visits=visits, CalcByYear=CalcByYear,max=max, sort=sort, abund=abund, output=output, ...)
-            switch(output,
+                           times=times,band=band,visits=visits, CalcByYear=CalcByYear,max=max, sort=sort, abund=abund, output=output, ...)            switch(output,
                    list= return(OutMat),
                    dataframe= return(rbindlist(OutMat, use.names=TRUE, fill=TRUE)) #return(bind_rows(OutMat))
             )
@@ -53,6 +51,7 @@ setMethod(f="SumRelAbund", signature=c(object="list"),
 
 
 setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
+
           function(object,points,AOU,years,band,visits,CalcByYear,max, sort, abund, output, ...){
             
             # create vector of bird names
@@ -71,11 +70,9 @@ setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
             dplyr::group_by(., Admin_Unit_Code,AOU_Code, Point_Name = points, visit, Year)} %>%  # sum across all visits by year
             dplyr::summarize(.,Total= sum(value, na.rm=TRUE), Mean= round(mean(value, na.rm=TRUE),digits=3), 
                              se= round(sd(value, na.rm=TRUE)/sqrt(n()),digits=3), n=n())  # calc mean and se
-            
             # do you want to also sort data and return most common species?
             
             if(!sort){
-              
               return(ungroup(data))
               
             }else{
