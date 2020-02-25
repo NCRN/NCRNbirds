@@ -1,4 +1,4 @@
-#' @include NCRNbirds_Class_def.R 
+#' @include NCRNbirds_Class_def.R CountXVisit.R CovsXVisit.R
 #' @inheritParams getBirds
 #' 
 #' @title makeUMF
@@ -8,7 +8,7 @@
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
 #' @importFrom purrr map pmap
-#' @importFrom  unmarked unmarkedFrameOccu
+#' @importFrom  unmarked unmarkedFrameOccu unmarkedFramePCount
 #'
 #' @param frametype Indicates the type of \code{unmarkedFrame} to make. Options are "pcount" the default incudes number of decections for n-mixture modeling. 
 #' "occu" is used for occupancy modeling. 

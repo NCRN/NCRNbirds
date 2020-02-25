@@ -51,4 +51,5 @@ Collate:
     'mapBirds.R'
     'nmixBirds.R'
     'richnessPlot.R'
+    'unmarkedBirds.R'
 RoxygenNote: 7.0.2
