@@ -9,23 +9,26 @@
 #' @importFrom magrittr %>%
 #' @importFrom tidyr  gather
 #' @importFrom purrr map_dfr 
+#' @importFrom rlang set_names
+#' 
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
+#' @param parks A character vector of park codes. Only visits within these parks will be returned.
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
 #' Detections will be summed by each individual species.
 #' @param years  A vector of numbers. Will return only data from the indicated years.
-#' @param times  A numeric vector of length 1 passed on to \code{\link{getVisits}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
+#' @param times  A numeric vector of length 1 passed on to \code{\link{getVisits}} and \code{\link{getBirds}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param band  A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
 #' @param visits  The visits that will be used for the matrix. Defautls to \code{NA}. See Details below,
 #' @param max Logical, if \code{TRUE} (default), relative abundance will be calculated from the maximum count among visits in a given year.
-#' @param CalcByYear  Logical, if \code{TRUE}, will calculate mean detections across all visits per year. Defaults to calculating per visit.
+#' @param CalcByYear  Logical, if \code{TRUE}, will calculate mean detections across all visits per year. Defaults to \code{FALSE}, calculating per visit.
 #' @param sort Logical, if \code{TRUE}, when multiple species are selected it will calculate and sort relative abundance per species. See \code{abund}.
 #' @param abund Numeric, When \code{sort} = \code{TRUE}, used to provide a numeric value to select the most abundant species.
 #' E.g., abund = 10 will return mean detections of the top 10 species. You can use the returned  \code{data.frame} to provide species AOU.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
-#' @param ... Additional arguments passed to \code{getBirds}
+#' @param ... Additional arguments passed to \code{getChecklist}
 #' 
-#' @details Summaries relative abundance by species (mean detections per point) for a \code{NCRNbirds} object or a \code{list} of such objects. 
+#' @details Summarizes relative abundance by species (mean detections per point) for a \code{NCRNbirds} object or a \code{list} of such objects. 
 #'  
 #'  If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot. 
 #'  Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used. 
@@ -37,13 +40,14 @@
 #'     
 #' @export
 
-setGeneric(name="SumRelAbund",function(object,points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA, CalcByYear= FALSE,max=TRUE,
+setGeneric(name="SumRelAbund",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA, CalcByYear= FALSE,max=TRUE,
                                        sort=FALSE, abund = 10, output="dataframe",...){standardGeneric("SumRelAbund")}, signature="object")
 
 setMethod(f="SumRelAbund", signature=c(object="list"),
-          function(object, points, AOU, years,times, band, visits, CalcByYear,max, sort, abund, output,...) {
-            OutMat<-lapply(X=object, FUN=SumRelAbund, points=points, AOU=AOU, years=years, 
-                           times=times,band=band,visits=visits, CalcByYear=CalcByYear,max=max, sort=sort, abund=abund, output=output, ...)            switch(output,
+          function(object, parks, points, AOU, years,times, band, visits, CalcByYear,max, sort, abund, output,...) {
+            OutMat<-lapply(X=object, FUN=SumRelAbund, parks=parks, points=points, AOU=AOU, years=years, 
+                           times=times,band=band,visits=visits, CalcByYear=CalcByYear,max=max, sort=sort, abund=abund, output=output, ...)            
+            switch(output,
                    list= return(OutMat),
                    dataframe= return(rbindlist(OutMat, use.names=TRUE, fill=TRUE)) #return(bind_rows(OutMat))
             )
@@ -52,24 +56,27 @@ setMethod(f="SumRelAbund", signature=c(object="list"),
 
 setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
 
-          function(object,points,AOU,years,band,visits,CalcByYear,max, sort, abund, output, ...){
+          function(object,parks, points,AOU,years,times,band, visits,CalcByYear,max, sort, abund, output, ...){
             
             # create vector of bird names
             
             
-            BirdNames<-getChecklist(object=object, points=points, AOU=AOU, years=years, band=band, ...) %>% 
+            BirdNames<-getChecklist(object=object, points=points, AOU=AOU, times=times, years=years, band=band, ...) %>% 
               as.vector()
             
             # create detection matrix per species, year, and visit
             
             data<-map_dfr(.x=set_names(BirdNames, nm=BirdNames),.id= "AOU_Code", 
-              ~CountXVisit(object=object,AOU= .x, points=points, visits=visits, years=years, band=band, max=max, ...)) %>% 
+              ~CountXVisit(object=object,AOU= .x, parks=parks, points=points, times=times, visits=visits, years=years, band=band, max=max)) %>% 
             tidyr::gather(visit, value, -AOU_Code, -Admin_Unit_Code, -Point_Name,-Year)  %>%  #reshape
             {if(max) dplyr::filter(. , visit %in% "Max") else dplyr::filter(., !visit %in% "Max") } %>%    # select the visit(s) and set grouping to summarize data by
-            {if(CalcByYear)  dplyr::group_by(.,Admin_Unit_Code,AOU_Code,Point_Name = points, Year) else # sum across all visits and years
-            dplyr::group_by(., Admin_Unit_Code,AOU_Code, Point_Name = points, visit, Year)} %>%  # sum across all visits by year
+            {if(CalcByYear)  dplyr::group_by(.,Admin_Unit_Code,AOU_Code,Point_Name, Year) else # sum across all visits and years
+            dplyr::group_by(., Admin_Unit_Code,AOU_Code, Point_Name, visit, Year)} %>%  # sum across all visits by year
             dplyr::summarize(.,Total= sum(value, na.rm=TRUE), Mean= round(mean(value, na.rm=TRUE),digits=3), 
                              se= round(sd(value, na.rm=TRUE)/sqrt(n()),digits=3), n=n())  # calc mean and se
+            
+            
+            
             # do you want to also sort data and return most common species?
             
             if(!sort){
@@ -78,7 +85,7 @@ setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
             }else{
               df<- data %>% 
                 group_by(Admin_Unit_Code,AOU_Code) %>% 
-                dplyr::summarise(Mean_total = mean(Mean)) %>% 
+                dplyr::summarise(Mean_total = mean(Mean, na.rm=TRUE)) %>% 
                 arrange(desc(Mean_total)) %>% 
                 slice(1:abund)
               return(ungroup(df))
