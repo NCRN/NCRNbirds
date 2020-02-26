@@ -1,6 +1,6 @@
 #' @include NCRNbirds_Class_def.R
 #' 
-#' @title importERMNbirds
+#' @title importERMNbirds2007
 #' 
 #' @importFrom lubridate year mdy
 #' @importFrom readr read_csv
@@ -15,7 +15,7 @@
 #' @export
 
 
-importERMNbirds<-function(Dir){
+importERMNbirds2007<-function(Dir){
  
   InBands<-read_csv(paste(Dir,"ERMNbands.csv", sep="/"))
   
@@ -106,23 +106,23 @@ importERMNbirds<-function(Dir){
             Guilds=InGuilds
   )
   
-  #
-  #GARI<-new("NCRNbirds", 
-  #           ParkCode="GARI", 
-  #           ShortName="Gauley River NRA", 
-  #           LongName="Gauley River National Recreation Area", 
-  #           Network="ERMN", 
-  #           
-  #           VisitNumber=4,
-  #           Bands=InBands,
-  #           Intervals=InIntervals,
-  #           
-  #           Points=InPoints[InPoints$Admin_Unit_Code=="GARI",], 
-  #           Visits=InVisits[InVisits$Admin_Unit_Code=="GARI",],
-  #           Birds=InFieldData[InFieldData$Admin_Unit_Code=="GARI",],
-  #           Species=InSpecies,
-  #           Guilds=InGuilds
-  # )
+  
+  GARI<-new("NCRNbirds", 
+             ParkCode="GARI", 
+             ShortName="Gauley River NRA", 
+             LongName="Gauley River National Recreation Area", 
+             Network="ERMN", 
+             
+             VisitNumber=4,
+             Bands=InBands,
+             Intervals=InIntervals,
+             
+             Points=InPoints[InPoints$Admin_Unit_Code=="GARI",], 
+             Visits=InVisits[InVisits$Admin_Unit_Code=="GARI",],
+             Birds=InFieldData[InFieldData$Admin_Unit_Code=="GARI",],
+             Species=InSpecies,
+             Guilds=InGuilds
+   )
   
   NERI<-new("NCRNbirds", 
             ParkCode="NERI", 
@@ -159,5 +159,5 @@ importERMNbirds<-function(Dir){
   )
   
   
-  return(c(ALPO,BLUE,DEWA,FONE,FRHI,NERI))
+  return(c(ALPO,BLUE,DEWA,FONE,FRHI,NERI,GARI))
 }

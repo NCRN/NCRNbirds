@@ -4,9 +4,21 @@
 \alias{detectsPlot}
 \title{detectsPlot}
 \usage{
-detectsPlot(object, parks = NA, years = NA, points = NA,
-  visits = NA, times = NA, max = F, plot_title = NA,
-  point_num = NA, se = FALSE, output = "total", ...)
+detectsPlot(
+  object,
+  parks = NA,
+  years = NA,
+  points = NA,
+  visits = NA,
+  times = NA,
+  max = F,
+  plot_title = NA,
+  point_num = NA,
+  se = FALSE,
+  add_line = TRUE,
+  output = "total",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{CountXVisit()}.}
@@ -30,7 +42,9 @@ If \code{TRUE} then the annual mean will be calculated from the maximum no. dete
 or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
 provided by the user.}
 
-\item{se}{Add Standard error to the plot. \code{TRUE} or \code{FALSE}, defaults to  \code{FALSE}}
+\item{se}{Logical. Add Standard error to the plot. \code{TRUE} or \code{FALSE}, defaults to \code{FALSE}}
+
+\item{add_line}{Logical. Connects points in plot when \code{TRUE}. Defaults to \code{TRUE}.}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
 

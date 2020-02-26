@@ -4,8 +4,15 @@
 \alias{getGuilds}
 \title{getGuilds}
 \usage{
-getGuilds(object, AOU = NA, type = NA, elements = NA,
-  categories = NA, guilds = NA, output = "dataframe")
+getGuilds(
+  object,
+  AOU = NA,
+  type = NA,
+  elements = NA,
+  categories = NA,
+  guilds = NA,
+  output = "dataframe"
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a list of such objects.}

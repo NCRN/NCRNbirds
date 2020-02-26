@@ -4,9 +4,19 @@
 \alias{CountXVisit}
 \title{CountXVisit}
 \usage{
-CountXVisit(object, parks = NA, points = NA, AOU = NA, years = NA,
-  times = NA, band = 1, visits = NA, max = F,
-  output = "dataframe", ...)
+CountXVisit(
+  object,
+  parks = NA,
+  points = NA,
+  AOU = NA,
+  years = NA,
+  times = NA,
+  band = 1,
+  visits = NA,
+  max = F,
+  output = "dataframe",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}

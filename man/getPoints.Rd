@@ -4,8 +4,7 @@
 \alias{getPoints}
 \title{getPoints}
 \usage{
-getPoints(object, times = NA, years = NA, points = NA,
-  output = "dataframe")
+getPoints(object, times = NA, years = NA, points = NA, output = "dataframe")
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}

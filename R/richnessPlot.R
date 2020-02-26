@@ -4,7 +4,7 @@
 #' @title richnessPlot
 #'
 #' @importFrom dplyr pull
-#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous theme theme_minimal scale_colour_viridis_d
+#' @importFrom ggplot2 aes element_line geom_point ggplot ggtitle labs scale_x_continuous theme theme_minimal scale_colour_viridis_d expand_limits geom_line
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map pmap
 #' @importFrom tidyr full_seq
@@ -22,18 +22,18 @@
 #' provided by the user. 
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
-#' 
+#' @param add_line Logical. Connects points in plot when \code{TRUE}. Defaults to \code{TRUE}.
 #' @details This function produces a graph of species richness over time. It does this by using the output of the \code{\link{birdRichness}}
 #' function. The data is then passed on to ggplot2 for graphing.
 #'   
 #' @export
 
 
-setGeneric(name="richnessPlot",function(object,years=NA, points=NA, visits = NA, times=NA, plot_title=NA, point_num=NA, output="total", ...){standardGeneric("richnessPlot")}, signature="object")
+setGeneric(name="richnessPlot",function(object,years=NA, points=NA, visits = NA, times=NA, plot_title=NA, point_num=NA, add_line = TRUE, output="total", ...){standardGeneric("richnessPlot")}, signature="object")
 
 
 setMethod(f="richnessPlot", signature=c(object="list"),
-  function(object,years,points,visits, times, plot_title, point_num, output, ...) {
+  function(object,years,points,visits, times, plot_title, point_num, add_line, output, ...) {
     switch(output,
       total={
         visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
@@ -47,17 +47,17 @@ setMethod(f="richnessPlot", signature=c(object="list"),
           map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
             unlist(F)})
         
-        return(richnessPlot(object=graphdata, plot_title=plot_title, point_num = point_num,visits = visits))
+        return(richnessPlot(object=graphdata, visits=visits, plot_title=plot_title, point_num = point_num, add_line=add_line))
       },
       list={
-        return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num))
+        return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num, add_line=add_line))
       }
     )
 })
 
 
 setMethod(f="richnessPlot", signature=c(object="NCRNbirds"),
-  function(object, years, points, visits, times, plot_title, point_num, ...){
+  function(object, years, points, visits, times, plot_title, point_num, add_line, ...){
     
     visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
     years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
@@ -70,20 +70,21 @@ setMethod(f="richnessPlot", signature=c(object="NCRNbirds"),
     if (all(is.na(point_num))) point_num<-map(visits, function(visits){ 
       map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
     
-    return(richnessPlot(object=graphdata, plot_title=plot_title, point_num=point_num))
+    return(richnessPlot(object=graphdata, plot_title=plot_title, point_num=point_num, add_line=add_line))
 
 })
 
 setMethod(f="richnessPlot", signature=c(object="data.frame"),
-  function(object, plot_title, point_num){
+  function(object, plot_title, point_num,add_line){
    
     SampEffort<-if(!all(is.na(point_num))) pmap(point_num, paste, sep=",") %>% unlist else NA
     
     integer_breaks<-min(object$Year):max(object$Year)
     YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", SampEffort,")") else integer_breaks
     
-    GraphOut<-ggplot(data=object, aes(x=Year, y=Richness))+
+    GraphOut<-ggplot(data=object, aes(x=Year, y=Richness))+expand_limits(y=0)+
       geom_point(size=4, color="blue")+
+      {if(add_line == TRUE) geom_line()}+
       scale_x_continuous(breaks=integer_breaks, minor_breaks=integer_breaks, labels=YearTicks)+
       labs(y=" Number of Species Observed" )+
       {if(!is.na(plot_title)) ggtitle(plot_title)}+
