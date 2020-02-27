@@ -22,6 +22,10 @@
 #' @param max Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at each 
 #' point#' accross all the visits specified in the \code{visits} argument.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
+#' @param site Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.
+#' @param dist Character. Filter data by disturbance code(s). See network documentation for list and meanings of codes. 
+#' @param wind Numeric. Filter data by wind code(s). See network documentation for list and meanings of codes.
+#' @param sky Numeric. Filter data by sky condition code(s). See network documentation for list and meanings of codes.
 #' @param ... Additional arguments passed to \code{getBirds}
 #' 
 #' @details This produces a Count X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
@@ -38,14 +42,15 @@
 ########################
 
 
-setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,max=F,
-                                       output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")
+setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,max=F,site=NA,dist=NA, wind =NA,
+                                       sky= NA, output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")
 
 
 
 setMethod(f="CountXVisit", signature=c(object="list"),
-          function(object, parks, points, AOU, years, band, visits, max, output,...) {
-            OutMat<-lapply(X=object, FUN=CountXVisit,parks=parks, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,max=max,...)
+          function(object, parks, points, AOU, years, band, visits, max, site,dist,wind,sky, output,...) {
+            OutMat<-lapply(X=object, FUN=CountXVisit,parks=parks, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,max=max,
+                           site= site, dist= dist, wind=wind, sky=sky, ...)
             switch(output,
                    list= return(OutMat),
                    dataframe= return(rbindlist(OutMat, use.names=TRUE, fill=TRUE)) 
@@ -54,13 +59,14 @@ setMethod(f="CountXVisit", signature=c(object="list"),
 
 
 setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
-          function(object,parks, points,AOU,years,band,visits,max, output,...){
+          function(object,parks, points,AOU,years,band,visits,max,site,dist,wind,sky, output,...){
             
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
             ##  visiting a point once instead of twice)
             visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
             
-            VisitMat<-getVisits(object=object,parks=parks, points=points,years=years,times=times,visits=visits) %>%
+            VisitMat<-getVisits(object=object,parks=parks, points=points,years=years,
+                                times=times,visits=visits, site=site, dist= dist,wind=wind,sky=sky) %>%
               mutate(Visit=paste0("Visit",Visit),Visited=1) %>%
               dplyr::select(Admin_Unit_Code,Point_Name,Year,Visit,Visited) %>%
               spread(key=Visit, value=Visited)
@@ -69,9 +75,10 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
             ## data there will be a "0", but this will occur for both missed visits and zero counts.
 
             
-            CountMat<-getVisits(object=object,parks=parks, points=points,years=years,times=times,visits=visits)%>%
+            CountMat<-getVisits(object=object,parks=parks, points=points,years=years,times=times,visits=visits,
+                                site=site, dist= dist,wind=wind,sky=sky)%>%
               dplyr::select(Admin_Unit_Code,Point_Name,EventDate,Visit,Year) %>%
-              left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
+              left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band,  ...))%>% 
               mutate(Visit=paste0("Visit",Visit)) %>%
               group_by(Admin_Unit_Code,Point_Name, Year, Visit) %>%
               summarize(Counts=sum(Bird_Count)) %>%

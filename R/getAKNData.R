@@ -21,7 +21,7 @@ getAKNData<- function(Dir, import= FALSE){
   #### Import data downloaded from AKN (http://data.prbo.org/science/biologists/index.php)
   
   PointCounts<-read.csv(paste(Dir,"AKN/AKNPointCountObs.csv", sep="/"),as.is=T, header = T) %>% 
-    mutate(AOU_Code = Spp)
+    rename(AOU_Code = Spp, Point_Name = Point)
   
   SiteCond <- read.csv(paste(Dir,"AKN/AKNSiteConditions.csv", sep="/"),as.is=T, header = T)
   
@@ -46,7 +46,7 @@ getAKNData<- function(Dir, import= FALSE){
   # First, create a df of the unique visits for each point in each year to determine visit per event
   visits<-PointCounts %>% 
     filter(!Visit %in% c(9)) %>% # remove QAQC visits
-    dplyr::select(Transect, Point, Date, Start.Time, End.Time, Researcher) %>%
+    dplyr::select(Transect, Point_Name, Date, Start.Time, End.Time, Researcher) %>%
     dplyr::mutate(Date= mdy(Date)) %>% 
     dplyr::mutate(Year= year(Date))%>% 
     dplyr::distinct(.) 
@@ -57,13 +57,13 @@ getAKNData<- function(Dir, import= FALSE){
   #(the line below doesn't work any longer so replaced with line 60, which seems to be working)
   #visits<-visits[, Visit:= seq.int(from = 1, along = list(Transect,Point, Date), by = 1), by= c("Point","Year")] 
   
-  visits<-visits[ , Visit := seq(.N), by = c("Point","Year")]
+  visits<-visits[ , Visit := seq(.N), by = c("Point_Name","Year")]
   
   # rename columnsto align with R package
   visits_clean<-visits %>% 
-    dplyr::mutate(Park= stringr::str_sub(Point, 1, 4)) %>%
-    
-    dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect, Point_Name = Point, Year,EventDate= Date, StartTime= Start.Time, EndTime= End.Time, Visit, Observer=Researcher)
+    dplyr::mutate(Park= stringr::str_sub(Point_Name, 1, 4)) %>%
+    dplyr::left_join(.,sites[,c("Point_Name", "Survey_Type")],by= "Point_Name" ) %>% ## add survey type (forest vs grassland)
+    dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect, Point_Name, Survey_Type,Year,EventDate= Date, StartTime= Start.Time, EndTime= End.Time, Visit, Observer=Researcher)
   
   
   write.table(visits_clean, paste(Dir,"Visits.csv", sep="/"), sep= ",", row.names = FALSE)

@@ -17,19 +17,24 @@
 #' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
 #' @param reps A length 1 numeric vector,defaults to \code{NA}, Returns only data from points and years where the point has been visited 
 #' at least \code{reps} times in the year.
+#' @param site Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.
+#' @param dist Character. Filter data by disturbance code(s). See network documentation for list and meanings of codes. 
+#' @param wind Numeric. Filter data by wind code(s). See network documentation for list and meanings of codes.
+#' @param sky Numeric. Filter data by sky condition code(s). See network documentation for list and meanings of codes.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' @details This function returns point data either from a single NCRNbirds object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object. 
 #'  
 #' @export
 
 
-setGeneric(name="getVisits",function(object, parks=NA, points=NA, years=NA, times=NA, visits=NA, reps=NA,
-                                     output="dataframe"){standardGeneric("getVisits")}, signature="object")
+setGeneric(name="getVisits",function(object, parks=NA, points=NA, years=NA, times=NA, visits=NA, reps=NA, site=NA,dist=NA, wind =NA,
+                                     sky= NA,  output="dataframe"){standardGeneric("getVisits")}, signature="object")
 
 
 setMethod(f="getVisits", signature=c(object="list"),
-          function(object,parks,points,years, times,visits,reps,output) {
-            OutVisits<-lapply(X=object, FUN=getVisits, parks=parks,  points=points, years=years, times=times, visits=visits, reps=reps)
+          function(object,parks,points,years, times,visits,reps,site,dist,wind,sky, output) {
+            OutVisits<-lapply(X=object, FUN=getVisits, parks=parks,  points=points, years=years, times=times, visits=visits,
+                              reps=reps, site= site, dist= dist,wind=wind,sky=sky, output=output)
             switch(output,
                    list={#names(OutPoints)<-getNames(object,name.class="code")
                      return(OutVisits)},
@@ -39,7 +44,7 @@ setMethod(f="getVisits", signature=c(object="list"),
 
 
 setMethod(f="getVisits", signature=c(object="NCRNbirds"),
-          function(object,parks,points,years, times,visits,reps, output){
+          function(object,parks,points,years, times,visits,reps, site,dist,wind,sky, output){
             
             XVisits<-object@Visits
             
@@ -50,6 +55,14 @@ setMethod(f="getVisits", signature=c(object="NCRNbirds"),
             if(!anyNA(points)) XVisits<-XVisits[XVisits$Point_Name %in% points,]
             
             if(!anyNA(visits)) XVisits<-XVisits[XVisits$Visit %in% visits,]
+            
+            if(!anyNA(site)) XVisits<-XVisits %>% filter(Survey_Type %in% site)
+            
+            if(!anyNA(dist)) XVisits<-XVisits %>% filter(Disturbance_Code %in% dist)
+            
+            if(!anyNA(wind)) XVisits<-XVisits %>% filter(Wind_Code %in% wind)
+            
+            if(!anyNA(sky)) XVisits<-XVisits %>% filter(Sky_Condition %in% sky)
             
             if(!anyNA(times))      {
               X<-tbl_df(object@Visits) %>%

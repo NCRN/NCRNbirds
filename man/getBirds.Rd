@@ -16,6 +16,10 @@ getBirds(
   visits = NA,
   times = NA,
   reps = NA,
+  site = NA,
+  flyover = FALSE,
+  gender = NA,
+  first3min = FALSE,
   output = "dataframe"
 )
 }
@@ -36,8 +40,17 @@ getBirds(
 
 \item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
 
-\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
-@param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
+\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
+\item{site}{Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.}
+
+\item{flyover}{Logical. \code{TRUE} to include flyovers in count data. Defaults to \code{FALSE}.}
+
+\item{gender}{Character. Defaults to selecting all detected individuals. Options to filter by gender are "Male", "Female", "Undetermined".}
+
+\item{first3min}{Logical. If \code{TRUE}, filters detections within first 3 minutes of the timed count. Defaults to selecting counts from all timed intervals.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 

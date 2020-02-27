@@ -7,11 +7,15 @@
 getVisits(
   object,
   parks = NA,
-  times = NA,
-  years = NA,
   points = NA,
+  years = NA,
+  times = NA,
   visits = NA,
   reps = NA,
+  site = NA,
+  dist = NA,
+  wind = NA,
+  sky = NA,
   output = "dataframe"
 )
 }
@@ -33,6 +37,14 @@ is greater or equal to the value of \code{times}. This is determined based on th
 
 \item{reps}{A length 1 numeric vector,defaults to \code{NA}, Returns only data from points and years where the point has been visited 
 at least \code{reps} times in the year.}
+
+\item{site}{Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.}
+
+\item{dist}{Character. Filter data by disturbance code(s). See network documentation for list and meanings of codes.}
+
+\item{wind}{Numeric. Filter data by wind code(s). See network documentation for list and meanings of codes.}
+
+\item{sky}{Numeric. Filter data by sky condition code(s). See network documentation for list and meanings of codes.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 }
