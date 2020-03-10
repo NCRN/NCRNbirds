@@ -17,6 +17,7 @@ makeUMF(
   sitecovs = NULL,
   visitcovs = NA,
   obscovslist = NULL,
+  trend = "none",
   output = "umf",
   ...
 )
@@ -54,6 +55,10 @@ by the \code{\link{CovsXVisit}} function.This will be used in conjuciton with th
 is a \code{list} and the desired output is a \code{list} than \code{obscovslist} should also be a \code{list} of \code{lists}
 with one \code{list} of observation covariates for each park.}
 
+\item{trend}{Used for multi-year data sets to indicate if the year of obsevation shoud be included in the model. Options are "none" the default, "numeric"
+to indicate that year should be treated as a numeric value and "factor" to indicate that year should be treated as a factor. Note that is the trend is set
+to "numeric" it is centered to imporve the odds of the model successfully fitting.}
+
 \item{output}{Either "umf" (the defautlt) or "list". Controls the output when \code{object} is a list. If "umf" the data from all \code{NCRNbirds}
 objects in the list will be combined into a single unmarked frame. If "list" then the output will be a list of unmarked frames - one for 
 each \code{NCRNbirds} object in the input list.}
@@ -67,7 +72,10 @@ Either an \code{unmarkedFrameOccu} or an \code{unmarkedFramePcount} object.
 Makes an unmarked frame for analysis using the unmarked package
 }
 \details{
-This function simplifies the process for fitting a N-mixture model (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to the \code{\link[unmarked]{pcount}} function and the resutls of the analysis are returned.
+This function simplifies the process for fitting of occupancy or N-mixture models (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object 
+or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to 
+the \code{\link[unmarked]{unmarkedFramePCount}} or  \code{\link[unmarked]{unmarkedFrameOccu}}function. The resulting object can then be passed to \
+\code{\link{unmarkedBirds}} for analysis.
 }
 \references{
 Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated counts using binomail mixutre models. Ecological Applications. 15: 1450-1461.

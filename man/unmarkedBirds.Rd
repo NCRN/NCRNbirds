@@ -4,71 +4,28 @@
 \alias{unmarkedBirds}
 \title{unmarkedBirds}
 \usage{
-unmarkedBirds(
-  object,
-  formula = NULL,
-  parks = NA,
-  points = NA,
-  AOU = NA,
-  years = NA,
-  times = NA,
-  visits = NA,
-  reps = NA,
-  frametype = "pcount",
-  sitecovs = NULL,
-  visitcovs = NA,
-  obscovslist = NULL,
-  output = "umf",
-  ...
-)
+unmarkedBirds(object, formula = NULL, ...)
 }
 \arguments{
-\item{object}{An NCRNbirds object or a list of such objects.}
+\item{object}{An unamked frame object such as those created by \code{makeUMF} or a \code{list} of such frames.}
 
-\item{points}{A character vecotr. The names of one or more points where the data was collected.}
+\item{formula}{A formula for the the model. Formula indicates covariates for observation and detection in that order. i.e. ~Day ~Forest_Type  Note that 
+this is NOT in quotes.}
 
-\item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
-
-\item{years}{A vector of number. will return only data from the indicated years.}
-
-\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal
-to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
-
-\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
-
-\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
-visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
-
-\item{frametype}{Indicates the type of \code{unmarkedFrame} to make. Options are "pcount" the default incudes number of decections for n-mixture modeling. 
-"occu" is used for occupancy modeling.}
-
-\item{sitecovs}{A \code{data.frame} of site covariates created by the user.Each covariate shoulb be in a separate olumn and point in its own row.
-This should not include a column of point names. Make sure that the order of the points in this \code{data.frame} math the order in the observation data. 
-If the input \code{object} is a \code{list} and the desired output is a \code{list} than \code{sitecovs} should also be a \code{list} of \code{data.frames}
-with one \code{data.frame} for each park.}
-
-\item{visitcovs}{A characeter vector with names of visit covariates to be used which ARE obtained from the \code{\link{CovsXVisit}} function.\code{makeUMF}
-will automtically format these for use in unmarkedFrames. These will be formatted at a list of named \code{data.frames}}
-
-\item{obscovslist}{A named \code{list} of \code{data.frame}s with observation covariates. Typically this will include covariates that ARE NOT returned 
-by the \code{\link{CovsXVisit}} function.This will be used in conjuciton with the visit covariates specified by \code{visitcovs}.If the input \code{object}
-is a \code{list} and the desired output is a \code{list} than \code{obscovslist} should also be a \code{list} of \code{lists}
-with one \code{list} of observation covariates for each park.}
-
-\item{output}{Either "umf" (the defautlt) or "list". Controls the output when \code{object} is a list. If "umf" the data from all \code{NCRNbirds}
-objects in the list will be combined into a single unmarked frame. If "list" then the output will be a list of unmarked frames - one for 
-each \code{NCRNbirds} object in the input list.}
-
-\item{...}{Additonal arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.}
+\item{...}{Additonal arguments passed to the relevant unmarked model fitting method.}
 }
 \value{
-Either an \code{unmarkedFrameOccu} or an \code{unmarkedFramePcount} object.
+A fitted unmaked model. Currently fits occupancy and n-mixture models.
 }
 \description{
 Analyzes an unmarkedFrame object using methods from the unmarked package.
 }
 \details{
-This function simplifies the process for fitting a N-mixture model (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects. The data is first extracted from the object(s) using the \code{\link{CountXVisit}} funciton. The data is then fed to the \code{\link[unmarked]{pcount}} function and the resutls of the analysis are returned.
+This function simplifies the process unmarked models (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects.
+The data is preppared by first using the \code{\link{makeUMF}} function to make the proper type of \code{unmarkedFrame}. The fraame can then be fed into
+\code(unmarkedBirds) for analysis. This function will automatically detect the frame type and do the corresponding analysis. If a formula is not supplied, 
+then all visit covariates in the unmarkedFrame will be used as detection covariates, and all site covaritates will be used as state (abundance or occupancy) 
+by defaults.
 }
 \references{
 Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated counts using binomail mixutre models. Ecological Applications. 15: 1450-1461.
