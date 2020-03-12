@@ -53,7 +53,7 @@ will automtically format these for use in unmarkedFrames. These will be formatte
 \item{obscovslist}{A named \code{list} of \code{data.frame}s with observation covariates. Typically this will include covariates that ARE NOT returned 
 by the \code{\link{CovsXVisit}} function.This will be used in conjuciton with the visit covariates specified by \code{visitcovs}.If the input \code{object}
 is a \code{list} and the desired output is a \code{list} than \code{obscovslist} should also be a \code{list} of \code{lists}
-with one \code{list} of observation covariates for each park.}
+with one \code{list} of observation covariates for each park. The covariates should be in order of Unit_Code, Year and Point_Name.}
 
 \item{trend}{Used for multi-year data sets to indicate if the year of obsevation shoud be included in the model. Options are "none" the default, "numeric"
 to indicate that year should be treated as a numeric value and "factor" to indicate that year should be treated as a factor. Note that is the trend is set

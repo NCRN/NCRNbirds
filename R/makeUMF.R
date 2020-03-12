@@ -5,7 +5,7 @@
 #' 
 #' @description Makes an unmarked frame for analysis using the unmarked package
 #' 
-#' @importFrom dplyr bind_cols select transmute
+#' @importFrom dplyr arrange bind_cols select transmute
 #' @importFrom magrittr %>%
 #' @importFrom purrr map pmap
 #' @importFrom unmarked unmarkedFrameOccu unmarkedFramePCount
@@ -21,7 +21,7 @@
 #' @param obscovslist A named \code{list} of \code{data.frame}s with observation covariates. Typically this will include covariates that ARE NOT returned 
 #' by the \code{\link{CovsXVisit}} function.This will be used in conjuciton with the visit covariates specified by \code{visitcovs}.If the input \code{object}
 #' is a \code{list} and the desired output is a \code{list} than \code{obscovslist} should also be a \code{list} of \code{lists}
-#' with one \code{list} of observation covariates for each park.
+#' with one \code{list} of observation covariates for each park. The covariates should be in order of Unit_Code, Year and Point_Name.
 #' @param trend Used for multi-year data sets to indicate if the year of obsevation shoud be included in the model. Options are "none" the default, "numeric"
 #' to indicate that year should be treated as a numeric value and "factor" to indicate that year should be treated as a factor. Note that is the trend is set
 #' to "numeric" it is centered to imporve the odds of the model successfully fitting.
@@ -54,11 +54,13 @@ setMethod(f="makeUMF", signature=c(object="list"),
       umf= {
             BirdMat<-CountXVisit(object=object, parks=parks, points=points, AOU=AOU, years=years, times=times, visits=visits, reps=reps,
                                  type=switch(frametype, pcount="count", occu="occupancy"),output="dataframe", ...) %>% 
+              arrange(Admin_Unit_Code, Year, Point_Name) %>% 
             dplyr::select(-c(Admin_Unit_Code, Point_Name))
                  
             VisitData<- if(!anyNA(visitcovs)){
               visitcovs %>% map(~CovsXVisit(object, parks=parks, points=points, years=years, times=times, visits=visits, reps=reps, 
                                             covs=.x, output="dataframe") %>% 
+                                  arrange(Admin_Unit_Code, Year, Point_Name) %>% 
                             select(-Admin_Unit_Code,-Point_Name,-Year)) %>% 
                            setNames(visitcovs)
             }else NULL
@@ -90,14 +92,16 @@ setMethod(f="makeUMF", signature=c(object="NCRNbirds"),
            
       BirdMat<-CountXVisit(object=object, parks=parks, points=points, AOU=AOU, years=years, times=times, visits=visits,
                            reps=reps,  type=switch(frametype, pcount="count", occu="occupancy"), ...) %>% 
+        arrange(Admin_Unit_Code, Year, Point_Name) %>% 
         dplyr::select(-c(Admin_Unit_Code, Point_Name))
       
       VisitData<- if(!anyNA(visitcovs)){
         visitcovs %>% map(~CovsXVisit(object, parks=parks, points=points, years=years, times=times, visits=visits, reps=reps, covs=.x) %>% 
-                      select(-Admin_Unit_Code,-Point_Name)) %>% 
+                    arrange(Admin_Unit_Code, Year, Point_Name) %>% 
+                    select(-Admin_Unit_Code,-Point_Name,-Year)) %>% 
           setNames(visitcovs)
       }else NULL
-      
+
       YearMat<-switch(trend,
                       none=NULL,
                       numeric=BirdMat %>% transmute(Year=scale(Year,scale=FALSE)),
