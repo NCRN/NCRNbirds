@@ -28,8 +28,7 @@ SumRelAbund(
 
 \item{points}{A character vector. The names of one or more points where the data was collected.}
 
-\item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.
-Detections will be summed by each individual species.}
+\item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.Detections will be summed by each individual species.}
 
 \item{years}{A vector of numbers. Will return only data from the indicated years.}
 

@@ -14,8 +14,7 @@
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
 #' @param parks A character vector of park codes. Only visits within these parks will be returned.
 #' @param points A character vector. The names of one or more points where the data was collected.
-#' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.
-#' Detections will be summed by each individual species.
+#' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.Detections will be summed by each individual species.
 #' @param years  A vector of numbers. Will return only data from the indicated years.
 #' @param times  A numeric vector of length 1 passed on to \code{\link{getVisits}} and \code{\link{getBirds}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param band  A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
@@ -60,22 +59,27 @@ setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
             
             # create vector of bird names
             
-            
-            BirdNames<-getChecklist(object=object, points=points, AOU=AOU, times=times, years=years, band=band, ...) %>% 
+            BirdNames<-getChecklist(object=object, points=points, AOU=AOU, years=years, times=times, band=band, ..., output = "dataframe") %>% 
               as.vector()
             
-            # create detection matrix per species, year, and visit
+            # create detection matrix per species, year, and visit and calc mean, se and N
             
             data<-map_dfr(.x=set_names(BirdNames, nm=BirdNames),.id= "AOU_Code", 
-              ~CountXVisit(object=object,AOU= .x, parks=parks, points=points, times=times, visits=visits, years=years, band=band, max=max)) %>% 
-            tidyr::gather(visit, value, -AOU_Code, -Admin_Unit_Code, -Point_Name,-Year)  %>%  #reshape
-            {if(max) dplyr::filter(. , visit %in% "Max") else dplyr::filter(., !visit %in% "Max") } %>%    # select the visit(s) and set grouping to summarize data by
-            {if(CalcByYear)  dplyr::group_by(.,Admin_Unit_Code,AOU_Code,Point_Name, Year) else # sum across all visits and years
-            dplyr::group_by(., Admin_Unit_Code,AOU_Code, Point_Name, visit, Year)} %>%  # sum across all visits by year
-            dplyr::summarize(.,Total= sum(value, na.rm=TRUE), Mean= round(mean(value, na.rm=TRUE),digits=3), 
+              ~CountXVisit(object=object,AOU= .x, parks=parks, points=points, times=times, visits=visits, years=years, band=band, max=max)) 
+            
+            # check to see if detections exist
+            if(nrow(data) == 0){
+              cat("No detections are available for those specific survey criteria.  ")
+            }else{
+              data<- data %>%  
+                tidyr::gather(visit, value, -AOU_Code, -Admin_Unit_Code, -Point_Name,-Year)  %>%  #reshape
+              {if(max) dplyr::filter(. , visit %in% "Max") else dplyr::filter(., !visit %in% "Max") } %>%    # select the visit(s) and set grouping to summarize data by
+              {if(CalcByYear)  dplyr::group_by(.,Admin_Unit_Code,AOU_Code,Point_Name, Year) else # sum across all visits and years
+              dplyr::group_by(., Admin_Unit_Code,AOU_Code, Point_Name, visit, Year)} %>%  # sum across all visits by year
+              dplyr::summarize(.,Total= sum(value, na.rm=TRUE), Mean= round(mean(value, na.rm=TRUE),digits=3), 
                              se= round(sd(value, na.rm=TRUE)/sqrt(n()),digits=3), n=n())  # calc mean and se
             
-            
+            }
             
             # do you want to also sort data and return most common species?
             
