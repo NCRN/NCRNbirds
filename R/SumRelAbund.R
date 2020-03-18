@@ -74,8 +74,8 @@ setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
               data<- data %>%  
                 tidyr::gather(visit, value, -AOU_Code, -Admin_Unit_Code, -Point_Name,-Year)  %>%  #reshape
               {if(max) dplyr::filter(. , visit %in% "Max") else dplyr::filter(., !visit %in% "Max") } %>%    # select the visit(s) and set grouping to summarize data by
-              {if(CalcByYear)  dplyr::group_by(.,Admin_Unit_Code,AOU_Code,Point_Name, Year) else # sum across all visits and years
-              dplyr::group_by(., Admin_Unit_Code,AOU_Code, Point_Name, visit, Year)} %>%  # sum across all visits by year
+              {if(CalcByYear)  dplyr::group_by(.,Admin_Unit_Code,AOU_Code,Year) else # sum across all visits and years
+              dplyr::group_by(., Admin_Unit_Code,AOU_Code, visit, Year)} %>%  # sum across all visits by year
               dplyr::summarize(.,Total= sum(value, na.rm=TRUE), Mean= round(mean(value, na.rm=TRUE),digits=3), 
                              se= round(sd(value, na.rm=TRUE)/sqrt(n()),digits=3), n=n())  # calc mean and se
             
