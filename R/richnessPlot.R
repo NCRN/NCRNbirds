@@ -23,17 +23,18 @@
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' @param add_line Logical. Connects points in plot when \code{TRUE}. Defaults to \code{TRUE}.
+#' @param plot Logical. Return plot \code{TRUE} (default) or data.frame \code{FALSE}. 
 #' @details This function produces a graph of species richness over time. It does this by using the output of the \code{\link{birdRichness}}
 #' function. The data is then passed on to ggplot2 for graphing.
 #'   
 #' @export
 
 
-setGeneric(name="richnessPlot",function(object,years=NA, points=NA, visits = NA, times=NA, plot_title=NA, point_num=NA, add_line = TRUE, output="total", ...){standardGeneric("richnessPlot")}, signature="object")
+setGeneric(name="richnessPlot",function(object,years=NA, points=NA, visits = NA, times=NA, plot_title=NA, point_num=NA, add_line = TRUE, output="total", plot=TRUE, ...){standardGeneric("richnessPlot")}, signature="object")
 
 
 setMethod(f="richnessPlot", signature=c(object="list"),
-  function(object,years,points,visits, times, plot_title, point_num, add_line, output, ...) {
+  function(object,years,points,visits, times, plot_title, point_num, add_line, output, plot, ...) {
     switch(output,
       total={
         visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
@@ -47,7 +48,9 @@ setMethod(f="richnessPlot", signature=c(object="list"),
           map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
             unlist(F)})
         
-        return(richnessPlot(object=graphdata, visits=visits, plot_title=plot_title, point_num = point_num, add_line=add_line))
+        if(plot){  
+        return(richnessPlot(object=graphdata, visits=visits, plot_title=plot_title, point_num = point_num, add_line=add_line))} else{
+          return(graphdata)}
       },
       list={
         return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num, add_line=add_line))
@@ -57,7 +60,7 @@ setMethod(f="richnessPlot", signature=c(object="list"),
 
 
 setMethod(f="richnessPlot", signature=c(object="NCRNbirds"),
-  function(object, years, points, visits, times, plot_title, point_num, add_line, ...){
+  function(object, years, points, visits, times, plot_title, point_num, add_line, plot, ...){
     
     visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
     years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
@@ -70,7 +73,9 @@ setMethod(f="richnessPlot", signature=c(object="NCRNbirds"),
     if (all(is.na(point_num))) point_num<-map(visits, function(visits){ 
       map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
     
-    return(richnessPlot(object=graphdata, plot_title=plot_title, point_num=point_num, add_line=add_line))
+    if(plot){  
+      return(richnessPlot(object=graphdata, visits=visits, plot_title=plot_title, point_num = point_num, add_line=add_line))} else{
+        return(graphdata)}
 
 })
 
@@ -94,5 +99,5 @@ setMethod(f="richnessPlot", signature=c(object="data.frame"),
       theme(axis.text.y = element_text(color="black", vjust= 0.5,size = 12))+
       theme(axis.text.x = element_text(color="black", size = 10))
     
-    return(GraphOut)
+    print(GraphOut)
 })

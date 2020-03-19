@@ -14,6 +14,7 @@ richnessPlot(
   point_num = NA,
   add_line = TRUE,
   output = "total",
+  plot = TRUE,
   ...
 )
 }
@@ -37,6 +38,8 @@ provided by the user.}
 \item{add_line}{Logical. Connects points in plot when \code{TRUE}. Defaults to \code{TRUE}.}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
+
+\item{plot}{Logical. Return plot \code{TRUE} (default) or data.frame \code{FALSE}.}
 
 \item{...}{Additional arguments passed to \code{\link{birdRichness}}}
 }
