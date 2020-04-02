@@ -50,4 +50,4 @@ Collate:
     'mapBirds.R'
     'nmixBirds.R'
     'richnessPlot.R'
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.2

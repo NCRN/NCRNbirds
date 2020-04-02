@@ -53,7 +53,7 @@ setMethod(f="richnessPlot", signature=c(object="list"),
           return(graphdata)}
       },
       list={
-        return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num, add_line=add_line))
+        return(lapply(X=object, FUN=richnessPlot, years=years, points=points, plot_title=plot_title, point_num=point_num, add_line=add_line, plot=plot))
       }
     )
 })

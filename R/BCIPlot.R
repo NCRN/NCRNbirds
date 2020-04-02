@@ -80,7 +80,7 @@ setMethod(f="BCIPlot", signature=c(object="list"),
     
           list={
          return(lapply(X=object, FUN=BCIPlot, years=years, points=points, visits=visits, times=times,
-                       plot_title=plot_title, point_num=point_num, type=type, caption=caption, palette=palette))
+                       plot_title=plot_title, point_num=point_num, type=type, caption=caption, palette=palette, plot=plot, ...))
        }
      )
 })

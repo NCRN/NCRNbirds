@@ -67,7 +67,7 @@ setMethod(f="detectsPlot", signature=c(object="list"),
                 },
       list={
          return(lapply(X=object, FUN=detectsPlot, years=years, points=points, visits=visits, times=times, max=max,
-                       plot_title=plot_title,point_num=point_num, se=se,add_line=add_line...))
+                       plot_title=plot_title,point_num=point_num, se=se,add_line=add_line, plot=plot, ...))
       }
     )
 })
