@@ -14,3 +14,8 @@ getAKNData(Dir, import = FALSE)
 \description{
 Takes NETN's AKN point count survey data download and updates Visits and FieldData files for NCRNbirds package import. Also has option to import into workspace as NCRNbirds object ("NETN").
 }
+\details{
+The following files will be saved in the folder denoted in the in argument \code{Dir}: FieldData.csv: Raw bird detection data by location and date; Visits.csv: List of unique surveys by date for each point count station.
+Please see associated Data Defintions for field names and descriptions. During the conversion from AKN's data format into a format that is readable by \code{importNETNbirds}, \code{getAKNData} filters out detections of mammals and unidentified species, checks AOU Codes against the most recent list 
+supplied by the look-up table BirdSpecies.csv, and renames and recodes a variety of data columns (e.g., detection type, distance) for standardization within the the package. Detections are aggregated into two distance bands (less than or greater than 50m from the observer), or are not recorded or considered as flyovers.
+}
