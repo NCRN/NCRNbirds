@@ -26,39 +26,44 @@ getBirds(
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
 
-\item{points}{A character vecotr. The names of one or more points where the data was collected.}
+\item{points}{A character vector. The names of one or more points where the data was collected.}
 
 \item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
 
-\item{years}{A vector of number. will return only data from the indicated years.}
+\item{years}{A vector of numbers. Will return only data from the indicated years.}
 
 \item{min.count}{A numeric vector of length one. Will only return data with a bird count equal to or geater than \code{min.count}}
 
 \item{max.count}{A numeric vector of length one. Will only return data with a bird count equal to or less than \code{max.count}}
 
-\item{interval}{A numeirc vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.}
+\item{band}{A numeric vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
 
-\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
+\item{interval}{A numeric vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.}
 
-\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{visits}{A length 1 numeric vector, defaults to \code{NA}. Returns data only from the indicated visits.}
 
-\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater than or 
+equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{site}{Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.}
+\item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been visited is 
+greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+
+\item{site}{Character. Used to select a type of habitat. Selects sites based on the \code{Survey_Type}field. 
+Currently "Forest" and "Grassland" are used. Defaults to \code{NA} which selects both site types.}
 
 \item{flyover}{Logical. \code{TRUE} to include flyovers in count data. Defaults to \code{FALSE}.}
 
 \item{gender}{Character. Defaults to selecting all detected individuals. Options to filter by gender are "Male", "Female", "Undetermined".}
 
-\item{first3min}{Logical. If \code{TRUE}, filters detections within first 3 minutes of the timed count. Defaults to selecting counts from all timed intervals.}
+\item{first3min}{Logical. If \code{TRUE}, only returns detections within first 3 minutes of the timed count. Defaults to selecting counts from all timed intervals.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
-
-\item{band.}{A numeirc vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned. Options are \code{1} for birds closer than 50m to the observer, \code{2} for birds between 50 and 100 meters from the observer, \code{c(1,2)} for birds between 0 and 100 meters of the observer, or \code{NA} for all birds regardless of distance.}
 }
 \description{
 Returns bird monitoring data from the \code{Birds} slot of an \code{NCRNbirds} object.
 }
 \details{
-Returns the data from the \code{Birds} slot of a single \code{NCNRbirds} object or a \code{list} of such objects. The data can be filtered using the various arguements. he default output is a\code{data.frame}. However, if \code{object} is a \code{list} and \code{output} is "list" then a \code{list} of \code{data.frame}s will be returned.
+Returns the data from the \code{Birds} slot of a single \code{NCNRbirds} object or a \code{list} of such objects. The data can be 
+filtered using the various arguments. The default output is a\code{data.frame}. However, if \code{object} is a \code{list} and \code{output} is "list" 
+then a \code{list} of \code{data.frame}s will be returned.
 }

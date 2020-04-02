@@ -3,7 +3,7 @@
 #' 
 #' @title getAKNData
 #'
-#' @importFrom dplyr distinct anti_join tally
+#' @importFrom dplyr anti_join distinct left_join rename tally
 #' @importFrom magrittr %>% 
 #' @importFrom data.table setDT
 #' @importFrom stringr str_sub str_detect

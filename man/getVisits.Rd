@@ -27,24 +27,24 @@ getVisits(
 \item{points}{A character vector of point names. Only data from these points will be returned.}
 
 \item{years}{A numeric vector. Returns data only from points where the years the point was visited matches one of the 
-values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot 
+values in \code{years}. The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot 
 which is derived from the information in the \code{EventDate} column.}
 
 \item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied 
 is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
+\item{visits}{A length 1 numeric vector, defaults to \code{NA}. Returns data only from the indicated visits.}
 
-\item{reps}{A length 1 numeric vector,defaults to \code{NA}, Returns only data from points and years where the point has been visited 
+\item{reps}{A length 1 numeric vector,defaults to \code{NA}. Returns only data from points and years where the point has been visited 
 at least \code{reps} times in the year.}
 
 \item{site}{Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.}
 
-\item{dist}{Character. Filter data by disturbance code(s). See network documentation for list and meanings of codes.}
+\item{dist}{Character. Filters data by disturbance code(s). See network documentation for list and meanings of codes.}
 
-\item{wind}{Numeric. Filter data by wind code(s). See network documentation for list and meanings of codes.}
+\item{wind}{Numeric. Filters data by wind code(s). See network documentation for list and meanings of codes.}
 
-\item{sky}{Numeric. Filter data by sky condition code(s). See network documentation for list and meanings of codes.}
+\item{sky}{Numeric. Filters data by sky condition code(s). See network documentation for list and meanings of codes.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 }
@@ -52,5 +52,7 @@ at least \code{reps} times in the year.}
 Returns the contents of the \code{Visits} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
 }
 \details{
-This function returns point data either from a single NCRNbirds object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object.
+This function returns point data either from a single NCRNbirds object or a list of such objects. 
+The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list 
+of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object.
 }
