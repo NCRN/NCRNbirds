@@ -16,6 +16,7 @@ BCIPlot(
   caption = T,
   palette = "BuGn",
   output = "total",
+  plot = TRUE,
   ...
 )
 }
@@ -44,6 +45,8 @@ should be included.}
 \item{palette}{Color pallete for the background of the graph. Defaults to "BuGn" (blue green) but will accept any RColorBrewer palette}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}.}
+
+\item{plot}{Logical. Return plot \code{TRUE} (default) or data.frame \code{FALSE}.}
 
 \item{...}{Additional arguments passed to \code{\link{birdRichness}}}
 }
