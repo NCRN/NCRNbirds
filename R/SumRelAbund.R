@@ -89,8 +89,8 @@ setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
             }else{
               df<- data %>% 
                 group_by(Admin_Unit_Code,AOU_Code) %>% 
-                dplyr::summarise(RelAbund = mean(Mean, na.rm=TRUE)) %>% 
-                arrange(desc(Mean_total)) %>% 
+                dplyr::summarise(RelAbund = mean(RelAbund, na.rm=TRUE)) %>% 
+                arrange(desc(RelAbund)) %>% 
                 slice(1:abund)
               return(ungroup(df))
             }
