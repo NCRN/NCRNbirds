@@ -30,7 +30,6 @@ Collate:
     'BCIPlot.R'
     'BirdGuildSummary.R'
     'getDesign.R'
-    'BirdGuildPlot.R'
     'CountXVisit.R'
     'CovsXVisit.R'
     'getParkNames.R'

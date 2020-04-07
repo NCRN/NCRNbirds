@@ -5,7 +5,7 @@
 #' @description Produces a summary of raw detections by species for plotting and analysis.
 #' 
 #' @importFrom data.table rbindlist
-#' @importFrom dplyr arrange group_by  mutate n select slice summarize ungroup filter
+#' @importFrom dplyr arrange group_by filter mutate n select slice summarize ungroup 
 #' @importFrom magrittr %>%
 #' @importFrom tidyr  gather
 #' @importFrom purrr map_dfr 
@@ -14,7 +14,7 @@
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
 #' @param parks A character vector of park codes. Only visits within these parks will be returned.
 #' @param points A character vector. The names of one or more points where the data was collected.
-#' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species. Detections will be summed by each individual species.
+#' @param AOU  A character vector. One or more AOU (American Onothological Union) codes of bird species.Detections will be summed by each individual species.
 #' @param years  A vector of numbers. Will return only data from the indicated years.
 #' @param times  A numeric vector of length 1 passed on to \code{\link{getVisits}} and \code{\link{getBirds}}. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param band  A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
@@ -74,9 +74,9 @@ setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
               data<- data %>%  
                 tidyr::gather(visit, value, -AOU_Code, -Admin_Unit_Code, -Point_Name,-Year)  %>%  #reshape
               {if(max) dplyr::filter(. , visit %in% "Max") else dplyr::filter(., !visit %in% "Max") } %>%    # select the visit(s) and set grouping to summarize data by
-              {if(CalcByYear)  dplyr::group_by(.,Admin_Unit_Code,AOU_Code, Year) else # sum across all visits and years
+              {if(CalcByYear)  dplyr::group_by(.,Admin_Unit_Code,AOU_Code,Year) else # sum across all visits and years
               dplyr::group_by(., Admin_Unit_Code,AOU_Code, visit, Year)} %>%  # sum across all visits by year
-              dplyr::summarize(.,Total= sum(value, na.rm=TRUE), Mean= round(mean(value, na.rm=TRUE),digits=3), 
+              dplyr::summarize(.,Total= sum(value, na.rm=TRUE), RelAbund= round(mean(value, na.rm=TRUE),digits=3), 
                              se= round(sd(value, na.rm=TRUE)/sqrt(n()),digits=3), n=n())  # calc mean and se
             
             }
@@ -89,7 +89,7 @@ setMethod(f="SumRelAbund", signature=c(object="NCRNbirds"),
             }else{
               df<- data %>% 
                 group_by(Admin_Unit_Code,AOU_Code) %>% 
-                dplyr::summarise(Mean_total = mean(Mean, na.rm=TRUE)) %>% 
+                dplyr::summarise(RelAbund = mean(Mean, na.rm=TRUE)) %>% 
                 arrange(desc(Mean_total)) %>% 
                 slice(1:abund)
               return(ungroup(df))
