@@ -29,7 +29,6 @@ Collate:
     'BCI.R'
     'BCIPlot.R'
     'getDesign.R'
-    'BirdGuildPlot.R'
     'BirdGuildSummary.R'
     'CountXVisit.R'
     'CovsXVisit.R'
