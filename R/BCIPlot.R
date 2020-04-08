@@ -27,6 +27,7 @@
 #' should be included.
 #' @param palette Color pallete for the background of the graph. Defaults to "BuGn" (blue green) but will accept any RColorBrewer palette
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
+#' @param plot Logical. Return plot \code{TRUE} (default) or data.frame \code{FALSE}.
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' 
 #' @details This function produces a graph the Bird community Index  over time. It does this by using the output of 
@@ -40,11 +41,11 @@
 
 
 setGeneric(name="BCIPlot",function(object,years=NA, points=NA,visits=NA, times=NA, plot_title=NA, point_num=NA, type="Cent_Appal",caption=T,
-                                   palette="BuGn", output="total", ...){standardGeneric("BCIPlot")}, signature="object")
+                                   palette="BuGn", output="total", plot = TRUE, ...){standardGeneric("BCIPlot")}, signature="object")
 
 
 setMethod(f="BCIPlot", signature=c(object="list"),
-  function(object,years,points,visits, times, plot_title, point_num, type, caption,palette, output, ...) {
+  function(object,years,points,visits, times, plot_title, point_num, type, caption,palette, output, plot, ...) {
     
      switch(output,
        total={
@@ -71,19 +72,22 @@ setMethod(f="BCIPlot", signature=c(object="list"),
           map(years, function(years) getVisits(object=object, years=years, visits=visits, times=times) %>% nrow) %>% 
             unlist(F)})
         
-        return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num, caption=caption,palette=palette))
+        if(plot){
+          return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num, caption=caption, palette=palette))} else{
+            
+            return(graphdata)}
        },
     
           list={
          return(lapply(X=object, FUN=BCIPlot, years=years, points=points, visits=visits, times=times,
-                       plot_title=plot_title, point_num=point_num, type=type, caption=caption, palette=palette))
+                       plot_title=plot_title, point_num=point_num, type=type, caption=caption, palette=palette, plot=plot, ...))
        }
      )
 })
 
 
 setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
-  function(object,years,points,visits, times, plot_title=NA,type,caption,palette, ...){
+  function(object,years,points,visits, times, plot_title=NA,type,caption,palette, plot, ...){
 
     visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
     years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
@@ -109,8 +113,14 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
         unlist(F)})
     
     plot_title<-if(is.na(plot_title)) paste0("Bird Community Index for ",getParkNames(object, name.class="long"), " (+/- 95% CI)") else plot_title
-                                             
-    return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num, caption=caption, palette=palette))
+
+    if(plot){
+      return(BCIPlot(object=graphdata, plot_title=plot_title, point_num = point_num, caption=caption, palette=palette))} else{
+        
+        return(graphdata)
+      }
+                                                 
+    
 })
 
 setMethod(f="BCIPlot", signature=c(object="data.frame"),
@@ -144,5 +154,6 @@ setMethod(f="BCIPlot", signature=c(object="data.frame"),
       {if(!is.na(plot_title)) ggtitle(plot_title)} +
       theme_classic()# +
     
-    return(GraphOut)
+    print(GraphOut)
+    
 })
