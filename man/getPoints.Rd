@@ -4,14 +4,7 @@
 \alias{getPoints}
 \title{getPoints}
 \usage{
-getPoints(
-  object,
-  times = NA,
-  years = NA,
-  points = NA,
-  site = NA,
-  output = "dataframe"
-)
+getPoints(object, times = NA, years = NA, points = NA, output = "dataframe")
 }
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
@@ -22,8 +15,6 @@ equal to the value of \code{times}. This is determined based on the data found i
 \item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years}.
 The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation 
 in the \code{EventDate} column.}
-
-\item{site}{Character. Select sites in "Forest" or "Grassland" habitats. Defaults to \code{NA} which selects both site types.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 }

@@ -25,6 +25,7 @@ getAKNData<- function(Dir, import= FALSE){
   
   PointCounts<-read.csv(paste(Dir,"AKN/AKNPointCountObs.csv", sep="/"),as.is=T, header = T) %>% # Entire point count data downloaded from AKN annually
     slice(-1) %>% ## to remove AKN's blank row on line 2 (excl. header)
+    rename(Point_Name= Point) %>% 
     mutate(AOU_Code = Spp)
 
   SiteCond <- read.csv(paste(Dir,"AKN/AKNSiteConditions.csv", sep="/"),as.is=T, header = T) %>%  # Entire site condition data downloaded from AKN annually
@@ -52,7 +53,7 @@ getAKNData<- function(Dir, import= FALSE){
   # First, create a df of the unique visits for each point in each year to determine visit per event
   visits<-PointCounts %>% 
     filter(!Visit %in% c(9)) %>% # remove QAQC visits
-    dplyr::select(Transect, Point, Date, Start.Time, End.Time, Researcher) %>%
+    dplyr::select(Transect, Point_Name, Date, Start.Time, End.Time, Researcher) %>%
     dplyr::mutate(Date= ymd(Date)) %>% 
     dplyr::mutate(Year= year(Date)) %>% 
     dplyr::distinct(.) 
@@ -114,7 +115,7 @@ getAKNData<- function(Dir, import= FALSE){
     select(-Visit) %>%  # now drop AKN's bad visit column to bind in derived visit nums (visits) from above
     dplyr::left_join(.,NETNintervals[1:2],by= "Time.Bin.ID") %>% # add in stadardized codes for detection time interval
     dplyr::mutate(Date= ymd(Date)) %>% # force vector to Date type
-    dplyr::left_join(.,visits[,c("Point", "Date", "Visit")],by= c("Point", "Date") )%>% # add visit no. to data
+    dplyr::left_join(.,visits[,c("Point_Name", "Date", "Visit")],by= c("Point_Name", "Date") )%>% # add visit no. to data
     # add in field to distinguish between obs made within first 3 min of the count
     dplyr::mutate (Initial_Three_Min_Cnt= ifelse(Time.Bin.ID %in% c(7,8,9), 1, 0)) %>% # check with unique(data[c("Time.Bin.ID","Initial_Three_Min_Cnt")])
     dplyr::mutate(Detection.Cue=recode(Detection.Cue, .missing = "NR")) %>% # change few detections with missing codes to "NR"
@@ -122,7 +123,6 @@ getAKNData<- function(Dir, import= FALSE){
     dplyr::mutate(Distance.Bin.ID= recode(Distance.Bin.ID, "L10" = "L50", "L25"= "L50", "L50" = "L50")) %>% 
     dplyr::left_join(.,DistBands,by= "Distance.Bin.ID" ) %>% # add in distance band info to denote visual vs auditory detection
     dplyr::mutate(Flyover_Observed= ifelse(Distance.Bin.ID == "FLY",1,0)) %>% # create new field to denote flyover
-    dplyr::rename(Point_Name = Point)%>% # renaming to support join in next step
     dplyr::left_join(.,sites[,c("Point_Name", "Survey_Type")],by= "Point_Name" ) %>% ## add survey type (forest vs grassland)
     dplyr::left_join(.,tlu_Obs, by= "Researcher") %>% # add in observer skill
     dplyr::mutate(Park= stringr::str_sub(Point_Name, 1, 4)) %>% ## Add ParkCode to data

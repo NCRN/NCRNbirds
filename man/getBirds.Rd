@@ -16,10 +16,11 @@ getBirds(
   visits = NA,
   times = NA,
   reps = NA,
-  site = NA,
   flyover = FALSE,
   gender = NA,
   first3min = FALSE,
+  incidental = FALSE,
+  juvenile = FALSE,
   output = "dataframe"
 )
 }
@@ -48,14 +49,15 @@ equal to the value of \code{times}. This is determined based on the data found i
 \item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been visited is 
 greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{site}{Character. Used to select a type of habitat. Selects sites based on the \code{Survey_Type}field. 
-Currently "Forest" and "Grassland" are used. Defaults to \code{NA} which selects both site types.}
-
 \item{flyover}{Logical. \code{TRUE} to include flyovers in count data. Defaults to \code{FALSE}.}
 
 \item{gender}{Character. Defaults to selecting all detected individuals. Options to filter by gender are "Male", "Female", "Undetermined".}
 
 \item{first3min}{Logical. If \code{TRUE}, only returns detections within first 3 minutes of the timed count. Defaults to selecting counts from all timed intervals.}
+
+\item{incidental}{Logical. \code{TRUE} to include incidental observations in count data. Defaults to \code{FALSE}.}
+
+\item{juvenile}{Logical. \code{TRUE} to include observations of juvenile birds in count data. Defaults to \code{FALSE}.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 }
