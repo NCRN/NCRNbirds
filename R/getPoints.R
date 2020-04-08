@@ -13,7 +13,6 @@
 #' @param years A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years}.
 #'  The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation 
 #'  in the \code{EventDate} column.
-#' @param site Character. Select sites in "Forest" or "Grassland" habitats. Defaults to \code{NA} which selects both site types.
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' 
 #' @details This function returns point data either from a single NCRNbirds object or a list of such objects. The default output 
@@ -24,12 +23,12 @@
 #' @export
 
 
-setGeneric(name="getPoints",function(object,times=NA, years=NA, points=NA, site= NA, output="dataframe"){standardGeneric("getPoints")}, signature="object")
+setGeneric(name="getPoints",function(object,times=NA, years=NA, points=NA, output="dataframe"){standardGeneric("getPoints")}, signature="object")
 
 
 setMethod(f="getPoints", signature=c(object="list"),
-          function(object,times,years,points,site, output) {
-            OutPoints<-lapply(X=object, FUN=getPoints, times=times, years=years, points=points, site=site)
+          function(object,times,years,points,output) {
+            OutPoints<-lapply(X=object, FUN=getPoints, times=times, years=years, points=points)
             switch(output,
                    list={names(OutPoints)<-getParkNames(object,name.class="code")
                          return(OutPoints)},
@@ -39,7 +38,7 @@ setMethod(f="getPoints", signature=c(object="list"),
 
 
 setMethod(f="getPoints", signature=c(object="NCRNbirds"),
-      function(object,times,years,points,site,output){
+      function(object,times,years,points,output){
         
         XPoints<-object@Points
         
@@ -58,8 +57,6 @@ setMethod(f="getPoints", signature=c(object="NCRNbirds"),
         
         #########################
         if(!anyNA(points)) XPoints<-XPoints[XPoints$Point_Name %in% points,]
-        
-        if(!anyNA(site)) XPoints<-XPoints[XPoints$Survey_Type %in% site,]
         
         return(XPoints)
         
