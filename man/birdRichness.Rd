@@ -29,7 +29,7 @@ birdRichness(
 they were monitored, otherwise only data from years listed in \code{years} will be used. See details below for 
 how years where no visits took place are handeled.}
 
-\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
+\item{visits}{A length 1 numeric vector, defaults to \code{NA}. Returns data only from the indicated visits.}
 
 \item{byYear}{Logical. If \code{FALSE} (the default) the total species richness across all years will be returned a single numeric value,
 if \code{TRUE} a data.frame will be returned with each row a different year and its correspoding species richness.}

@@ -26,7 +26,7 @@ getAKNData<- function(Dir, import= FALSE){
   PointCounts<-read.csv(paste(Dir,"AKN/AKNPointCountObs.csv", sep="/"),as.is=T, header = T) %>% # Entire point count data downloaded from AKN annually
     slice(-1) %>% ## to remove AKN's blank row on line 2 (excl. header)
     mutate(AOU_Code = Spp)
-  
+
   SiteCond <- read.csv(paste(Dir,"AKN/AKNSiteConditions.csv", sep="/"),as.is=T, header = T) %>%  # Entire site condition data downloaded from AKN annually
     slice(-1) ## to remove AKN's blank row on line 2 (excl. header)
     
@@ -63,13 +63,13 @@ getAKNData<- function(Dir, import= FALSE){
   #(the line below doesn't work any longer so replaced with line 60, which seems to be working)
   #visits<-visits[, Visit:= seq.int(from = 1, along = list(Transect,Point, Date), by = 1), by= c("Point","Year")] 
   
-  visits<-visits[ , Visit := seq(.N), by = c("Point","Year")]
+  visits<-visits[ , Visit := seq(.N), by = c("Point_Name","Year")]
   
   # rename columnsto align with R package
   visits_clean<-visits %>% 
-    dplyr::mutate(Park= stringr::str_sub(Point, 1, 4)) %>%
-    
-    dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect, Point_Name = Point, Year,EventDate= Date, StartTime= Start.Time, EndTime= End.Time, Visit, Observer=Researcher)
+    dplyr::mutate(Park= stringr::str_sub(Point_Name, 1, 4)) %>%
+    dplyr::left_join(.,sites[,c("Point_Name", "Survey_Type")],by= "Point_Name" ) %>% ## add survey type (forest vs grassland)
+    dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect, Point_Name, Survey_Type,Year,EventDate= Date, StartTime= Start.Time, EndTime= End.Time, Visit, Observer=Researcher)
   
   
   write.table(visits_clean, paste(Dir,"Visits.csv", sep="/"), sep= ",", row.names = FALSE)
