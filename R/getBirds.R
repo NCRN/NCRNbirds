@@ -52,10 +52,10 @@ setMethod(f="getBirds", signature=c(object="list"),
 setMethod(f="getBirds", signature=c(object="NCRNbirds"),
           function(object,points,AOU,years,min.count,max.count,band,interval,visits,times,reps,flyover,gender,first3min,incidental,juvenile, output){
             XBirds<-object@Birds
-            if(flyover) XBirds<-XBirds else XBirds<-XBirds %>% filter(Flyover_Observed %in% 0)
-            if(first3min) XBirds<-XBirds %>% filter(Initial_Three_Min_Cnt %in% 1) else XBirds<-XBirds
-            if(incidental) XBirds<-XBirds %>% filter(Incidental %in% 1) else XBirds<-XBirds
-            if(juvenile) XBirds<-XBirds %>% filter(Juvenile %in% 1) else XBirds<-XBirds
+            if(flyover) XBirds<-XBirds else XBirds<-XBirds %>% filter(Flyover_Observed %in% 0) # keep flyovers in the data if TRUE
+            if(first3min) XBirds<-XBirds %>% filter(Initial_Three_Min_Cnt %in% 1) else XBirds<-XBirds # keep only detecions during first 3 min if TRUE
+            if(incidental) XBirds<-XBirds else XBirds<-XBirds %>% filter(Incidental %in% 0) # add incidental obs to the data if TRUE
+            if(juvenile) XBirds<-XBirds else XBirds<-XBirds %>% filter(Juvenile %in% 0) # add juveniles obs to the data if TRUE
             if(!anyNA(gender)) XBirds<-XBirds %>% filter(Sex %in% gender)
             if(!anyNA(points)) XBirds<-XBirds %>% filter(Point_Name %in% points)
             if(!anyNA(AOU)) XBirds<-XBirds %>% filter (AOU_Code %in% AOU)
