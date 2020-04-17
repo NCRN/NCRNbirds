@@ -41,7 +41,6 @@ been visited is greater or equal to the value of \code{times}. This is determine
 
 \item{visits}{The visits that will be used for the matrix. Defaults to \code{NA}. See Details below.}
 
-
 \item{max}{Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at 
 each point across all the visits specified in the \code{visits} argument.}
 

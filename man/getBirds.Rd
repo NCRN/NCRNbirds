@@ -41,14 +41,13 @@ getBirds(
 
 \item{interval}{A numeric vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.}
 
-
 \item{visits}{A length 1 numeric vector, defaults to \code{NA}. Returns data only from the indicated visits.}
 
-\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater than or 
-equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal
+to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
-visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+visited is greater or equal to the valuemax,site,dist,wind,sky, of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{flyover}{Logical. \code{TRUE} to include flyovers in count data. Defaults to \code{FALSE}.}
 

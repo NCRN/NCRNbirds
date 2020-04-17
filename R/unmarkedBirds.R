@@ -19,11 +19,11 @@
 #' 
 #' @details This function simplifies the process unmarked models (Royal 2004, Kery et al. 2005) to data in an NCRNbirds object or a list of such objects.
 #' The data is preppared by first using the \code{\link{makeUMF}} function to make the proper type of \code{unmarkedFrame}. The fraame can then be fed into
-#' \code(unmarkedBirds) for analysis. This function will automatically detect the frame type and do the corresponding analysis. If a formula is not supplied, 
+#' \code{unmarkedBirds} for analysis. This function will automatically detect the frame type and do the corresponding analysis. If a formula is not supplied, 
 #' then all visit covariates in the unmarkedFrame will be used as detection covariates, and all site covaritates will be used as state (abundance or occupancy) 
 #' by defaults. 
 #' 
-#' @references Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated counts using binomail mixutre models. Ecological Applications. 15: 1450-1461. 
+#' @references Kery, M. Royle, J.A. and Schmid. 2005. Modeling avian abundance from replicated counts using binomial mixture models. Ecological Applications. 15: 1450-1461. 
 #' @references Royle, J. A.  2004. N-Mixture models for estimating population size from spatially replicated counts. Biometrics 60: 108-115.
 #' 
 #' @export

@@ -25,19 +25,19 @@ makeUMF(
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
 
-\item{points}{A character vecotr. The names of one or more points where the data was collected.}
+\item{points}{A character vector. The names of one or more points where the data was collected.}
 
 \item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
 
-\item{years}{A vector of number. will return only data from the indicated years.}
+\item{years}{A vector of numbers. Will return only data from the indicated years.}
 
 \item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal
 to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the incidated visits.}
+\item{visits}{A length 1 numeric vector, defaults to \code{NA}. Returns data only from the indicated visits.}
 
 \item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
-visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+visited is greater or equal to the valuemax,site,dist,wind,sky, of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{frametype}{Indicates the type of \code{unmarkedFrame} to make. Options are "pcount" the default incudes number of decections for n-mixture modeling. 
 "occu" is used for occupancy modeling.}

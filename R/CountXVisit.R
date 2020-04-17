@@ -48,8 +48,8 @@
 ########################
 
 
-setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,max=F, type="count", site=NA, dist=NA, wind =NA,
-                                       sky= NA, output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")1
+setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA, max=F, type="count", site=NA, dist=NA, 
+                                       wind =NA, sky= NA, output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")
 
 
 
@@ -66,7 +66,7 @@ setMethod(f="CountXVisit", signature=c(object="list"),
 
 
 setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
-          function(object,parks, points,AOU,years,times, band,visits,max, type,max,site,dist,wind,sky,...){
+          function(object,parks, points,AOU,years,times, band,visits, max, type,site,dist,wind,sky,...){
             
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
             ##  visiting a point once instead of twice)
