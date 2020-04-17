@@ -15,6 +15,10 @@ CountXVisit(
   visits = NA,
   max = F,
   type = "count",
+  site = NA,
+  dist = NA,
+  wind = NA,
+  sky = NA,
   output = "dataframe",
   ...
 )
@@ -28,20 +32,29 @@ CountXVisit(
 
 \item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
 
-\item{years}{A vector of numbers. will return only data from the indicated years.}
+\item{years}{A vector of numbers. Will return only data from the indicated years.}
 
 \item{times}{A numeric vector of length 1 passed on to \code{\link{getVisits}}. Returns only data from points where the number of years that a point has 
 been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{band}{A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
 
-\item{visits}{The visits that will be used for the matrix. Defautls to \code{NA}. See Details below.}
+\item{visits}{The visits that will be used for the matrix. Defaults to \code{NA}. See Details below.}
+
 
 \item{max}{Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at 
 each point across all the visits specified in the \code{visits} argument.}
 
 \item{type}{Either "count", the default of "occupancy". Determines the type of data in the matrix. If "count" then each number will represent the
 number of birds observed. If "occupancy" then the data will be 1 if one or more birds is observed, and 0 otherwise.}
+
+\item{site}{Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.}
+
+\item{dist}{Character. Filter data by disturbance code(s). See network documentation for list and meanings of codes.}
+
+\item{wind}{Numeric. Filter data by wind code(s). See network documentation for list and meanings of codes.}
+
+\item{sky}{Numeric. Filter data by sky condition code(s). See network documentation for list and meanings of codes.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 

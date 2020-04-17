@@ -9,9 +9,12 @@ getPoints(object, times = NA, years = NA, points = NA, output = "dataframe")
 \arguments{
 \item{object}{An NCRNbirds object or a list of such objects.}
 
-\item{times}{A numeric vector of lenght 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or 
+equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years} The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation in the \code{EventDate} column.}
+\item{years}{A numeric vector. Returns data only from points where the years the point was visited  matches one of the values in \code{years}.
+The year a visit takes place is determined by the \code{Year} column in the \code{visits} slot which is dervied from the imformation 
+in the \code{EventDate} column.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 }
@@ -19,5 +22,7 @@ getPoints(object, times = NA, years = NA, points = NA, output = "dataframe")
 Returns the contents of the \code{Points} slot of an NCRNbirds object. The returned data can be filtered to meet various criteria.
 }
 \details{
-This function returns point data either from a single NCRNbirds object or a list of such objects. The default output is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object.
+This function returns point data either from a single NCRNbirds object or a list of such objects. The default output 
+is a\code{data.frame}. However, if \code{object} is a list and \code{output} is "list" then a list of \code{data.frame}s will be returned. 
+The name of each element in this list will correspond to the \code{ParkCode} in each NCRNbirds object.
 }

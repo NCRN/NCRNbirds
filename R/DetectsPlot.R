@@ -28,6 +28,7 @@
 #' @param se Logical. Add Standard error to the plot. \code{TRUE} or \code{FALSE}, defaults to \code{FALSE}
 #' @param add_line Logical. Connects points in plot when \code{TRUE}. Defaults to \code{TRUE}.
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}. 
+#' @param plot Logical. Return plot \code{TRUE} (default) or data.frame \code{FALSE}. 
 #' @param ... Additional arguments passed to \code{\link{CountXVisit}}
 #' 
 #' @details This function produces a graph of species detections over time. It does this by using the output of the \code{\link{CountXVisit}}
@@ -36,11 +37,11 @@
 #' @export
 
 
-setGeneric(name="detectsPlot",function(object,parks= NA,years=NA,  points=NA, visits=NA, times=NA, max=F, plot_title=NA, point_num= NA, se= FALSE, add_line = TRUE, output="total", ...){standardGeneric("detectsPlot")}, signature="object")
+setGeneric(name="detectsPlot",function(object,parks= NA,years=NA,  points=NA, visits=NA, times=NA, max=F, plot_title=NA, point_num= NA, se= FALSE, add_line = TRUE, output="total", plot = TRUE, ...){standardGeneric("detectsPlot")}, signature="object")
 
 
 setMethod(f="detectsPlot", signature=c(object="list"),
-  function(object,parks,years,points,visits,times, max, plot_title, point_num,se,add_line,output, ...) {
+  function(object,parks,years,points,visits,times, max, plot_title, point_num,se,add_line,output, plot, ...) {
     
     switch(output,
        total={    visits<-if(anyNA(visits)) getDesign(object,info="visits") %>% unlist %>% max %>% seq else visits
@@ -59,19 +60,21 @@ setMethod(f="detectsPlot", signature=c(object="list"),
          if (all(is.na(point_num))) point_num<-purrr::map(visits, function(visits){ 
            purrr::map(years, function(years) getVisits(object=object,parks=parks,  years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
          
-                   
-                 return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se, add_line=add_line))
+          if(plot){          
+                 return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se, add_line=add_line))}else{
+                
+                   return(graphdata)}
                 },
       list={
          return(lapply(X=object, FUN=detectsPlot, years=years, points=points, visits=visits, times=times, max=max,
-                       plot_title=plot_title,point_num=point_num, se=se,add_line=add_line...))
+                       plot_title=plot_title,point_num=point_num, se=se,add_line=add_line, plot=plot, ...))
       }
     )
 })
 
 
 setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
-  function(object,parks,years,points,visits,times, plot_title,point_num,add_line, ...){
+  function(object,parks,years,points,visits,times, plot_title,point_num,add_line, plot, ...){
       
     visits<-if(anyNA(visits)) 1:getDesign(object,info="visits") else visits
     years<-if(anyNA(years)) getVisits(object, parks=parks, points=points,  visits=visits, times=times) %>% 
@@ -90,7 +93,10 @@ setMethod(f="detectsPlot", signature=c(object="NCRNbirds"),
     if (all(is.na(point_num))) point_num<-purrr::map(visits, function(visits){ 
       purrr::map(years, function(years) getVisits(object=object, parks=parks,  years=years, visits=visits, times=times) %>% nrow) %>% unlist(F)})
     
-    return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se, add_line=add_line))
+    if(plot){
+      return(detectsPlot(object=graphdata, plot_title=plot_title,point_num=point_num, se=se, add_line=add_line))} else{
+        
+        return(graphdata)}
 })
 
 setMethod(f="detectsPlot", signature=c(object="data.frame"),
@@ -120,5 +126,5 @@ setMethod(f="detectsPlot", signature=c(object="data.frame"),
                 labs(y=" Mean + SE number of birds detected per point", colour= ""))
                 }
             
-            return(GraphOut)
+            print(GraphOut)
 })

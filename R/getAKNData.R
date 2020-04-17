@@ -3,7 +3,7 @@
 #' 
 #' @title getAKNData
 #'
-#' @importFrom dplyr distinct anti_join tally
+#' @importFrom dplyr distinct anti_join tally recode slice
 #' @importFrom magrittr %>% 
 #' @importFrom data.table setDT
 #' @importFrom stringr str_sub str_detect
@@ -13,6 +13,9 @@
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
 #' @param import Logical. If \code{TRUE} will import data as "NETN" NCRNbirds object.
+#' @details  The following files will be saved in the folder denoted in the in argument \code{Dir}: FieldData.csv: Raw bird detection data by location and date; Visits.csv: List of unique surveys by date for each point count station.
+#' Please see associated Data Defintions for field names and descriptions. During the conversion from AKN's data format into a format that is readable by \code{importNETNbirds}, \code{getAKNData} filters out detections of mammals and unidentified species, checks AOU Codes against the most recent list 
+#' supplied by the look-up table BirdSpecies.csv, and renames and recodes a variety of data columns (e.g., detection type, distance) for standardization within the the package. Detections are aggregated into two distance bands (less than or greater than 50m from the observer), or are not recorded or considered as flyovers. 
 #' @export
 
 
@@ -20,12 +23,16 @@ getAKNData<- function(Dir, import= FALSE){
   
   #### Import data downloaded from AKN (http://data.prbo.org/science/biologists/index.php)
   
-  PointCounts<-read.csv(paste(Dir,"AKN/AKNPointCountObs.csv", sep="/"),as.is=T, header = T) %>% 
+  PointCounts<-read.csv(paste(Dir,"AKN/AKNPointCountObs.csv", sep="/"),as.is=T, header = T) %>% # Entire point count data downloaded from AKN annually
+    slice(-1) %>% ## to remove AKN's blank row on line 2 (excl. header)
+    rename(Point_Name= Point) %>% 
     mutate(AOU_Code = Spp)
-  
-  SiteCond <- read.csv(paste(Dir,"AKN/AKNSiteConditions.csv", sep="/"),as.is=T, header = T)
-  
-  NETNintervals<-read.csv(paste(Dir,"NETNintervals.csv", sep="/"),as.is=T, header = T)
+
+  SiteCond <- read.csv(paste(Dir,"AKN/AKNSiteConditions.csv", sep="/"),as.is=T, header = T) %>%  # Entire site condition data downloaded from AKN annually
+    slice(-1) ## to remove AKN's blank row on line 2 (excl. header)
+    
+  NETNintervals<-read.csv(paste(Dir,"NETNintervals.csv", sep="/"),as.is=T, header = T) %>%  # look up file 
+    mutate(Time.Bin.ID = as.character(Time.Bin.ID ))
   
   NETNID_methods<-read.csv(paste(Dir,"tlu_ID_Methods.csv", sep="/"),as.is=T, header = T)
   
@@ -46,9 +53,9 @@ getAKNData<- function(Dir, import= FALSE){
   # First, create a df of the unique visits for each point in each year to determine visit per event
   visits<-PointCounts %>% 
     filter(!Visit %in% c(9)) %>% # remove QAQC visits
-    dplyr::select(Transect, Point, Date, Start.Time, End.Time, Researcher) %>%
-    dplyr::mutate(Date= mdy(Date)) %>% 
-    dplyr::mutate(Year= year(Date))%>% 
+    dplyr::select(Transect, Point_Name, Date, Start.Time, End.Time, Researcher) %>%
+    dplyr::mutate(Date= ymd(Date)) %>% 
+    dplyr::mutate(Year= year(Date)) %>% 
     dplyr::distinct(.) 
   
   visits<-setDT(visits)   ## change format
@@ -57,13 +64,13 @@ getAKNData<- function(Dir, import= FALSE){
   #(the line below doesn't work any longer so replaced with line 60, which seems to be working)
   #visits<-visits[, Visit:= seq.int(from = 1, along = list(Transect,Point, Date), by = 1), by= c("Point","Year")] 
   
-  visits<-visits[ , Visit := seq(.N), by = c("Point","Year")]
+  visits<-visits[ , Visit := seq(.N), by = c("Point_Name","Year")]
   
   # rename columnsto align with R package
   visits_clean<-visits %>% 
-    dplyr::mutate(Park= stringr::str_sub(Point, 1, 4)) %>%
-    
-    dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect, Point_Name = Point, Year,EventDate= Date, StartTime= Start.Time, EndTime= End.Time, Visit, Observer=Researcher)
+    dplyr::mutate(Park= stringr::str_sub(Point_Name, 1, 4)) %>%
+    dplyr::left_join(.,sites[,c("Point_Name", "Survey_Type")],by= "Point_Name" ) %>% ## add survey type (forest vs grassland)
+    dplyr::select(Admin_Unit_Code= Park, Transect_Name= Transect, Point_Name, Survey_Type,Year,EventDate= Date, StartTime= Start.Time, EndTime= End.Time, Visit, Observer=Researcher)
   
   
   write.table(visits_clean, paste(Dir,"Visits.csv", sep="/"), sep= ",", row.names = FALSE)
@@ -84,18 +91,19 @@ getAKNData<- function(Dir, import= FALSE){
   # Which species codes are not found in the updated taxonomy table?
   
   ## Which species in ERMN's taxonomy table don't match NETN AKN and guild data
-  CommMatch<-anti_join(NETN_AOU,Species_AOU, by="AOU_Code")
-  print(CommMatch)
+  SppMatch<-anti_join(NETN_AOU,Species_AOU, by="AOU_Code")
+  cat("The following AOU codes in the AKN download  don't match the current AOU Codes in the NCRNBirds package but have been updated in the data.")
+  
+  print(SppMatch)
   
   ##ADD HERE TO RETURN THE NO. OF SPECIES NOT MATCHED AND THIER AOUs
-  #View(CommMatch)  
+  #View(SppMatch)  
   
   # now rename species codes to match taxonomy
   # changes to AOU COdes det on March 28 2019 
   # By creating the vector AOU_Code above during import of PointCounts you can see the changes from Spp to AOU_Code
   PointCounts<-PointCounts %>% 
     mutate(AOU_Code= recode(AOU_Code, "MYWA"= "YRWA","SCJU"="DEJU","YSFL"="NOFL","SOVI"= "BHVI","CAGO"="CANG"))
-  
   
   ####### Generate FieldData file----
   
@@ -106,15 +114,15 @@ getAKNData<- function(Dir, import= FALSE){
     dplyr::filter(!Visit %in% c(9)) %>% # remove QAQC visits
     select(-Visit) %>%  # now drop AKN's bad visit column to bind in derived visit nums (visits) from above
     dplyr::left_join(.,NETNintervals[1:2],by= "Time.Bin.ID") %>% # add in stadardized codes for detection time interval
-    dplyr::mutate(Date= as.Date(Date, "%m/%d/%Y")) %>% # force vector to Date type
-    dplyr::left_join(.,visits[,c("Point", "Date", "Visit")],by= c("Point", "Date") )%>% # add visit no. to data
+    dplyr::mutate(Date= ymd(Date)) %>% # force vector to Date type
+    dplyr::left_join(.,visits[,c("Point_Name", "Date", "Visit")],by= c("Point_Name", "Date") )%>% # add visit no. to data
     # add in field to distinguish between obs made within first 3 min of the count
     dplyr::mutate (Initial_Three_Min_Cnt= ifelse(Time.Bin.ID %in% c(7,8,9), 1, 0)) %>% # check with unique(data[c("Time.Bin.ID","Initial_Three_Min_Cnt")])
     dplyr::mutate(Detection.Cue=recode(Detection.Cue, .missing = "NR")) %>% # change few detections with missing codes to "NR"
     dplyr::left_join(.,NETNID_methods,by= "Detection.Cue" ) %>%  # standardize cues from look up table
+    dplyr::mutate(Distance.Bin.ID= recode(Distance.Bin.ID, "L10" = "L50", "L25"= "L50", "L50" = "L50")) %>% 
     dplyr::left_join(.,DistBands,by= "Distance.Bin.ID" ) %>% # add in distance band info to denote visual vs auditory detection
     dplyr::mutate(Flyover_Observed= ifelse(Distance.Bin.ID == "FLY",1,0)) %>% # create new field to denote flyover
-    dplyr::rename(Point_Name = Point)%>% # renaming to suport join in next step
     dplyr::left_join(.,sites[,c("Point_Name", "Survey_Type")],by= "Point_Name" ) %>% ## add survey type (forest vs grassland)
     dplyr::left_join(.,tlu_Obs, by= "Researcher") %>% # add in observer skill
     dplyr::mutate(Park= stringr::str_sub(Point_Name, 1, 4)) %>% ## Add ParkCode to data
@@ -127,8 +135,11 @@ getAKNData<- function(Dir, import= FALSE){
   NETN_AOU<-data %>% select(AOU_Code, Common_Name,Scientific_Name) %>%
     dplyr:: distinct(.)
   
-  CommMatch<-anti_join(NETN_AOU,Species_AOU, by="AOU_Code")
-  print(CommMatch)
+  SppMatch1<-anti_join(NETN_AOU,Species_AOU, by="AOU_Code")
+  
+  cat("Any remaining AOU Codes that don't match the updated taxonomy table?")
+  
+  print(table(SppMatch1))
   
   ## Check and print detection id codes that aren't flyovers ----
   data_detections<-data %>%
@@ -136,12 +147,16 @@ getAKNData<- function(Dir, import= FALSE){
     select(ID_Method_Code, ID_Method) %>% 
     group_by(ID_Method_Code) %>% tally(.)
   
-  print(data_detections) 
+  cat("Tally of detection codes that are not flyovers:")
+  
+  print(table(data_detections))
    
- # print which park these obs are from
+ # print which park these obs NA's are from
   NA_Det<-data %>% 
    filter(Flyover_Observed %in% 0 & is.na(ID_Method_Code))
-  print(unique(NA_Det[,c("Admin_Unit_Code","Point_Name")]))
+  cat("Park where missing detection codes were recorded from:")
+  
+  print(table(unique(NA_Det[,c("Admin_Unit_Code","Point_Name")])))
  
 ### write data to directory and import as NCRNbirds object----
   write.table(data, paste(Dir,"FieldData.csv", sep="/"), sep= ",", row.names = FALSE)
