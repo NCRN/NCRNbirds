@@ -14,6 +14,7 @@ CountXVisit(
   band = 1,
   visits = NA,
   max = F,
+  type = "count",
   site = NA,
   dist = NA,
   wind = NA,
@@ -33,15 +34,19 @@ CountXVisit(
 
 \item{years}{A vector of numbers. Will return only data from the indicated years.}
 
-\item{times}{A numeric vector of length 1 passed on to \code{link{getVisits}}. Returns only data from points where the number of years that a point has 
+\item{times}{A numeric vector of length 1 passed on to \code{\link{getVisits}}. Returns only data from points where the number of years that a point has 
 been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{band}{A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
 
 \item{visits}{The visits that will be used for the matrix. Defaults to \code{NA}. See Details below.}
 
-\item{max}{Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at each 
-point across all the visits specified in the \code{visits} argument.}
+
+\item{max}{Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at 
+each point across all the visits specified in the \code{visits} argument.}
+
+\item{type}{Either "count", the default of "occupancy". Determines the type of data in the matrix. If "count" then each number will represent the
+number of birds observed. If "occupancy" then the data will be 1 if one or more birds is observed, and 0 otherwise.}
 
 \item{site}{Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.}
 
@@ -65,5 +70,8 @@ This produces a Count X Visit matrix for a \code{NCRNbirds} object or a \code{li
  abundances will be totaled. If \code{max=T} then the maximum accross all visits will be returned as well as the indvidual visit totals.
  
  If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot. 
- Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used.
+ Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used. 
+ 
+ If \code{type} is set as "occupancy" the the matix will have 1 for visits where a site is occuped and 0 forvisits where it is unoccupied rather than 
+ abundances.
 }

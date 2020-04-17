@@ -14,12 +14,12 @@
 #' @param years  A vector of numbers. Will return only data from the indicated years.
 #' @param min.count  A numeric vector of length one. Will only return data with a bird count equal to or geater than \code{min.count}
 #' @param max.count  A numeric vector of length one. Will only return data with a bird count equal to or less than \code{max.count}
-#' @param band A numeric vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
+#' @param band A numeric vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned. 
 #' @param interval A numeric vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.
-#' @param reps A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been visited is 
-#' greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
-#' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater than or 
-#' equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
+#' @param reps A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
+#' visited is greater or equal to the valuemax,site,dist,wind,sky, of \code{times}. This is determined based on the data found in the \code{Visits} slot.
+#' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal
+#' to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param visits A length 1 numeric vector, defaults to \code{NA}. Returns data only from the indicated visits.
 #' @param flyover Logical. \code{TRUE} to include flyovers in count data. Defaults to \code{FALSE}.
 #' @param incidental Logical. \code{TRUE} to include incidental observations in count data. Defaults to \code{FALSE}.

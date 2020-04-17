@@ -15,12 +15,14 @@
 #' @param points A character vector. The names of one or more points where the data was collected.
 #' @param AOU A character vector. One or more AOU (American Onothological Union) codes of bird species.
 #' @param years A vector of numbers. Will return only data from the indicated years.
-#' @param times A numeric vector of length 1 passed on to \code{link{getVisits}}. Returns only data from points where the number of years that a point has 
+#' @param times A numeric vector of length 1 passed on to \code{\link{getVisits}}. Returns only data from points where the number of years that a point has 
 #' been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param band A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.
 #' @param visits The visits that will be used for the matrix. Defaults to \code{NA}. See Details below.
-#' @param max Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at each 
-#' point across all the visits specified in the \code{visits} argument.
+#' @param max Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at 
+#' each point across all the visits specified in the \code{visits} argument.
+#' @param type Either "count", the default of "occupancy". Determines the type of data in the matrix. If "count" then each number will represent the
+#' number of birds observed. If "occupancy" then the data will be 1 if one or more birds is observed, and 0 otherwise. 
 #' @param site Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.
 #' @param dist Character. Filter data by disturbance code(s). See network documentation for list and meanings of codes. 
 #' @param wind Numeric. Filter data by wind code(s). See network documentation for list and meanings of codes.
@@ -36,6 +38,9 @@
 #'  If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot. 
 #'  Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used. 
 #'  
+
+#'  If \code{type} is set as "occupancy" the the matix will have 1 for visits where a site is occuped and 0 forvisits where it is unoccupied rather than 
+#'  abundances. 
 #'     
 #' @export
 
@@ -43,15 +48,16 @@
 ########################
 
 
-setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,max=F, site=NA, dist=NA, wind =NA,
-                                       sky= NA, output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")
+setGeneric(name="CountXVisit",function(object,parks= NA, points=NA,AOU=NA,years=NA,times=NA,band=1,visits=NA,max=F, type="count", site=NA, dist=NA, wind =NA,
+                                       sky= NA, output="dataframe",...){standardGeneric("CountXVisit")}, signature="object")1
 
 
 
 setMethod(f="CountXVisit", signature=c(object="list"),
-          function(object, parks, points, AOU, years, band, visits, max, site, dist, wind, sky, output,...) {
+
+          function(object, parks, points, AOU, years, times, band, visits, max, type, site, dist, wind, sky, output,...) {
             OutMat<-lapply(X=object, FUN=CountXVisit,parks=parks, points=points, AOU=AOU, years=years, times=times,band=band,visits=visits,max=max,
-                           site= site, dist= dist, wind=wind, sky=sky, ...)
+                           type=type, site= site, dist= dist, wind=wind, sky=sky,...)
             switch(output,
                    list= return(OutMat),
                    dataframe= return(rbindlist(OutMat, use.names=TRUE, fill=TRUE)) 
@@ -60,7 +66,7 @@ setMethod(f="CountXVisit", signature=c(object="list"),
 
 
 setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
-          function(object,parks, points,AOU,years,band,visits,max,site,dist,wind,sky, output,...){
+          function(object,parks, points,AOU,years,times, band,visits,max, type,max,site,dist,wind,sky,...){
             
             ## This makes a matrix with 1 for visits that occured and NA for visits that did not occur (such as only
             ##  visiting a point once instead of twice)
@@ -82,7 +88,9 @@ setMethod(f="CountXVisit", signature=c(object="NCRNbirds"),
               left_join(getBirds(object=object, points=points, AOU=AOU, years=years, band=band, ...))%>% 
               mutate(Visit=paste0("Visit",Visit)) %>%
               group_by(Admin_Unit_Code,Point_Name, Year, Visit) %>%
-              summarize(Counts=sum(Bird_Count)) %>%
+              summarize(Counts=switch(type,
+                        count= sum(Bird_Count),
+                        occupancy=  min(Bird_Count,1) )) %>% #if Bird_Count is 0, Count will be 0, otherwise it will be 1 
               spread(key=Visit,value=Counts,fill=0) 
               
             
