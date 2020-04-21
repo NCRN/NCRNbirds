@@ -4,7 +4,15 @@
 \alias{summarizeEffort}
 \title{summarizeEffort}
 \usage{
-summarizeEffort(object, byYear = T, byPoint = F, effort = "points", wide = F)
+summarizeEffort(
+  object,
+  byYear = T,
+  byPoint = F,
+  effort = "points",
+  wide = F,
+  output = "dataframe",
+  ...
+)
 }
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}
@@ -18,51 +26,16 @@ summarizeEffort(object, byYear = T, byPoint = F, effort = "points", wide = F)
 \item{wide}{Defaults to \code{FALSE}. If \code{TRUE} and \code{wide} is \code{TRUE} then there will be a column for each year and row for each park 
 or point. Otherwise there will be a single \code{Year} column to indicate the year.}
 
-\item{parks}{A character vector of park codes. Only visits within these parks will be returned.}
-
-\item{points}{A character vector. The names of one or more points where the data was collected.}
-
-\item{AOU}{A character vector. One or more AOU (American Onothological Union) codes of bird species.}
-
-\item{years}{A vector of numbers. Will return only data from the indicated years.}
-
-\item{times}{A numeric vector of length 1 passed on to \code{\link{getVisits}}. Returns only data from points where the number of years that a point has 
-been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
-
-\item{band}{A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
-
-\item{visits}{The visits that will be used for the matrix. Defaults to \code{NA}. See Details below.}
-
-\item{max}{Logical, defaults to \code{FALSE}. If \code{TRUE} then the matrix will also include a single column with the maximum detections seen at 
-each point across all the visits specified in the \code{visits} argument.}
-
-\item{type}{Either "count", the default of "occupancy". Determines the type of data in the matrix. If "count" then each number will represent the
-number of birds observed. If "occupancy" then the data will be 1 if one or more birds is observed, and 0 otherwise.}
-
-\item{site}{Character. Select sites in "Forest" or "Grassland" habitats. Defaults to selecting both site types.}
-
-\item{dist}{Character. Filter data by disturbance code(s). See network documentation for list and meanings of codes.}
-
-\item{wind}{Numeric. Filter data by wind code(s). See network documentation for list and meanings of codes.}
-
-\item{sky}{Numeric. Filter data by sky condition code(s). See network documentation for list and meanings of codes.}
-
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
 
-\item{...}{Additional arguments passed to \code{getBirds}}
+\item{...}{Additional arguments passed to \code{getVisits}}
 }
 \description{
 Produces a table indicating how many visits were made to parks and points.
 }
 \details{
-This produces a Count X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
- will correspond to a different point in a different year. The columns of the matrix will be the park code, the point name, the year 
- visited, and a column of abundances of the indcated species at that visit. If multiple species are indicated in \code{AOU}, their 
- abundances will be totaled. If \code{max=T} then the maximum accross all visits will be returned as well as the indvidual visit totals.
- 
- If \code{visits} is left as \code{NA} then the visits used will be 1 through the number of visits indicated in the \code{visits} slot. 
- Otherwise a numeric vectore e.g. c(1,2) can be used to select which visits are used. 
- 
- If \code{type} is set as "occupancy" the the matix will have 1 for visits where a site is occuped and 0 forvisits where it is unoccupied rather than 
- abundances.
+This produces a summary of the amoutn of effort put into monitoring either measured as the number points visited or the number of 
+visits made to the points. The data on effort is retrieved from the \code{Visits} slot of the \code{NCRNbirds} object(s). The output can either be 
+in long format - suitable for further use in a map or graph, or in wide format which is easier for viewing. Any argument which is valid for 
+\code{getVisits} is also valid for this function.
 }
