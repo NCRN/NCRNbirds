@@ -27,7 +27,8 @@ richnessPlot(
 
 \item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
 
-\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater 
+or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{plot_title}{Optional,  A title for the plot.}
 

@@ -29,7 +29,8 @@ BCIPlot(
 
 \item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
 
-\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
+\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal 
+to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
 \item{plot_title}{Optional,  A title for the plot.}
 
@@ -55,7 +56,7 @@ Plots BCI score over time.
 }
 \details{
 This function produces a graph the Bird community Index  over time. It does this by using the output of 
-the \code{\link{BCI}} function, and averging the plot values for the park's yearly value. The error bars on the plot represnt 95% 
+the \code{\link{BCI}} function, and averging the plot values for the park's yearly value. The error bars on the plot reprsent 95% 
 bootstrap confidence intervals. The data is then passed on 
 to ggplot2 for graphing. Typically this is done automatically by providing an \code{NCRNbirds} object or a \code{list}
 of such objects. If the user wishes to provide their own \code{data.frame} it should have 3 columns, \code{Year, BCI, BCI_Category}
