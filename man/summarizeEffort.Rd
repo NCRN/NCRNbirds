@@ -6,6 +6,7 @@
 \usage{
 summarizeEffort(
   object,
+  byPark = T,
   byYear = T,
   byPoint = F,
   effort = "points",
@@ -17,13 +18,15 @@ summarizeEffort(
 \arguments{
 \item{object}{An \code{NCRNbirds} object or a \code{list} of such objects.}
 
+\item{byPark}{Defaults to \code{TRUE}. Indicates if data should be separated by park (\code{TRUE}) or combined (\code{FALSE})}
+
 \item{byYear}{Defaults to \code{TRUE}. Indicates if data should be separated by year (\code{TRUE}) or combined (\code{FALSE})}
 
 \item{byPoint}{Defaults to \code{FALSE}. Indicates if data should be separated by point (\code{TRUE}) or combined (\code{FALSE})}
 
 \item{effort}{Indicates if effort should be measured by "points" (# of points visited) or "visits" (total # of visits).}
 
-\item{wide}{Defaults to \code{FALSE}. If \code{TRUE} and \code{wide} is \code{TRUE} then there will be a column for each year and row for each park 
+\item{wide}{Defaults to \code{FALSE}. If \code{TRUE} and \code{byYear} is \code{TRUE} then there will be a column for each year and row for each park 
 or point. Otherwise there will be a single \code{Year} column to indicate the year.}
 
 \item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}

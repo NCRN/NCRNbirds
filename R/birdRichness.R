@@ -18,6 +18,8 @@
 #' @param years  A vector of numbers passed to \code{\link{getBirds}}. \code{NA} (the default) will count species regardless of the year
 #'  they were monitored, otherwise only data from years listed in \code{years} will be used. See details below for 
 #'  how years where no visits took place are handeled.  
+#' @param byPark Logical. If \code{FALSe} (the default) the total species richness across all parks will be returned as a single numeric value,
+#'  if \code{TRUE} a data.frame will be returned with each row a different park and its correspoding species richness.
 #' @param byYear Logical. If \code{FALSE} (the default) the total species richness across all years will be returned a single numeric value,
 #'  if \code{TRUE} a data.frame will be returned with each row a different year and its correspoding species richness.
 #' @param byPoint Locgcial ,f \code{FALSE} (the default) the total species richness across all points will be returned a single numeric value,
@@ -25,6 +27,8 @@
 #' @param output Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, 
 #' when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. 
 #' "list" will return a list, with each entry to the list corresponding to the species richness of one of the \code{NCRNbirds} objects in the input list.  
+#' @param wide Defaults to \code{FALSE}. If \code{TRUE} and \code{byYear} is \code{TRUE} then there will be a column for each year and row for each park 
+#' or point. Otherwise there will be a single \code{Year} column to indicate the year.
 #' @param ... additional arguments passed to \code{\link{getBirds}}. Any argument which is a valid argument for \code{\link{getBirds}} can be used here.
 #' 
 #' @details This function calculates the species richness for a park, group of parks, group of monitoring points etc. 
@@ -41,42 +45,45 @@
 #' 
 #' @export
 
-setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,visits=NA,byYear=FALSE, byPoint=FALSE,
+setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,visits=NA, byPark=FALSE, byYear=FALSE, byPoint=FALSE, wide=FALSE,
                                         output="total",...){standardGeneric("birdRichness")}, signature="object")
 
 setMethod(f="birdRichness", signature=c(object="list"),
-  function(object,points,AOU,years,byYear, byPoint,output,...) {
+  function(object, points, AOU, years, byPark, byYear, byPoint, wide, output,...) {
     switch(output,
       list= return(
-        lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,visits=visits, byYear=byYear,byPoint=byPoint, output=output,...)
+        lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,visits=visits, byPark=byPark, byYear=byYear,byPoint=byPoint, 
+               wide=wide, output=output,...)
       ),
       total={
         Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...)
         years<-getVisits(object=object, points=points, years=years, visits= visits, output="dataframe") %>% distinct(Year) %>% pull() 
-        return(birdRichness(object=Data, years=years, byYear=byYear, byPoint=byPoint, output=output)      
+        return(birdRichness(object=Data, years=years, byPark=byPark, byYear=byYear, byPoint=byPoint, wide=wide, output=output)      
       )}
     )
 })
 
 
 setMethod(f="birdRichness", signature=c(object="NCRNbirds"),
-  function(object,points,AOU,years,byYear, byPoint,output,...){
+  function(object, points, AOU, years, byPark, byYear, byPoint, wide, output,...){
 
     Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...)
     years<-getVisits(object=object, points=points, years=years, output="dataframe") %>% distinct(Year) %>% pull() 
-    return(birdRichness(object=Data, years=years, byYear=byYear, byPoint=byPoint))
+    return(birdRichness(object=Data, years=years, byPark=byPark, byYear=byYear, byPoint=byPoint, wide=wide))
 })
 
 
 setMethod(f="birdRichness", signature=c(object="data.frame"),
-  function(object,years,byYear,byPoint){
+  function(object, years, byPark, byYear, byPoint, wide){
     
-  object<-if(all(is.na(years))) object else object %>% filter(Year %in% years)
-  object<-if(byYear) object %>% group_by(Year) else object
-  object<-if(byPoint) object %>% group_by(Point_Name, add=TRUE) else object
-  count<- object %>% summarise(Richness=n_distinct(AOU_Code))
-  if(!byYear & !byPoint) count<-count %>% pull(Richness)
+  Count<-object %>% 
+    {if(all(is.na(years))) . else filter(., Year %in% years)} %>% 
+    {if(byPark) group_by(., Admin_Unit_Code) else . } %>% 
+    {if(byYear) group_by(.,Year, add=TRUE) else .} %>% 
+    {if(byPoint) group_by(., Point_Name, add=TRUE) else .} %>% 
+    summarise(Richness=n_distinct(AOU_Code)) %>% 
+    {if(!byYear & !byPark & !byPoint) pull(., Richness) else .} %>% 
+    {if(wide & byYear)pivot_wider(., names_from = Year, values_from = Richness) else .}
             
-
-  return(count)
+  return(Count)
 })

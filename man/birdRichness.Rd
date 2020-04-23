@@ -10,8 +10,10 @@ birdRichness(
   AOU = NA,
   years = NA,
   visits = NA,
+  byPark = FALSE,
   byYear = FALSE,
   byPoint = FALSE,
+  wide = FALSE,
   output = "total",
   ...
 )
@@ -31,11 +33,17 @@ how years where no visits took place are handeled.}
 
 \item{visits}{A length 1 numeric vector, defaults to \code{NA}. Returns data only from the indicated visits.}
 
+\item{byPark}{Logical. If \code{FALSe} (the default) the total species richness across all parks will be returned as a single numeric value,
+if \code{TRUE} a data.frame will be returned with each row a different park and its correspoding species richness.}
+
 \item{byYear}{Logical. If \code{FALSE} (the default) the total species richness across all years will be returned a single numeric value,
 if \code{TRUE} a data.frame will be returned with each row a different year and its correspoding species richness.}
 
 \item{byPoint}{Locgcial ,f \code{FALSE} (the default) the total species richness across all points will be returned a single numeric value,
 if \code{TRUE} a data.frame will be returned with each row a different plot and its correspoding species richness.}
+
+\item{wide}{Defaults to \code{FALSE}. If \code{TRUE} and \code{byYear} is \code{TRUE} then there will be a column for each year and row for each park 
+or point. Otherwise there will be a single \code{Year} column to indicate the year.}
 
 \item{output}{Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, 
 when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. 

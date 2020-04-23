@@ -12,11 +12,11 @@
 #' 
 #' 
 #' @param object An \code{NCRNbirds} object or a \code{list} of such objects.
-#' 
+#' @param byPark Defaults to \code{TRUE}. Indicates if data should be separated by park (\code{TRUE}) or combined (\code{FALSE})
 #' @param byYear Defaults to \code{TRUE}. Indicates if data should be separated by year (\code{TRUE}) or combined (\code{FALSE})
 #' @param byPoint Defaults to \code{FALSE}. Indicates if data should be separated by point (\code{TRUE}) or combined (\code{FALSE})
 #' @param effort Indicates if effort should be measured by "points" (# of points visited) or "visits" (total # of visits).
-#' @param wide Defaults to \code{FALSE}. If \code{TRUE} and \code{wide} is \code{TRUE} then there will be a column for each year and row for each park 
+#' @param wide Defaults to \code{FALSE}. If \code{TRUE} and \code{byYear} is \code{TRUE} then there will be a column for each year and row for each park 
 #' or point. Otherwise there will be a single \code{Year} column to indicate the year. 
 #' @param output Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.
 #' @param ... Additional arguments passed to \code{getVisits}
@@ -33,41 +33,41 @@
 ########################
 
 
-setGeneric(name="summarizeEffort", function(object, byYear=T, byPoint=F, effort="points", wide=F, output="dataframe", ...){
+setGeneric(name="summarizeEffort", function(object, byPark=T, byYear=T, byPoint=F, effort="points", wide=F, output="dataframe", ...){
   standardGeneric("summarizeEffort")},  signature="object")
 
 setMethod(f="summarizeEffort", signature=c(object="list"),
-           function(object,byYear, byPoint, effort, wide, output, ...) {
+           function(object, byPark, byYear, byPoint, effort, wide, output, ...) {
   
 # Get the correct data from getVisits and pass it on to the data.frame method
              
              VisitData<-getVisits(object=object, output=output, ...)
                
              switch(output,
-                    list= return(map(VisitData, summarizeEffort, byYear=byYear, byPoint=byPoint, effort=effort, wide=wide)),
-                    dataframe= return(summarizeEffort(VisitData,  byYear=byYear, byPoint=byPoint, effort=effort, wide=wide))              
+                    list= return(map(VisitData, summarizeEffort, byPark=byPark, byYear=byYear, byPoint=byPoint, effort=effort, wide=wide)),
+                    dataframe= return(summarizeEffort(VisitData, byPark=byPark, byYear=byYear, byPoint=byPoint, effort=effort, wide=wide))              
               )
 })
  
 
 
 setMethod(f="summarizeEffort", signature=c(object="NCRNbirds"),
-           function(object, byYear, byPoint, effort, wide, ...){
+           function(object, byPark, byYear, byPoint, effort, wide, ...){
              
 # Get the correct data from getVisits and pass it on to the data.frame method
              
              VisitData-getVisits(object, ...)
              
-             return(summarizeEffort(object=VisitData, byYear=byYear, byPoint=byPoint, effort=effort, wide=wide))
+             return(summarizeEffort(object=VisitData, byPark=byPark, byYear=byYear, byPoint=byPoint, effort=effort, wide=wide))
 })
 
 setMethod(f="summarizeEffort", signature=c(object="data.frame"),
-    function(object, byYear, byPoint, effort, wide){
+    function(object, byPark, byYear, byPoint, effort, wide){
              
     effort_table<-object %>% 
       dplyr::select(Admin_Unit_Code,Point_Name,Year) %>% 
       {if(effort=="points") distinct(.) else .} %>% 
-      group_by(Admin_Unit_Code) %>% 
+      {if(byPark) group_by(., Admin_Unit_Code) else . }%>% 
       {if(byYear) group_by(., Year, add=T) else . } %>%
       {if(byPoint) group_by(., Point_Name, add=T) else . } %>%
       summarise(Point_Counts=n())  
