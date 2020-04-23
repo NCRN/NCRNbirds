@@ -42,6 +42,7 @@ Collate:
     'getAKNData.R'
     'getGuilds.R'
     'getPoints.R'
+    'heatmapRichness.R'
     'importERMNbirds.R'
     'importERMNbirds2007.R'
     'importMIDNbirds.R'
