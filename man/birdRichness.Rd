@@ -14,6 +14,7 @@ birdRichness(
   byYear = FALSE,
   byPoint = FALSE,
   wide = FALSE,
+  name.class = "short",
   output = "total",
   ...
 )
@@ -44,6 +45,8 @@ if \code{TRUE} a data.frame will be returned with each row a different plot and 
 
 \item{wide}{Defaults to \code{FALSE}. If \code{TRUE} and \code{byYear} is \code{TRUE} then there will be a column for each year and row for each park 
 or point. Otherwise there will be a single \code{Year} column to indicate the year.}
+
+\item{name.class}{Indicates if park names should appear as "code" the defaults or as "short" or "long" names from \code{\link{getParkNames}}}
 
 \item{output}{Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, 
 when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. 

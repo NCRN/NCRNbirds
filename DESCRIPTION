@@ -37,6 +37,7 @@ Collate:
     'getBirdNames.R'
     'getChecklist.R'
     'SumRelAbund.R'
+    'matchParkCodes.R'
     'birdRichness.R'
     'importNETNbirds.R'
     'getAKNData.R'

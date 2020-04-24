@@ -6,40 +6,28 @@
 \usage{
 heatmapRichness(
   object,
+  byPoint = F,
   color = "dark green",
-  years = NA,
-  points = NA,
-  visits = NA,
-  times = NA,
   plot_title = NA,
-  point_num = NA,
-  add_line = TRUE,
+  scale = T,
+  labels = T,
   output = "total",
   plot = TRUE,
   ...
 )
 }
 \arguments{
-\item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.}
+\item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{\link{birdRichness}}.}
+
+\item{byPoint}{Defaults to \code{FALSE}. If \code{TRUE} heatamap will have one line for each point, otherwise will have one line for each park}
 
 \item{color}{A color that will correspond to the maximum species richness}
 
-\item{years}{A numeric vector. Indicates which years should be graphed.}
-
-\item{points}{A character vector of point names. Only these points will be used.}
-
-\item{visits}{A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.}
-
-\item{times}{A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater 
-or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
-
 \item{plot_title}{Optional,  A title for the plot.}
 
-\item{point_num}{An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
-or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
-provided by the user.}
+\item{scale}{If \code{TRUE} will include a scale to the right of the heatmap}
 
-\item{add_line}{Logical. Connects points in plot when \code{TRUE}. Defaults to \code{TRUE}.}
+\item{labels}{If\code{TRUE} will label species richness values on the heatmap.}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}}
 
@@ -51,6 +39,6 @@ provided by the user.}
 Makes a heamap of species richness
 }
 \details{
-This function produces a graph of species richness over time. It does this by using the output of the \code{\link{birdRichness}}
-function. The data is then passed on to ggplot2 for graphing.
+This function produces a heatmap of species richness at the park or point level across years. It does this by using the 
+output of the \code{\link{birdRichness}} function. The data is then passed on to ggplot2 for graphing.
 }

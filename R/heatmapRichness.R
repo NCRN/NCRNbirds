@@ -2,68 +2,71 @@
 #'   
 #' @title heatmapRichness
 #'
-#' @importFrom ggplot2 aes element_blank element_rect element_text geom_raster geom_text ggplot ggtitle labs scale_fill_gradient theme unit
+#' @importFrom dplyr mutate
+#' @importFrom ggplot2 aes element_blank element_rect element_text geom_text geom_raster ggplot ggtitle labs scale_fill_gradient
+#' @importFrom ggplot2 scale_y_discrete theme unit
+#' @importFrom magrittr %>% 
 #' @importFrom purrr map
 #' 
 #' @description Makes a heamap of species richness
 #' 
-#' @param object An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{birdRichness()}.
-#' 
+#' @param object An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{\link{birdRichness}}.
+#' @param byPoint Defaults to \code{FALSE}. If \code{TRUE} heatamap will have one line for each point, otherwise will have one line for each park
 #' @param color A color that will correspond to the maximum species richness
 #' @param output Either "total" (the default) or "list". Only used when \code{object} is a \code{list}
-#' 
-#' 
-#' @param years  A numeric vector. Indicates which years should be graphed.
-#' @param points A character vector of point names. Only these points will be used.
-#' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits.
-#' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been visited is greater 
-#' or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param plot_title  Optional,  A title for the plot. 
-#' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
-#' or a \code{list} of such objects, then this will be calculated automatically. If \code{object} is a \code{data.frame} than this can be
-#' provided by the user. 
-#' @param ... Additional arguments passed to \code{\link{birdRichness}}
-#' @param add_line Logical. Connects points in plot when \code{TRUE}. Defaults to \code{TRUE}.
+#' @param scale If \code{TRUE} will include a scale to the right of the heatmap
+#' @param labels If\code{TRUE} will label species richness values on the heatmap.
+
 #' @param plot Logical. Return plot \code{TRUE} (default) or data.frame \code{FALSE}. 
-#' @details This function produces a graph of species richness over time. It does this by using the output of the \code{\link{birdRichness}}
-#' function. The data is then passed on to ggplot2 for graphing.
+
+
+#' @param ... Additional arguments passed to \code{\link{birdRichness}}
+
+
+#' @details This function produces a heatmap of species richness at the park or point level across years. It does this by using the 
+#' output of the \code{\link{birdRichness}} function. The data is then passed on to ggplot2 for graphing.
 #'   
 #' @export
 
 
-setGeneric(name="heatmapRichness",function(object, color="dark green" ,years=NA, points=NA, visits = NA, times=NA, plot_title=NA, point_num=NA, add_line = TRUE, 
-                                           output="total", plot=TRUE, ...){standardGeneric("heatmapRichness")}, signature="object")
+setGeneric(name="heatmapRichness",function(object, byPoint=F, color="dark green", plot_title=NA, scale=T, labels=T, output="total",
+                                           plot=TRUE, ...){standardGeneric("heatmapRichness")}, signature="object")
 
 
 setMethod(f="heatmapRichness", signature=c(object="list"),
-   function(object, color, output) {
+   function(object, byPoint, color, plot_title, scale, labels, output, plot,  ...) {
      switch(output,
        total={
-          heatmapdata=birdRichness(object,byPark=T, byYear=T, output="total")
+          heatmapdata=birdRichness(object,byPark=T, byYear=T, byPoint=byPoint, output="total",...)
 
-        return(heatmapRichness(object=heatmapdata, color=color))
+        return(heatmapRichness(object=heatmapdata, byPoint=byPoint, color=color, plot_title=plot_title, scale=scale, labels=labels, plot = plot))
       },
        list={
-         return(map(object,heatmapRichness, color=color))
+         return(map(object,heatmapRichness, byPoint=byPoint, color=color, plot_title=plot_title, scale=scale, labels=labels, plot=plot, ...))
        }
      )
  })
  
  setMethod(f="heatmapRichness", signature=c(object="NCRNbirds"),
-   function(object, color){
-  heatmapdata<-birdRichness(object, byPark=T, byYear = T)
+   function(object, byPoint, color, plot_title, scale, labels, plot, ...){
+  heatmapdata<-birdRichness(object, byPark=T, byYear=T, byPoint=byPoint, ...)
   
-  heatmapRichness(heatmapdata, color)
+  heatmapRichness(object=heatmapdata, byPoint=byPoint, color=color, plot_title = plot_title, scale=scale, labels=labels, plot=plot)
 
  
  })
 
 setMethod(f="heatmapRichness", signature=c(object="data.frame"),
-  function(object, color){#, plot_title, point_num,add_line){
+  function(object,byPoint, color, plot_title, scale, labels, plot){
+    
+    if(!plot) return(object)
+    object<-object %>% mutate(ParkName=factor(ParkName)) %>% 
+      {if(byPoint) mutate(.,Point_Name=factor(Point_Name)) else .}
    
     maxRichness<-max(object$Richness)
     
-    heatmapOut<-ggplot(data=object, aes(x=as.factor(Year), y=Admin_Unit_Code, fill=Richness)) + 
+    heatmapOut<-ggplot(data=object, aes(x=as.factor(Year), y=if(byPoint) Point_Name else ParkName, fill=Richness)) + 
       geom_raster() +
        theme(panel.background = element_rect(fill="transparent"),
              panel.border= element_rect(color="white", fill="transparent"),
@@ -72,12 +75,13 @@ setMethod(f="heatmapRichness", signature=c(object="data.frame"),
              title = element_text(size=12),
              legend.key.width=unit(2,"lines"),
              legend.key.height=unit(3,"lines"))+
-       scale_fill_gradient(low = "white", high = color, na.value="gray",
+       scale_fill_gradient(low = "white", high = color, na.value="gray", guide=if (scale) 'colorbar' else FALSE,
                            limits=c(0, ceiling(maxRichness)),
                            breaks=c(round(seq(0,maxRichness, length.out=5),0)))+
-        labs(x=element_blank(), y="Park")+
-        geom_text(aes(label = round(Richness, 0)), size = 3,color="black")+
-       ggtitle("Species Richness by Park and Year")
+      scale_y_discrete(limits=rev(if(byPoint) object$Point_Name else object$ParkName))+
+      labs(x=element_blank(), y=element_blank())+
+      {if(labels) geom_text(aes(label = round(Richness, 0)), size = 3,color="black")}+
+      {if(!is.na(plot_title)) ggtitle(plot_title)}
     
 print(heatmapOut)
     

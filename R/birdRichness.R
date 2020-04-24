@@ -1,10 +1,10 @@
-#' @include NCRNbirds_Class_def.R getBirds.R
+#' @include NCRNbirds_Class_def.R getBirds.R getVisits.R matchParkCodes.R
 #' @include getVisits.R
 #' @include getBirds.R
 #' 
 #' @title birdRichness
 #' 
-#' @importFrom dplyr distinct filter n_distinct pull summarise
+#' @importFrom dplyr distinct filter mutate n_distinct pull summarise ungroup
 #' @importFrom magrittr %>% 
 #' 
 #' @description Returns the number of bird species found in a park, at a point or a collection of points. 
@@ -29,6 +29,7 @@
 #' "list" will return a list, with each entry to the list corresponding to the species richness of one of the \code{NCRNbirds} objects in the input list.  
 #' @param wide Defaults to \code{FALSE}. If \code{TRUE} and \code{byYear} is \code{TRUE} then there will be a column for each year and row for each park 
 #' or point. Otherwise there will be a single \code{Year} column to indicate the year.
+#' @param name.class Indicates if park names should appear as "code" the defaults or as "short" or "long" names from \code{\link{getParkNames}}
 #' @param ... additional arguments passed to \code{\link{getBirds}}. Any argument which is a valid argument for \code{\link{getBirds}} can be used here.
 #' 
 #' @details This function calculates the species richness for a park, group of parks, group of monitoring points etc. 
@@ -45,18 +46,19 @@
 #' 
 #' @export
 
-setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,visits=NA, byPark=FALSE, byYear=FALSE, byPoint=FALSE, wide=FALSE,
-                                        output="total",...){standardGeneric("birdRichness")}, signature="object")
+setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,visits=NA, byPark=FALSE, byYear=FALSE, byPoint=FALSE, wide=FALSE, 
+                                        name.class="short", output="total",...){standardGeneric("birdRichness")}, signature="object")
 
 setMethod(f="birdRichness", signature=c(object="list"),
-  function(object, points, AOU, years, byPark, byYear, byPoint, wide, output,...) {
+  function(object, points, AOU, years, byPark, byYear, byPoint, wide, name.class, output,...) {
     switch(output,
       list= return(
-        lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,visits=visits, byPark=byPark, byYear=byYear,byPoint=byPoint, 
-               wide=wide, output=output,...)
+        lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,visits=visits, byPark=byPark, byYear=byYear, byPoint=byPoint, 
+               wide=wide, name.class=name.class, output=output,...)
       ),
       total={
-        Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...)
+        Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...) %>% 
+          mutate(ParkName=matchParkCodes(object, Admin_Unit_Code, name.class = name.class))
         years<-getVisits(object=object, points=points, years=years, visits= visits, output="dataframe") %>% distinct(Year) %>% pull() 
         return(birdRichness(object=Data, years=years, byPark=byPark, byYear=byYear, byPoint=byPoint, wide=wide, output=output)      
       )}
@@ -65,25 +67,28 @@ setMethod(f="birdRichness", signature=c(object="list"),
 
 
 setMethod(f="birdRichness", signature=c(object="NCRNbirds"),
-  function(object, points, AOU, years, byPark, byYear, byPoint, wide, output,...){
+  function(object, points, AOU, years, byPark, byYear, byPoint, wide, name.class, ...){
 
-    Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...)
+    Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...) %>% 
+      mutate(ParkName=matchParkCodes(object, Admin_Unit_Code, name.class = name.class))
     years<-getVisits(object=object, points=points, years=years, output="dataframe") %>% distinct(Year) %>% pull() 
     return(birdRichness(object=Data, years=years, byPark=byPark, byYear=byYear, byPoint=byPoint, wide=wide))
+    
+    #purrr:::map(x, ~getParkNames(NCRN,"short")[which(.x==y)])
 })
 
 
 setMethod(f="birdRichness", signature=c(object="data.frame"),
   function(object, years, byPark, byYear, byPoint, wide){
-    
   Count<-object %>% 
     {if(all(is.na(years))) . else filter(., Year %in% years)} %>% 
-    {if(byPark) group_by(., Admin_Unit_Code) else . } %>% 
+    {if(byPark) group_by(., Admin_Unit_Code,ParkName) else . } %>% 
     {if(byYear) group_by(.,Year, add=TRUE) else .} %>% 
     {if(byPoint) group_by(., Point_Name, add=TRUE) else .} %>% 
     summarise(Richness=n_distinct(AOU_Code)) %>% 
     {if(!byYear & !byPark & !byPoint) pull(., Richness) else .} %>% 
-    {if(wide & byYear)pivot_wider(., names_from = Year, values_from = Richness) else .}
+    {if(wide & byYear)pivot_wider(., names_from = Year, values_from = Richness) else .} %>% 
+    ungroup()
             
   return(Count)
 })
