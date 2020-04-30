@@ -87,8 +87,9 @@ setMethod(f="birdRichness", signature=c(object="data.frame"),
     {if(byPoint) group_by(., Point_Name, add=TRUE) else .} %>% 
     summarise(Richness=n_distinct(AOU_Code)) %>% 
     {if(!byYear & !byPark & !byPoint) pull(., Richness) else .} %>% 
-    {if(wide & byYear)pivot_wider(., names_from = Year, values_from = Richness) else .} %>% 
-    ungroup()
+    {if(wide & byYear) pivot_wider(., names_from = Year, values_from = Richness) else .} %>% 
+    {if (is.data.frame(.)) ungroup(.) else .}
+
             
   return(Count)
 })
