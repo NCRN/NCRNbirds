@@ -21,17 +21,19 @@ barplotRichness(
 \arguments{
 \item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{\link{birdRichness}}.}
 
-\item{byPark}{}
+\item{byPark}{Defaults to \code{FALSE}. If true the barplot will have on bar for each park.}
 
-\item{byPoint}{Defaults to \code{FALSE}. If \code{TRUE} heatamap will have one line for each point, otherwise will have one line for each park}
+\item{byYear}{Defaults to \code{FALSE}. If true the barplot will have on bar for each year.}
 
-\item{color}{A color that will correspond to the maximum species richness}
+\item{byPoint}{Defaults to \code{FALSE}. If \code{TRUE} the barplot will have one bar for each point.}
+
+\item{color}{A color for the bars.}
 
 \item{plot_title}{Optional,  A title for the plot.}
 
-\item{scale}{If \code{TRUE} will include a scale to the right of the heatmap}
+\item{scale}{If \code{TRUE} will include a scale to the right of the barplot.}
 
-\item{labels}{If\code{TRUE} will label species richness values on the heatmap.}
+\item{labels}{If\code{TRUE} will label species richness values on the barplot.}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}}
 
@@ -43,6 +45,7 @@ barplotRichness(
 Makes a barplot of species richness
 }
 \details{
-This function produces a heatmap of species richness at the park or point level across years. It does this by using the 
-output of the \code{\link{birdRichness}} function. The data is then passed on to ggplot2 for graphing.
+This function produces a barplot of species richness by Park, Year or Point. It does this by using the 
+output of the \code{\link{birdRichness}} function. The data is then passed on to ggplot2 for graphing. The user can chose to have \code{byPark=T}, 
+\code{byYear=T} or \code{byPoint=T}, but should only pick one of the three.
 }
