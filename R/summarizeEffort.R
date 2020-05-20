@@ -56,7 +56,7 @@ setMethod(f="summarizeEffort", signature=c(object="NCRNbirds"),
              
 # Get the correct data from getVisits and pass it on to the data.frame method
              
-             VisitData-getVisits(object, ...)
+             VisitData<-getVisits(object, ...)
              
              return(summarizeEffort(object=VisitData, byPark=byPark, byYear=byYear, byPoint=byPoint, effort=effort, wide=wide))
 })
