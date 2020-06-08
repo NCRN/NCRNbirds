@@ -45,6 +45,7 @@ Collate:
     'importERMNbirds.R'
     'importERMNbirds2007.R'
     'importMIDNbirds.R'
+    'importNCCNbirds.R'
     'importNCRNbirds.R'
     'makeNCRNbirds.R'
     'makeUMF.R'
