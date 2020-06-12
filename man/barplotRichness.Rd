@@ -9,6 +9,8 @@ barplotRichness(
   byPark = F,
   byYear = F,
   byPoint = F,
+  byGuild = F,
+  includeNA = T,
   color = "dark green",
   plot_title = NA,
   scale = T,
@@ -27,13 +29,18 @@ barplotRichness(
 
 \item{byPoint}{Defaults to \code{FALSE}. If \code{TRUE} the barplot will have one bar for each point.}
 
+\item{byGuild}{Defaults to \code{FALSE}. If \code{TRUE} the barplot will be stacked by Guild.}
+
+\item{includeNA}{Defaults to \code{TRUE}. If \code{byGuild = T} and \code{includeNA=F} then speices which have a response guild of \code{NA}
+will not be included in the bar chart.}
+
 \item{color}{A color for the bars.}
 
 \item{plot_title}{Optional,  A title for the plot.}
 
 \item{scale}{If \code{TRUE} will include a scale to the right of the barplot.}
 
-\item{labels}{If\code{TRUE} will label species richness values on the barplot.}
+\item{labels}{If\code{TRUE} will label species richness values on the barplot.Labels are never shown wehen plotting by guild.}
 
 \item{output}{Either "total" (the default) or "list". Only used when \code{object} is a \code{list}}
 
@@ -47,5 +54,6 @@ Makes a barplot of species richness
 \details{
 This function produces a barplot of species richness by Park, Year or Point. It does this by using the 
 output of the \code{\link{birdRichness}} function. The data is then passed on to ggplot2 for graphing. The user can chose to have \code{byPark=T}, 
-\code{byYear=T} or \code{byPoint=T}, but should only pick one of the three.
+\code{byYear=T} or \code{byPoint=T}, but should only pick one of the three. These can be combined with a guild category using \code{byGuild}. The 
+\code{includeNA} argument indicates if bird species that are not categorized for a particular guild shoud be included.
 }

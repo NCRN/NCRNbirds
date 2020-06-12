@@ -48,22 +48,21 @@ if \code{TRUE} a data.frame will be returned with each row a different plot and 
 
 \item{byGuild}{Logical,if \code{FALSE} (the default) the total species richness across all points will be returned a single numeric value,
 if \code{TRUE} a data.frame will be returned with each row a different response guild plot and its corresponding species richness. The 
-guild will be determined by the \code(guildType) and \code{guildCateogory} arguments.}
+guild will be determined by the \code{guildType} and \code{guildCateogory} arguments.}
 
 \item{guildType}{The type of guild as determined by the BCI. Passed on to the \code{type} argument of \code{\link{getGuilds}}}
 
 \item{guildCategory}{The guild category as determined by the BCI. Passed on to the \code{categories} argument of \code{\link{getGuilds}}. 
- Should be only one category.
- @param output Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, 
-when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. 
-"list" will return a list, with each entry to the list corresponding to the species richness of one of the \code{NCRNbirds} objects in the input list.}
+Should be only one category.}
 
 \item{wide}{Defaults to \code{FALSE}. If \code{TRUE} and \code{byYear} is \code{TRUE} then there will be a column for each year and row for each park 
 or point. Otherwise there will be a single \code{Year} column to indicate the year.}
 
 \item{name.class}{Indicates if park names should appear as "code" the defaults or as "short" or "long" names from \code{\link{getParkNames}}}
 
-\item{output}{Either "dataframe" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function.}
+\item{output}{Either "total" (the default) or "list". Note that this must be in quotes. Determines the type of output from the function, 
+when \code{object} is a \code{list}. "total" will give the number of distinct species found across all parks. 
+"list" will return a list, with each entry to the list corresponding to the species richness of one of the \code{NCRNbirds} objects in the input list.}
 
 \item{...}{additional arguments passed to \code{\link{getBirds}}. Any argument which is a valid argument for \code{\link{getBirds}} can be used here.}
 }

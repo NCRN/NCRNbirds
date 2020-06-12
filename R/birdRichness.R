@@ -24,7 +24,7 @@
 #'  if \code{TRUE} a data.frame will be returned with each row a different plot and its corresponding species richness.
 #' @param byGuild Logical,if \code{FALSE} (the default) the total species richness across all points will be returned a single numeric value,
 #'  if \code{TRUE} a data.frame will be returned with each row a different response guild plot and its corresponding species richness. The 
-#'  guild will be determined by the \code(guildType) and \code{guildCateogory} arguments.
+#'  guild will be determined by the \code{guildType} and \code{guildCateogory} arguments.
 #' @param guildType The type of guild as determined by the BCI. Passed on to the \code{type} argument of \code{\link{getGuilds}} 
 #' @param guildCategory The guild category as determined by the BCI. Passed on to the \code{categories} argument of \code{\link{getGuilds}}. 
 #'  Should be only one category.
@@ -55,11 +55,11 @@ setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,visits=
                                         name.class="short", output="total",...){standardGeneric("birdRichness")}, signature="object")
 
 setMethod(f="birdRichness", signature=c(object="list"),
-  function(object, points, AOU, years, byPark, byYear, byPoint, byGuild, wide, name.class, output,...) {
+  function(object, points, AOU, years, byPark, byYear, byPoint, byGuild, guildType, guildCategory, wide, name.class, output,...) {
     switch(output,
       list= return(
         lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,visits=visits, byPark=byPark, byYear=byYear, byPoint=byPoint, 
-               byGuild=ByGuild, wide=wide, name.class=name.class, output=output,...)
+               byGuild=ByGuild, guildType=guildType, guildCategory=guildCategory, wide=wide, name.class=name.class, output=output,...)
       ),
       total={
         Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...) %>% 
