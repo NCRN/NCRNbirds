@@ -55,6 +55,7 @@ setGeneric(name="birdRichness",function(object,points=NA,AOU=NA,years=NA,visits=
                                         name.class="short", output="total",...){standardGeneric("birdRichness")}, signature="object")
 
 setMethod(f="birdRichness", signature=c(object="list"),
+
   function(object, points, AOU, years, byPark, byYear, byPoint, byGuild, guildType, guildCategory, wide, name.class, output,...) {
     switch(output,
       list= return(
