@@ -11,7 +11,8 @@ barplotRichness(
   byPoint = F,
   byGuild = F,
   includeNA = T,
-  color = "dark green",
+  colors = "dark green",
+  palette = "BuGn",
   plot_title = NA,
   scale = T,
   labels = T,
@@ -34,7 +35,9 @@ barplotRichness(
 \item{includeNA}{Defaults to \code{TRUE}. If \code{byGuild = T} and \code{includeNA=F} then speices which have a response guild of \code{NA}
 will not be included in the bar chart.}
 
-\item{color}{A color for the bars.}
+\item{colors}{One or more colors for the bars.}
+
+\item{palette}{Color pallete for the background of the graph. Defaults to "BuGn" (blue green) but will accept any RColorBrewer palette}
 
 \item{plot_title}{Optional,  A title for the plot.}
 
@@ -56,4 +59,11 @@ This function produces a barplot of species richness by Park, Year or Point. It 
 output of the \code{\link{birdRichness}} function. The data is then passed on to ggplot2 for graphing. The user can chose to have \code{byPark=T}, 
 \code{byYear=T} or \code{byPoint=T}, but should only pick one of the three. These can be combined with a guild category using \code{byGuild}. The 
 \code{includeNA} argument indicates if bird species that are not categorized for a particular guild shoud be included.
+
+Colors:
+
+Colors of the bars are controlled by either \code{colors} or \code{palette} argumnts. If the barplot is not by guild then the color indicated by 
+\code{colors} will be used. If \code{byGuild=T} then by default the \code{palette} arguement will be used. However, the \code{palette} arguement
+can be overridden simply by giving \code{colors} a vector of colors with one color for each guild category shown in the barplot.If 
+\code{includeNA=T} than than the first color will correspond to the NA value.
 }
