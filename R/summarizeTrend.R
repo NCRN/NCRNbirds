@@ -7,7 +7,7 @@
 #' @importFrom boot inv.logit
 #' @importFrom dplyr group_by mutate summarize
 #' @importFrom magrittr %>%
-#' @importFrom unmarked coef getData getY predict SE siteCovs
+#' @importFrom unmarked bup coef confint getData getY predict ranef SE show siteCovs
 
 #' @importFrom purrr map pmap
 
@@ -36,30 +36,42 @@ setGeneric(name="summarizeTrend",function(object,tabletype="state", ...){standar
 
 setMethod(f="summarizeTrend", signature=c(object="unmarkedFitOccu"),
           function(object,tabletype,...){
-        
 
- ModelType<-if(class(siteCovs(getData(object))$Year)=="factor") "factor" else "numeric"
- ModelData<-getData(object)
+  ModelType<-if(class(siteCovs(getData(object))$Year)=="factor") "factor" else "numeric"
  
- InFrame<-as.data.frame(getY(ModelData))
- InFrame<-cbind(InFrame, siteCovs(ModelData))%>% mutate(Occupied = Visit1 | Visit2) %>% 
+  ModelData<-getData(object)
+ 
+  
+  InFrame<-as.data.frame(getY(ModelData))
+  InFrame<-cbind(InFrame, siteCovs(ModelData))%>% mutate(Occupied = Visit1 | Visit2) %>% 
    group_by(Year) %>% summarize(Sites=n(), Occupancy=sum(Occupied/Sites, na.rm=T))
- StatePreds<-cbind(predict(object,'state'), siteCovs(ModelData)) %>% 
-   group_by(Year) %>% summarize(Preidct=round(mean(Predicted),3), Lower=round(mean(lower),3),Upper=round(mean(upper),3))
+
+  ModelRanef<-ranef(object)
+  RanefMode<-bup(ModelRanef, stat="mean")
+  ModeCI<-confint(ModelRanef, level=0.95)
+  
+  Estimates<-cbind(data.frame(Mode=RanefMode),ModeCI, siteCovs(ModelData)) %>% 
+    group_by(Year) %>% summarize(Estimate=round(mean(Mode),3), Lower=round(mean(`2.5%`),3),Upper=round(mean(`97.5%`),3))
+ # StatePreds<-cbind(predict(object,'state'), siteCovs(ModelData)) %>% 
+#   group_by(Year) %>% summarize(Preidct=round(mean(Predicted),3), Lower=round(mean(lower),3),Upper=round(mean(upper),3))
+
+  # State_ranef<-cbind( show(ranef(object)), siteCovs(ModelData) ) # %>% 
+  #  group_by(Year) %>% summarize(PredIct=round(mean(Mean),3), Lower=round(mean(`2.5%`),3),Upper=round(mean(`97.5%`),3))
  
-return(StatePreds)
+
+
  
 OutTable<-data.frame(Year=if(ModelType=="factor") levels(siteCovs(ModelData)$Year) else "All" ,
                   Sites=InFrame$Sites,
                   Naive_Occu=round(InFrame$Occupancy,2),
                   Coef=c(coef(object, type="state")[1],coef(object, type="state")[1]+coef(object, type="state")[-1]),
-                  Fit=linearComb(object,c(rep()))
+                  Estimate=Estimates$Estimate,
+                  Lower95=Estimates$Lower,
+                  Upper95=Estimates$Upper
 
 )
 
-
-OutTable<-OutTable %>% mutate(Estimate=inv.logit(Coef))
-
+rownames(OutTable)<-c()
 return(OutTable)
 
 
