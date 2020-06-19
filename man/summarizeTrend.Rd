@@ -7,15 +7,22 @@
 summarizeTrend(object, tabletype = "state", ...)
 }
 \arguments{
-\item{object}{An unamked frame object such as those created by \code{makeUMF} or a \code{list} of such frames.}
+\item{object}{An unmarked fit object such as those created by \code{unmarkedBirds} or a \code{list} of such frames.}
 }
 \value{
-A table which summarizes the trend analysis results. Currently fits occupancy and n-mixture models.
+A table which summarizes the trend analysis results. Currently fits occupancy models with only year (factor or numeric) as a site covariate.
 }
 \description{
 Analyzes an unmarkedFrame object using methods from the unmarked package.
 }
 \details{
-This function simplifies the process of extracting trends over tiem from unmarked models (Royal 2004, Kery et al. 2005) generated
-by the \code{\link{unmarkedBirds}} command. The code currenlty assumes you have an occupancy model fit with the trend Year as a factor.
+This function simplifies the process of extracting trends from unmarked models (Royal 2004, Kery et al. 2005) generated
+by the \code{\link{unmarkedBirds}} function. 
+
+The function will return a table, where each row is a differnet year. Columns include, the year, the number of points visited. naive 
+occupancy for each year, the model coefficient and standard error. The function also returns two sets of estimates of the true occupancy for each year.
+The first, \emph{psi}, is the inverse logit of the model coefficient and represents the estimated occupancy of a site given its site and visit covariates. 
+The second estimate, \emph{z}, takes into account not only covariates but also the actual detection history for each site.  Each estimate comes with 
+its own upper and lower limits for a 95\% CI. Note that as \emph{z} takes into account the actual detection history, its lower limit is 
+always at least the naive occupancy, whereas \emph{psi} has no such lower boundary.
 }
