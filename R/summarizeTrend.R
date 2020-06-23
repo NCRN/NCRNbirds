@@ -127,9 +127,8 @@ setMethod(f="summarizeTrend", signature=c(object="unmarkedFitPCount"),
       z_lower95=Estimates$Lower %>% round(2),
       z_upper95=Estimates$Upper %>% round(2)
     )
-    OutTable<-OutTable %>% mutate(psi=(exp(Coef)/Points) %>% round(2), psi_lower95=(exp(Coef-1.96*SE)/Points) %>% round(2), 
-        psi_upper95=(exp(Coef+1.96*SE)/Points) %>% round(2), z=(z/Points) %>% round(2), z_lower95=(z_lower95/Points) %>% round(2),
-        z_upper95=(z_upper95/Points) %>% round(2)) %>% 
+    OutTable<-OutTable %>% mutate(psi=exp(Coef) %>% round(2), psi_lower95=exp(Coef-1.96*SE) %>% round(2), 
+        psi_upper95=exp(Coef+1.96*SE) %>% round(2)) %>% 
       arrange(Year, Points, Naive_Mean_Count, Coef, SE, psi, psi_lower95, psi_upper95, z, z_lower95, z_upper95)
     
     OutTable$Year<-if(ModelType=="numeric") OutTable$Year + attr(siteCovs(ModelData)$Year,"scaled:center") else OutTable$Year

@@ -55,5 +55,6 @@ Collate:
     'richnessPlot.R'
     'summarizeEffort.R'
     'summarizeTrend.R'
+    'trendsPlot.R'
     'unmarkedBirds.R'
 RoxygenNote: 7.1.0
