@@ -20,7 +20,8 @@ trendsPlot(
 )
 }
 \arguments{
-\item{object}{An \code{NCRNbirds} object a \code{list} of such objects, or a \code{data.frame} like that produced by \code{\link{birdRichness}}.}
+\item{object}{An unmarked fit object with an yearly trend such as those produced by \code{\link{unmarkedBirds}}, a \code{data.frame} produced by 
+\code{\link{summarizeTrend}}, or a \code{list} of such objects.}
 
 \item{trendtype}{Indicates if this is from an occupancy model "occu" or a n-mixture model. Only required if \code{object} is a data.frame.}
 
@@ -42,21 +43,22 @@ trendsPlot(
 
 \item{plot}{Logical. Return plot \code{TRUE} (default) or data.frame \code{FALSE}.}
 
-\item{estiamte}{Either "psi", the defualt or "z". Inidicate the type of esimate you wish to display.}
+\item{estiamte}{Either "psi", the default, or "z". Inidicate the type of esimate you wish to display.}
 }
 \description{
 Makes a plot of trends in bird populations
 }
 \details{
-This function produces a barplot of species richness by Park, Year or Point. It does this by using the 
-output of the \code{\link{birdRichness}} function. The data is then passed on to ggplot2 for graphing. The user can chose to have \code{byPark=T}, 
-\code{byYear=T} or \code{byPoint=T}, but should only pick one of the three. These can be combined with a guild category using \code{byGuild}. The 
-\code{includeNA} argument indicates if bird species that are not categorized for a particular guild shoud be included.
+This function produces plot of trends based on the output of \code{\link{summarizeTrend}}. If the \code{object} is the output of 
+\code{\link{unmarkedBirds}} then the funciton will automatically detect if the trend is based on an occupancy or n-mixture model. If the \code{object}
+is a \code{data.frame} this has to be specified using the \code{trendtype} agrument. 
 
-Colors:
+The plot will display both the naive values and the model estimates. The type of estimate is controlled by the \code{esitmate} argument. If this 
+is "psi", then the model esiamtes will be the inverse model coefficient back transformed to occupancy or abundance. This is the estimated 
+value for  a site given its site and visit covariates. The  other option,"z", takes into account not only covariates
+but also the actual detection history for each site.  The estiamte will also dipaly  upper and lower limits for a 95\% CI. 
 
-Colors of the bars are controlled by either \code{colors} or \code{palette} argumnts. If the barplot is not by guild then the color indicated by 
-\code{colors} will be used. If \code{byGuild=T} then by default the \code{palette} arguement will be used. However, the \code{palette} arguement
-can be overridden simply by giving \code{colors} a vector of colors with one color for each guild category shown in the barplot.If 
-\code{includeNA=T} than than the first color will correspond to the NA value.
+Several arguments control the graphical dispaly. The naive values are always points, but their color and shape can be selected by the user. Estiamated 
+values can also be displayed and customized a spoints, or can be a line instead. Error in the estiamates can either be shown as yearly error bars or as
+a "ribbon" -  a shaded area around the estimate. The color and shape arguments accept standard \code{ggplot2} options.
 }

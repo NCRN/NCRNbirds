@@ -22,7 +22,7 @@ by the \code{\link{unmarkedBirds}} function.
 
 The function will return a table, where each row is a different year. Columns include the year, the number of points visited., naive 
 occupancy or abundance for each year, the model coefficient and standard error. The function also returns two sets of estimates of the true 
-occupancy or abundance, by each year. The first, \emph{psi}, is the inverse model coefficient back transfomred to occupancy / aboundance and 
+occupancy or abundance, by each year. The first, \emph{psi}, is the inverse model coefficient back transformed to occupancy / abundance and 
 represents the estimated value for  a site given its site and visit covariates. The second estimate, \emph{z}, takes into account not only covariates
 but also the actual detection history for each site.  Each estimate comes with  its own upper and lower limits for a 95\% CI. Note that as \emph{z} 
 takes into account the actual detection history, its lower occupancy limit is always at least the naive occupancy, whereas \emph{psi} has no such 

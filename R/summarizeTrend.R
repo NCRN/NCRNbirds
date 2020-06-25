@@ -18,7 +18,7 @@
 #' 
 #' The function will return a table, where each row is a different year. Columns include the year, the number of points visited., naive 
 #' occupancy or abundance for each year, the model coefficient and standard error. The function also returns two sets of estimates of the true 
-#' occupancy or abundance, by each year. The first, \emph{psi}, is the inverse model coefficient back transfomred to occupancy / aboundance and 
+#' occupancy or abundance, by each year. The first, \emph{psi}, is the inverse model coefficient back transformed to occupancy / abundance and 
 #' represents the estimated value for  a site given its site and visit covariates. The second estimate, \emph{z}, takes into account not only covariates
 #' but also the actual detection history for each site.  Each estimate comes with  its own upper and lower limits for a 95\% CI. Note that as \emph{z} 
 #' takes into account the actual detection history, its lower occupancy limit is always at least the naive occupancy, whereas \emph{psi} has no such 
@@ -63,7 +63,7 @@ setMethod(f="summarizeTrend", signature=c(object="unmarkedFitOccu"),
     group_by(Year) %>% summarize(Estimate=round(mean(Mode),3), Lower=round(mean(`2.5%`),3),Upper=round(mean(`97.5%`),3))
   
  
-  OutTable<-data.frame(Year=if(ModelType=="factor") levels(siteCovs(ModelData)$Year) else Estimates$Year,
+  OutTable<-data.frame(Year=if(ModelType=="factor") as.numeric(levels(siteCovs(ModelData)$Year)) else Estimates$Year,
     Points=InFrame$Points,
     Naive_Occu=round(InFrame$Occupancy,2),
     Coef=switch (ModelType,
@@ -112,7 +112,7 @@ setMethod(f="summarizeTrend", signature=c(object="unmarkedFitPCount"),
       group_by(Year) %>% summarize(Estimate=round(mean(Mode),3), Lower=round(mean(`2.5%`),3),Upper=round(mean(`97.5%`),3))
     
     
-    OutTable<-data.frame(Year=if(ModelType=="factor") levels(siteCovs(ModelData)$Year) else Estimates$Year,
+    OutTable<-data.frame(Year=if(ModelType=="factor") as.numeric(levels(siteCovs(ModelData)$Year)) else Estimates$Year,
       Points=InFrame$Points,
       Naive_Mean_Count=round(InFrame$Mean_Count,2),
       Coef=switch (ModelType,
