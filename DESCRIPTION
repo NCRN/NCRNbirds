@@ -52,6 +52,7 @@ Collate:
     'makeNCRNbirds.R'
     'makeUMF.R'
     'mapBirds.R'
+    'mapBCI.R'
     'richnessPlot.R'
     'summarizeEffort.R'
     'summarizeTrend.R'

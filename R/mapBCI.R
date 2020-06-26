@@ -1,9 +1,10 @@
-#' @include NCRNbirds_Class_def.R makeNCRNbirds.R
+#' @include NCRNbirds_Class_def.R BCI.R getPoints.R mapBirds.R
 #' 
-#' @title mapBirds
+#' @title mapBCI
 #' 
-#' @importFrom leaflet addCircles addLegend addTiles leaflet colorBin colorFactor colorNumeric colorQuantile leaflet
+#' @importFrom dplyr left_join select
 #' @importFrom magrittr %>%
+#' @importFrom RColorBrewer brewer.pal
 #' 
 #' @description Produces an html map from a vector of point names and a vector of corresponding values.
 #' 
@@ -59,38 +60,36 @@
 #' 
 #' @export
 
-setGeneric(name="mapBirds",function(object,points,values, maptype="basic", colorgroups=8,radius=30,opacity=1,colortype="quantile",
-                                     colors=c("cyan","magenta4","orangered3"),title=deparse(substitute(values)),...){standardGeneric("mapBirds")}, signature="object")
+setGeneric(name="mapBCI",function(object, years, points=NA, type="Cent_Appal",palette="BuGn",maptype="basic",...){standardGeneric("mapBCI")}, signature="object")
 
-setMethod(f="mapBirds", signature=c(object="list"),
-          function(object,points,values,maptype,colorgroups,radius,opacity,colortype,colors,title,...){
-            TempPark<-makeNCRNbirds(object,ParkCode="TEMPOBJ", ShortName="TempObj",LongName="Temp park Map", Network="TempMap")
-            return(mapBirds(object=TempPark, points=points,values=values,maptype=maptype, colorgroups=colorgroups,radius=radius,
-                             opacity=opacity,colortype=colortype,colors=colors,title=title,...))
+# setMethod(f="mapBCI", signature=c(object="list"),
+#           function(object,points,values,maptype,colorgroups,radius,opacity,colortype,colors,title,...){
+#             TempPark<-makeNCRNbirds(object,ParkCode="TEMPOBJ", ShortName="TempObj",LongName="Temp park Map", Network="TempMap")
+#             return(mapBirds(object=TempPark, points=points,values=values,maptype=maptype, colorgroups=colorgroups,radius=radius,
+#                              opacity=opacity,colortype=colortype,colors=colors,title=title,...))
+#           })
+
+
+setMethod(f="mapBCI", signature=c(object="NCRNbirds"),
+          function(object, years, points, type,palette, maptype, ...){
+            
+            InBCI<-BCI(object,years=years, points=points, type=type, ...)
+            InPoints<-getPoints(object=object, years=years, points=points)
+            
+            BCIdata<-left_join(InPoints,InBCI %>% select(Point_Name,BCI, BCI_Category))
+            
+            
+            BCIColors<-brewer.pal(4,palette) 
+            
+            names(BCIColors)<-c("Low Integrity", "Medium Integrity", "High Integrity", "Highest Integrity")
+            
+            
+            
+            mapBirds(object=object, points=BCIdata$Point_Name, values=BCIdata$BCI, colorgroups=c(0,40.1,52.1,60.1,77.1),
+                     colortype = "bin", colors=BCIColors, maptype = maptype)    
+            
+                           
           })
 
 
-setMethod(f="mapBirds", signature=c(object="NCRNbirds"),
-          function(object,points,values,...){
-            
-            BaseMap<-switch(maptype,
-                            basic="//{s}.tiles.mapbox.com/v4/nps.2yxv8n84,nps.jhd2e8lb/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnBzIiwiYSI6IkdfeS1OY1UifQ.K8Qn5ojTw4RV1GwBlsci-Q",
-                            imagery="//{s}.tiles.mapbox.com/v4/nps.2c589204,nps.25abf75b,nps.7531d30a/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnBzIiwiYSI6IkdfeS1OY1UifQ.K8Qn5ojTw4RV1GwBlsci-Q",
-                            slate="//{s}.tiles.mapbox.com/v4/nps.68926899,nps.jhd2e8lb/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnBzIiwiYSI6IkdfeS1OY1UifQ.K8Qn5ojTw4RV1GwBlsci-Q"
-            )
-            
 
-              MapCol<-switch(colortype,
-                           quantile=colorQuantile(palette=colors, n=colorgroups,domain=values),
-                           bin=colorBin(palette=colors,bins=colorgroups,domain=values),
-                           numeric=colorNumeric(palette=colors,domain=values),
-                           factor=colorFactor(palette=colors,domain=values)
-            )
-            
-            BirdMap<-leaflet() %>%
-              addTiles(urlTemplate=BaseMap) 
-            BirdMap%>%
-              addCircles(data=getPoints(object=object,points=points), color=MapCol(values), fillColor=MapCol(values), radius=radius,
-                        opacity=opacity, fillOpacity=opacity, popup=paste(points,":",as.character(values))) %>%
-              addLegend(pal=MapCol, values=values,title=title)
-          })
