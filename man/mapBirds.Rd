@@ -15,6 +15,7 @@ mapBirds(
   colortype = "quantile",
   colors = c("cyan", "magenta4", "orangered3"),
   title = deparse(substitute(values)),
+  legend_labels = NA,
   ...
 )
 }
@@ -48,13 +49,13 @@ mapBirds(
 
 \item{colors}{A character vector of one or more colors for the points on the map. See discussion below.}
 
-\item{title}{A character vector to be used as the lengend title.}
+\item{title}{A character vector to be used as the legend title.}
 }
 \description{
 Produces an html map from a vector of point names and a vector of corresponding values.
 }
 \details{
-This function is serves as a wrapper for the leaflet package. It quickly creates a map by plotting the locations of the points on 
+This function serves as a wrapper for the leaflet package. It quickly creates a map by plotting the locations of the points on 
 the ParkTiles base map from the NPS. 
 
 Several option exist for coloring the points based on the \code{colorNumeric}, \code{colorBin}, \code{colorQuantile}, and \code{colorFactor} 

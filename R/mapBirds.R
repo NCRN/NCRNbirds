@@ -27,9 +27,8 @@
 #'    \item{"factor}{Used when \code{values} are categorical data.}
 #'  }
 #' @param colors  A character vector of one or more colors for the points on the map. See discussion below.
-#' @param title  A character vector to be used as the lengend title. 
-#' 
-#' @details  This function is serves as a wrapper for the leaflet package. It quickly creates a map by plotting the locations of the points on 
+#' @param title  A character vector to be used as the legend title. 
+#' @details  This function serves as a wrapper for the leaflet package. It quickly creates a map by plotting the locations of the points on 
 #' the ParkTiles base map from the NPS. 
 #' 
 #' Several option exist for coloring the points based on the \code{colorNumeric}, \code{colorBin}, \code{colorQuantile}, and \code{colorFactor} 
@@ -60,7 +59,8 @@
 #' @export
 
 setGeneric(name="mapBirds",function(object,points,values, maptype="basic", colorgroups=8,radius=30,opacity=1,colortype="quantile",
-                                     colors=c("cyan","magenta4","orangered3"),title=deparse(substitute(values)),...){standardGeneric("mapBirds")}, signature="object")
+                                     colors=c("cyan","magenta4","orangered3"),title=deparse(substitute(values)),
+                                    legend_labels=NA, ...){standardGeneric("mapBirds")}, signature="object")
 
 setMethod(f="mapBirds", signature=c(object="list"),
           function(object,points,values,maptype,colorgroups,radius,opacity,colortype,colors,title,...){
@@ -84,7 +84,7 @@ setMethod(f="mapBirds", signature=c(object="NCRNbirds"),
                            quantile=colorQuantile(palette=colors, n=colorgroups,domain=values),
                            bin=colorBin(palette=colors,bins=colorgroups,domain=values),
                            numeric=colorNumeric(palette=colors,domain=values),
-                           factor=colorFactor(palette=colors,domain=values)
+                           factor=colorFactor(palette=colors,domain=values, ordered=T)
             )
             
             BirdMap<-leaflet() %>%
