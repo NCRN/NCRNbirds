@@ -53,6 +53,7 @@ Collate:
     'makeUMF.R'
     'mapBirds.R'
     'mapBCI.R'
+    'mapRichness.R'
     'richnessPlot.R'
     'summarizeEffort.R'
     'summarizeTrend.R'

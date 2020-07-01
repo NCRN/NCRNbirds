@@ -59,8 +59,7 @@
 #' @export
 
 setGeneric(name="mapBirds",function(object,points,values, maptype="basic", colorgroups=8,radius=30,opacity=1,colortype="quantile",
-                                     colors=c("cyan","magenta4","orangered3"),title=deparse(substitute(values)),
-                                    legend_labels=NA, ...){standardGeneric("mapBirds")}, signature="object")
+    colors=c("cyan","magenta4","orangered3"),title=deparse(substitute(values)), ...){standardGeneric("mapBirds")}, signature="object")
 
 setMethod(f="mapBirds", signature=c(object="list"),
           function(object,points,values,maptype,colorgroups,radius,opacity,colortype,colors,title,...){
@@ -92,5 +91,5 @@ setMethod(f="mapBirds", signature=c(object="NCRNbirds"),
             BirdMap%>%
               addCircles(data=getPoints(object=object,points=points), color=MapCol(values), fillColor=MapCol(values), radius=radius,
                         opacity=opacity, fillOpacity=opacity, popup=paste(points,":",as.character(values))) %>%
-              addLegend(pal=MapCol, values=values,title=title)
+              addLegend(pal=MapCol, values=values, title=title)
           })

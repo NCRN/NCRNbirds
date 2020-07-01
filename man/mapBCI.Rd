@@ -20,15 +20,15 @@ mapBCI(
 
 \item{years}{A single numeric value indicating the year of the data you wish to map.}
 
-\item{points}{A character vector of point names. /code{NA}, the default, will map all points.}
+\item{points}{A character vector of point names. \code{NA}, the default, will map all points.}
 
 \item{type}{A mandatory length 1 character \code{vector} that indicates the type of BCI to calculate. Can be "Cent_Appal", the default, or "NETN_Forest_BCI"}
 
-\item{palette}{Color pallete for the colros of the ponits Defaults to "BuGn" (blue green) but will accept any RColorBrewer, viridis or custom palette.}
+\item{palette}{Color pallete for the colors of the points Defaults to "BuGn" (blue green) but will accept any RColorBrewer, viridis or custom palette.}
 
 \item{maptype}{The type of base map to be used. See \code{\link{mapBirds}} for options}
 
-\item{title}{A character vector to be used as the lengend title.}
+\item{title}{A character vector to be used as the legend title.}
 
 \item{...}{Additional arguments passed to \code{\link{BCI}}.}
 }
@@ -37,7 +37,7 @@ Produces an html map of BCI Cateogries for a given year.
 }
 \details{
 This function prodcues a map showing the BCI category of each point for a given year. BCI values and categories are calculated using the 
-\code{\link{BCI}} function, and this data is then passed on to the \code{\link{mapBirds}} function. AS the BCI value makes little sense when calculated 
+\code{\link{BCI}} function, and this data is then passed on to the \code{\link{mapBirds}} function. As the BCI value makes little sense when calculated 
 using multiple years of data, only a single year should be indicated in the \code{years} argument.
 }
 \seealso{

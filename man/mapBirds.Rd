@@ -15,7 +15,6 @@ mapBirds(
   colortype = "quantile",
   colors = c("cyan", "magenta4", "orangered3"),
   title = deparse(substitute(values)),
-  legend_labels = NA,
   ...
 )
 }
