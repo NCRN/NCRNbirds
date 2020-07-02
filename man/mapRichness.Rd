@@ -35,7 +35,7 @@ Produces an html map of bird species richness.
 }
 \details{
 This function prodcues a map showing the bird species richness of each point for one or more years. Bird species richness is calculated using the 
-\code{\link{birdRichess}} function, and this data is then passed on to the \code{\link{mapBirds}} function.
+\code{\link{birdRichness}} function, and this data is then passed on to the \code{\link{mapBirds}} function.
 }
 \seealso{
 \code{\link{birdRichness}} \code{\link{mapBirds}}

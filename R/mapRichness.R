@@ -2,9 +2,6 @@
 #' 
 #' @title mapRichness
 #' 
-#' @importFrom dplyr left_join select
-#' @importFrom magrittr %>%
-#' 
 #' @description Produces an html map of bird species richness.
 #' 
 #' @param object Either an object of class \code{NCRNbirds} or a list of such objects.
@@ -17,7 +14,7 @@
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}. 
 #' 
 #' @details  This function prodcues a map showing the bird species richness of each point for one or more years. Bird species richness is calculated using the 
-#' \code{\link{birdRichess}} function, and this data is then passed on to the \code{\link{mapBirds}} function. 
+#' \code{\link{birdRichness}} function, and this data is then passed on to the \code{\link{mapBirds}} function. 
 #' 
 #' @seealso \code{\link{birdRichness}} \code{\link{mapBirds}}
 #' 
