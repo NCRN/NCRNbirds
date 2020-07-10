@@ -54,8 +54,11 @@ setMethod(f="makeUMF", signature=c(object="list"),
       umf= {
             BirdMat<-CountXVisit(object=object, parks=parks, points=points, AOU=AOU, years=years, times=times, visits=visits, reps=reps,
                                  type=switch(frametype, pcount="count", occu="occupancy"),output="dataframe", ...) %>% 
-              arrange(Admin_Unit_Code, Year, Point_Name) %>% 
-            dplyr::select(-c(Admin_Unit_Code, Point_Name))
+              arrange(Admin_Unit_Code, Year, Point_Name)
+            
+            Points<-data.frame(Point_Name=BirdMat$Point_Name) 
+            
+            BirdMat<- BirdMat %>% dplyr::select(-c(Admin_Unit_Code, Point_Name))
                  
             VisitData<- if(!anyNA(visitcovs)){
               visitcovs %>% map(~CovsXVisit(object, parks=parks, points=points, years=years, times=times, visits=visits, reps=reps, 
@@ -71,7 +74,8 @@ setMethod(f="makeUMF", signature=c(object="list"),
                             factor=BirdMat %>% transmute(Year=factor(Year))
                            )
             
-          sitecovs<-if(trend!="none") bind_cols(YearMat,sitecovs) else sitecovs #bind_cols used as cbind has issues with NULL
+            sitecovs<-if(trend!="none") bind_cols(Points,YearMat,sitecovs) else bind_cols(Points, sitecovs) 
+            #bind_cols used as cbind has issues with NULL
           
           return(makeUMF(object=BirdMat %>% select(-Year),frametype=frametype, sitecovs=sitecovs, obscovslist = c(VisitData, obscovslist)))
       },
@@ -92,8 +96,12 @@ setMethod(f="makeUMF", signature=c(object="NCRNbirds"),
            
       BirdMat<-CountXVisit(object=object, parks=parks, points=points, AOU=AOU, years=years, times=times, visits=visits,
                            reps=reps,  type=switch(frametype, pcount="count", occu="occupancy"), ...) %>% 
-        arrange(Admin_Unit_Code, Year, Point_Name) %>% 
-        dplyr::select(-c(Admin_Unit_Code, Point_Name))
+        arrange(Admin_Unit_Code, Year, Point_Name) 
+      
+      Points<-data.frame(Point_Name=BirdMat$Point_Name)
+      
+      BirdMat<-BirdMat %>% dplyr::select(-c(Admin_Unit_Code, Point_Name))
+      
       
       VisitData<- if(!anyNA(visitcovs)){
         visitcovs %>% map(~CovsXVisit(object, parks=parks, points=points, years=years, times=times, visits=visits, reps=reps, covs=.x) %>% 
@@ -107,7 +115,8 @@ setMethod(f="makeUMF", signature=c(object="NCRNbirds"),
                       numeric=BirdMat %>% transmute(Year=scale(Year,scale=FALSE)),
                       factor=BirdMat %>% transmute(Year=factor(Year))
       )
-      sitecovs<-if(trend!="none") bind_cols(YearMat,sitecovs) else sitecovs #bind_cols used as cbind has issues with NULL
+      sitecovs<-if(trend!="none") bind_cols(Points,YearMat,sitecovs) else bind_cols(Points, sitecovs) 
+      #bind_cols used as cbind has issues with NULL
       
    return(makeUMF(object=BirdMat %>% select(-Year), frametype=frametype,sitecovs=sitecovs, obscovslist = c(VisitData, obscovslist)))
   }
