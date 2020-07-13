@@ -32,6 +32,8 @@ same format at the ouptut of \code{\link{getVisits}}}
 \item{"visit"}{Indicates if a visit occurred or not. Each visit column will either have the visit number if a visit occured or \code{NA}
 if it did not.}
 \item{"wind"}{Provides the wind level for each visit (e.g. Calm, Light breeze).}
+\item{"fyear"}{Provdes the year as a factor for each visit.}
+\item{"nyear}{Provides the centered year for each visit.}
 }}
 
 \item{parks}{A character vector of park codes. Only data from these parks will be returned.}
