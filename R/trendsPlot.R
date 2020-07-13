@@ -12,8 +12,8 @@
 #' 
 #' @param object An unmarked fit object with an yearly trend such as those produced by \code{\link{unmarkedBirds}}, a \code{data.frame} produced by 
 #' \code{\link{summarizeTrend}}, or a \code{list} of such objects.
-#' @param trendtype Indicates if this is from an occupancy model "occu" or a n-mixture model. Only required if \code{object} is a data.frame. 
-#' @param estiamte Either "psi", the default, or "z". Inidicate the type of esimate you wish to display.
+#' @param trendtype Either "occu" or "pcount". Indicates if this is from an occupancy model or an n-mixture model. Only required if \code{object} is a data.frame. 
+#' @param estimate Either "psi", the default, or "z". Inidicates the type of esimate you wish to display.
 #' @param est_symbol Either "point" or "line". Indicates how you wish to display the estimate.
 #' @param est_color The color of the estimate.
 #' @param est_shape If \code{est_symbol} is "point" this will control the shape of the points. Default is a filled circle.
@@ -26,16 +26,16 @@
 
 
 #' @details This function produces plot of trends based on the output of \code{\link{summarizeTrend}}. If the \code{object} is the output of 
-#' \code{\link{unmarkedBirds}} then the funciton will automatically detect if the trend is based on an occupancy or n-mixture model. If the \code{object}
+#' \code{\link{unmarkedBirds}} then the function will automatically detect if the trend is based on an occupancy or n-mixture model. If the \code{object}
 #' is a \code{data.frame} this has to be specified using the \code{trendtype} agrument. 
 #' 
 #' The plot will display both the naive values and the model estimates. The type of estimate is controlled by the \code{esitmate} argument. If this 
-#' is "psi", then the model esiamtes will be the inverse model coefficient back transformed to occupancy or abundance. This is the estimated 
-#' value for  a site given its site and visit covariates. The  other option,"z", takes into account not only covariates
-#' but also the actual detection history for each site.  The estiamte will also dipaly  upper and lower limits for a 95\% CI. 
-#' 
-#' Several arguments control the graphical dispaly. The naive values are always points, but their color and shape can be selected by the user. Estiamated 
-#' values can also be displayed and customized a spoints, or can be a line instead. Error in the estiamates can either be shown as yearly error bars or as
+#' is "psi", then the model estimates will be the model coefficients back transformed to occupancy or abundance. This is the estimated 
+#' value for  a site given its site. The  other option,"z", takes into account not only site covariates but also the  visit covaraites and 
+#' actual detection history for each site.  The estiamte will also display  upper and lower limits for a 95\% CI. 
+#'  
+#' Several arguments control the graphical display. The naive values are always points, but their color and shape can be selected by the user. Estiamated 
+#' values can also be displayed and customized as points, or can be a line instead. Error in the estimates can either be shown as yearly error bars or as
 #' a "ribbon" -  a shaded area around the estimate. The color and shape arguments accept standard \code{ggplot2} options.
 #'  
 #'   
@@ -60,8 +60,8 @@ setMethod(f="trendsPlot", signature=c(object="unmarkedFitPCount"),
           function(object, trendtype, estimate, est_symbol, est_color, est_shape, obs_color, obs_shape, error_symbol, plot_title, legend, plot ){
             
             TrendDF<-summarizeTrend(object)
-            trendsPlot(object=TrendDF, trendtype = "pcount", estimate = estimate, est_symbol = est_symbol, est_color = est_color,est_shape = est_shape,
-                       obs_color = obs_color, obs_shape = obs_shape, error_symbol = error_symbol, plot_title = plot_title,legend = legend, plot = plot)
+            trendsPlot(object=TrendDF, trendtype = "pcount", estimate = estimate, est_symbol = est_symbol, est_color = est_color, est_shape = est_shape,
+                       obs_color = obs_color, obs_shape = obs_shape, error_symbol = error_symbol, plot_title = plot_title, legend = legend, plot = plot)
 })
 
   
