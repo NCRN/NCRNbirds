@@ -5,10 +5,11 @@
 #' @description Produces an html map of fits for an unmarked fit. 
 #' 
 #' @importFrom boot inv.logit
-#' @importFrom unmarked getData predict siteCovs
+#' @importFrom unmarked bup getData predict ranef siteCovs
 #' 
 #' @param object Either an object of class \code{NCRNbirds} or a list of such objects.
 #' @param model An unmarked fit object such as those created by \code{\link{unmarkedBirds}}.
+#' @param estimate Either "psi", the default, or "z". Inidicates the type of esimate you wish to display.
 #' @param years A vector of a single numeric value indicating the year of the estimates you wish to map. Do not include multiple years
 #'  as the map shows preictios for a particular year. 
 #' @param points A character vector of point names. \code{NA}, the default, will map all points.
@@ -25,15 +26,17 @@
 #' 
 #' @export
 
-setGeneric(name="mapUnmarked",function(object, model, years=NA, points=NA, palette="BuGn",maptype="basic",
+setGeneric(name="mapUnmarked",function(object, model,  estimate="psi", years=NA, points=NA, palette="BuGn",maptype="basic",
         title="Model Estimates", ...){standardGeneric("mapUnmarked")}, signature="model")
 
 
 
 setMethod(f="mapUnmarked", signature=c(model="unmarkedFit"),
-  function(object, model, years, points, palette, maptype, title,...){
+  function(object, model, estimate, years, points, palette, maptype, title,...){
       
  SiteData<- cbind(siteCovs(getData(model)), predict(model, "state")[1])
+ 
+ SiteData$z<-bup(ranef(model), stat="mean")
  
  SiteData<- if("Year" %in% names(SiteData) & class(SiteData$Year)=="matrix"){
     SiteData %>% mutate(Year=Year+attr(Year,"scaled:center"))} else SiteData
@@ -43,14 +46,17 @@ setMethod(f="mapUnmarked", signature=c(model="unmarkedFit"),
    SiteData %>% filter(Year %in% years)} else SiteData
 
  
-SiteData$Estimate <-switch(class(model)[1],
+SiteData$psi <-switch(class(model)[1],
                              unmarkedFitOccu=inv.logit(SiteData$Predicted) %>% round(2),
                              unmarkedFitPCount=exp(SiteData$Predicted) %>% round(2)
 )
  
  
-mapBirds(object=object, points=SiteData$Point_Name, values=SiteData$Estimate,  colortype = "numeric", colors=palette, 
-         maptype = maptype, title=title)
+mapBirds(object=object, points=SiteData$Point_Name, 
+         values=switch(estimate,
+                       psi=SiteData$psi,
+                       z= SiteData$z), 
+         colortype = "numeric", colors=palette, maptype = maptype, title=title)
                            
 })
 

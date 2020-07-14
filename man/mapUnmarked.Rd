@@ -7,6 +7,7 @@
 mapUnmarked(
   object,
   model,
+  estimate = "psi",
   years = NA,
   points = NA,
   palette = "BuGn",
@@ -19,6 +20,8 @@ mapUnmarked(
 \item{object}{Either an object of class \code{NCRNbirds} or a list of such objects.}
 
 \item{model}{An unmarked fit object such as those created by \code{\link{unmarkedBirds}}.}
+
+\item{estimate}{Either "psi", the default, or "z". Inidicates the type of esimate you wish to display.}
 
 \item{years}{A vector of a single numeric value indicating the year of the estimates you wish to map. Do not include multiple years
 as the map shows preictios for a particular year.}
