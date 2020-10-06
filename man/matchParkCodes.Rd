@@ -22,5 +22,5 @@ matchParkCodes(object, parkNames, name.class = "short")
 A character vector with one or more park names.
 }
 \description{
-Matches a stirng of park codes with the corresponding park codes.
+Matches a string of park codes with the corresponding park names.
 }

@@ -2,7 +2,7 @@
 #' @title matchParkCodes
 #' @importFrom purrr map_chr
 #' 
-#' @description Matches a stirng of park codes with the corresponding park codes.
+#' @description Matches a string of park codes with the corresponding park names.
 #' 
 #' @param object Either an NPSbirds object or a list of such objects.
 #' @param parkNames A vector of Park codes

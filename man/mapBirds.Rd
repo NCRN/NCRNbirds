@@ -30,6 +30,7 @@ mapBirds(
  \item{"basic"}{The default, uses the basic Park Tiles map, similar to the maps found in park brochures.}
  \item{"imagery"}{The Park Tiles satellite imagery map.}
  \item{"slate"}{The Park Tiles slate map. A very muted and grey base map.}
+ \item{"light"}{The Park Tiles light map. A very pale map.}
 }}
 
 \item{colorgroups}{The number of different colors to display for maps with a \code{colortype} of "bin" or "quantile", or a series of cut points to be used with \code{colortype="bin"} See discussion below.}

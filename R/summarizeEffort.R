@@ -68,12 +68,12 @@ setMethod(f="summarizeEffort", signature=c(object="data.frame"),
       dplyr::select(Admin_Unit_Code,Point_Name,Year) %>% 
       {if(effort=="points") distinct(.) else .} %>% 
       {if(byPark) group_by(., Admin_Unit_Code) else . }%>% 
-      {if(byYear) group_by(., Year, add=T) else . } %>%
-      {if(byPoint) group_by(., Point_Name, add=T) else . } %>%
+      {if(byYear) group_by(., Year, .add=T) else . } %>%
+      {if(byPoint) group_by(., Point_Name, .add=T) else . } %>%
       summarise(Point_Counts=n())  
       
     
-    if(wide & byYear) effort_table<-effort_table %>% pivot_wider(names_from = Year, values_from = Point_Counts)
+    if(wide & byYear) effort_table<-effort_table %>% pivot_wider(names_from = Year, values_from = Point_Counts, names_sort=T)
     
     if(!wide & effort=="points") effort_table<-effort_table %>% rename(Points=Point_Counts) 
     

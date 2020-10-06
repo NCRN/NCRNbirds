@@ -103,12 +103,12 @@ setMethod(f="birdRichness", signature=c(object="data.frame"),
   Count<-object %>% 
     {if(all(is.na(years))) . else filter(., Year %in% years)} %>% 
     {if(byPark) group_by(., Admin_Unit_Code,ParkName) else . } %>% 
-    {if(byYear) group_by(.,Year, add=TRUE) else .} %>% 
-    {if(byPoint) group_by(., Point_Name, add=TRUE) else .} %>% 
-    {if(byGuild) group_by(., Guild, add=TRUE) else .} %>% 
+    {if(byYear) group_by(.,Year, .add=TRUE) else .} %>% 
+    {if(byPoint) group_by(., Point_Name, .add=TRUE) else .} %>% 
+    {if(byGuild) group_by(., Guild, .add=TRUE) else .} %>% 
     summarise(Richness=n_distinct(AOU_Code)) %>% 
     {if(!byYear & !byPark & !byPoint & !byGuild) pull(., Richness) else .} %>% 
-    {if(wide & byYear) pivot_wider(., names_from = Year, values_from = Richness) else .} %>% 
+    {if(wide & byYear) pivot_wider(., names_from = Year, values_from = Richness, names_sort=T) else .} %>% 
     {if (is.data.frame(.)) ungroup(.) else .}
 
             

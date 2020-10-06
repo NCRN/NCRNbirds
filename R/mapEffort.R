@@ -8,6 +8,8 @@
 #' @description Produces an html map of the number of visits made to each point.
 #' 
 #' @param object Either an object of class \code{NCRNbirds} or a list of such objects.
+#' @param years Optional. A vector of numeric value(s) indicating the year of the data you wish to map. \code{NA}, the default, combines data across all
+#' years.
 #' @param palette Color pallete for the colors of the points. Defaults to "BuGn" (blue green) but will accept any RColorBrewer, viridis or custom palette.
 #' @param maptype The type of base map to be used. See \code{\link{mapBirds}} for options.
 #' @param title  A character vector to be used as the legend title. 
@@ -28,7 +30,7 @@ setGeneric(name="mapEffort",function(object, years=NA, points=NA, palette="BuGn"
  setMethod(f="mapEffort", signature=c(object="list"),
            function(object, years, points, palette, maptype,title,...){
              
-             Effort<-summarizeEffort(object,byPoint=T, byYear=F, effort="visits", ...)
+             Effort<-summarizeEffort(object,byPoint=T, byYear=F, effort="visits", years=years, ...)
              
              Effort<-Effort %>%  mutate(Point_Counts=factor(Point_Counts, ordered = T, levels=sort(unique(Effort$Point_Counts))))
             
@@ -41,9 +43,9 @@ setGeneric(name="mapEffort",function(object, years=NA, points=NA, palette="BuGn"
 
 
 setMethod(f="mapEffort", signature=c(object="NCRNbirds"),
-  function(object,palette, maptype, title,...){
+  function(object,years, palette, maptype, title,...){
       
-    Effort<-summarizeEffort(object,byPoint=T, byYear=F, effort="visits", ...)  
+    Effort<-summarizeEffort(object,byPoint=T, byYear=F, effort="visits", years=years,...)  
     Effort<-Effort %>%  mutate(Point_Counts=factor(Point_Counts, ordered = T, levels=sort(unique(Effort$Point_Counts))))
     
     

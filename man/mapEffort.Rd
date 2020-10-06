@@ -17,6 +17,9 @@ mapEffort(
 \arguments{
 \item{object}{Either an object of class \code{NCRNbirds} or a list of such objects.}
 
+\item{years}{Optional. A vector of numeric value(s) indicating the year of the data you wish to map. \code{NA}, the default, combines data across all
+years.}
+
 \item{palette}{Color pallete for the colors of the points. Defaults to "BuGn" (blue green) but will accept any RColorBrewer, viridis or custom palette.}
 
 \item{maptype}{The type of base map to be used. See \code{\link{mapBirds}} for options.}
