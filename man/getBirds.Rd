@@ -37,7 +37,7 @@ getBirds(
 
 \item{max.count}{A numeric vector of length one. Will only return data with a bird count equal to or less than \code{max.count}}
 
-\item{band}{A numeric vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
+\item{band}{A numeric vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned. \code{NA} returns all bands.}
 
 \item{interval}{A numeric vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.}
 

@@ -16,7 +16,6 @@
 #' @param palette Color pallete for the colors of the points. Defaults to "BuGn" (blue green) but will accept any RColorBrewer, viridis or custom palette.
 #' @param maptype The type of base map to be used. See \code{\link{mapBirds}} for options.
 #' @param title  A character vector to be used as the legend title. 
-#' @param ... Additional arguments passed to \code{\link{birdRichness}}. 
 #' 
 #' @details  This function prodcues a map showing model fits for unmarked fit objects for a given year, as produced by \code{\link{unmarkedBirds}}. In order to produce
 #' the map the function requries you to specify which year's fits you are interestred in. The fits are then passed on to the \code{\link{mapBirds}} function. 
@@ -27,26 +26,34 @@
 #' @export
 
 setGeneric(name="mapUnmarked",function(object, model,  estimate="psi", years=NA, points=NA, palette="BuGn",maptype="basic",
-        title="Model Estimates", ...){standardGeneric("mapUnmarked")}, signature="model")
+        title="Model Estimates"){standardGeneric("mapUnmarked")}, signature="model")
 
 
 
 setMethod(f="mapUnmarked", signature=c(model="unmarkedFit"),
-  function(object, model, estimate, years, points, palette, maptype, title,...){
+  function(object, model, estimate, years, points, palette, maptype, title){
+    
       
- SiteData<- cbind(siteCovs(getData(model)), predict(model, "state")[1])
- 
- SiteData$z<-bup(ranef(model), stat="mean")
- 
- SiteData<- if("Year" %in% names(SiteData) & class(SiteData$Year)=="matrix"){
-    SiteData %>% mutate(Year=Year+attr(Year,"scaled:center"))} else SiteData
+  SiteCovData<-  siteCovs(getData(model))
+  
+  SiteCovData<- if(any("Year" %in% names(SiteCovData) & class(SiteCovData$Year)=="matrix")){
+    SiteCovData %>% mutate(Year=Year+attr(Year,"scaled:center"))} else SiteCovData
+  
+
+  if(length(model@sitesRemoved )>0) SiteCovData<-SiteCovData[-model@sitesRemoved,]  #removed sites dropped from model.
+                        
+                                                
+  SiteData<- cbind(SiteCovData, predict(model, "state")[1])
 
  
- SiteData<- if("Year" %in% names(SiteData) & !anyNA(years)){
+  SiteData$z<-bup(ranef(model), stat="mean")
+ 
+
+  SiteData<- if("Year" %in% names(SiteData) & !anyNA(years)){
    SiteData %>% filter(Year %in% years)} else SiteData
 
  
-SiteData$psi <-switch(class(model)[1],
+  SiteData$psi <-switch(class(model)[1],
                              unmarkedFitOccu=inv.logit(SiteData$Predicted) %>% round(2),
                              unmarkedFitPCount=exp(SiteData$Predicted) %>% round(2)
 )

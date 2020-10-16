@@ -12,8 +12,7 @@ mapUnmarked(
   points = NA,
   palette = "BuGn",
   maptype = "basic",
-  title = "Model Estimates",
-  ...
+  title = "Model Estimates"
 )
 }
 \arguments{
@@ -33,8 +32,6 @@ as the map shows preictios for a particular year.}
 \item{maptype}{The type of base map to be used. See \code{\link{mapBirds}} for options.}
 
 \item{title}{A character vector to be used as the legend title.}
-
-\item{...}{Additional arguments passed to \code{\link{birdRichness}}.}
 }
 \description{
 Produces an html map of fits for an unmarked fit.

@@ -47,7 +47,8 @@ mapBirds(
   \item{"factor}{Used when \code{values} are categorical data.}
 }}
 
-\item{colors}{A character vector of one or more colors for the points on the map. See discussion below.}
+\item{colors}{Either a character vector of one or more colors for the points on the map or a paletter created by a function such as 
+\code{colrorFactor}.See discussion below.}
 
 \item{title}{A character vector to be used as the legend title.}
 }
@@ -77,8 +78,9 @@ numeric - This option does not divide the points into groups. Rather points will
 factor - This well color the points when \code{values} is categorical data (e.g. soil or vegetation type) rather than numeric. Each 
 category gets a different color. 
 
-The \code{colors} agrument indicates which colors will be chosen for the points. This is a charcter vector and can either be standard R 
+The \code{colors} agrument indicates which colors will be chosen for the points. This can a charcter vector and can either be standard R 
 color names ("blue", "green" etc.) or hexadecimal colors ("#0000FF","008000",etc). If the number of colors is equal to the number of groups 
 that each group will get the corresponding color. If there are fewer colors than groups, than a colorramp will be created using the indicate 
-colors and used for the points. Typically maps made with the \code{"numeric"} option will make use of the color ramp.
+colors and used for the points. Typically maps made with the \code{"numeric"} option will make use of the color ramp. Alternatively you can supply 
+a pre-made color palette created by the functions in the \code{leaflet} package.
 }

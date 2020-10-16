@@ -11,7 +11,7 @@ CountXVisit(
   AOU = NA,
   years = NA,
   times = NA,
-  band = 1,
+  band = NA,
   visits = NA,
   max = F,
   type = "count",
@@ -37,7 +37,8 @@ CountXVisit(
 \item{times}{A numeric vector of length 1 passed on to \code{\link{getVisits}}. Returns only data from points where the number of years that a point has 
 been visited is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{band}{A numeric vector. Defaults to 1. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned.}
+\item{band}{A numeric vector. Defaults to NA. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned. 
+\code{NA} returns all bands.}
 
 \item{visits}{The visits that will be used for the matrix. Defaults to \code{NA}. See Details below.}
 
