@@ -45,6 +45,7 @@ Collate:
     'importERMNbirds.R'
     'importERMNbirds2007.R'
     'importMIDNbirds.R'
+    'importNCBNbirds.R'
     'importNCCNbirds.R'
     'importNCRNbirds.R'
     'makeNCRNbirds.R'
@@ -52,4 +53,4 @@ Collate:
     'mapBirds.R'
     'richnessPlot.R'
     'unmarkedBirds.R'
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
