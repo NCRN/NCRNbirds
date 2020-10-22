@@ -3,6 +3,7 @@ Type: Package
 Title: Data analysis and visualization for NPS I&M bird monitoring.
 Version: 0.6
 Date: 2020-10-06
+
 Author: John Paul Schmit, Aaron Weed, Matt Marshall, Mark Johnson, Zachary Ladin
 Maintainer: John Paul Schmit <john_schmit@nps.gov>
 Encoding: UTF-8
