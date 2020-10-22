@@ -4,7 +4,8 @@
 #' 
 #' @description Analyzes an unmarkedFrame object using methods from the unmarked package.
 #' 
-#' @importFrom dplyr case_when
+#' 
+#' @importFrom dplyr case_when select
 #' @importFrom magrittr %>%
 #' @importFrom unmarked obsCovs occu pcount siteCovs
 
@@ -51,14 +52,15 @@ setMethod(f="unmarkedBirds", signature=c(object="unmarkedFrameOccu"),
   obs_formula<-case_when(
     !is.null(formula) ~ NA_character_,
     is.null(formula) & is.null(obsCovs(object)) ~ "~1",
-    is.null(formula) & !is.null(obsCovs(object)) ~ paste("~",paste(object %>% obsCovs %>% names,collapse="+"),sep="")
+    is.null(formula) & !is.null(obsCovs(object)) ~ paste("~",paste(object %>% obsCovs  %>% names,collapse="+"),sep="")
   )   
    
 
   site_formula<-case_when(
    !is.null(formula) ~ NA_character_,
-   is.null(formula) & is.null(siteCovs(object)) ~ "~1",
-   is.null(formula) & !is.null(siteCovs(object)) ~ paste("~",paste(object %>% siteCovs %>% names,collapse="+"),sep="")
+   is.null(formula) & (is.null(siteCovs(object)) | all(names(siteCovs(object))=="Point_Name")) ~ "~1",
+   is.null(formula) & (!is.null(siteCovs(object)) & !all(names(siteCovs(object))=="Point_Name")) ~ 
+     paste("~",paste(object %>% siteCovs %>% select(-Point_Name) %>% names,collapse="+"),sep="")
   )
          
       
@@ -86,7 +88,8 @@ setMethod(f="unmarkedBirds", signature=c(object="unmarkedFramePCount"),
             site_formula<-case_when(
               !is.null(formula) ~ NA_character_,
               is.null(formula) & is.null(siteCovs(object)) ~ "~1",
-              is.null(formula) & !is.null(siteCovs(object)) ~ paste("~",paste(object %>% siteCovs %>% names,collapse="+"),sep="")
+              is.null(formula) & (!is.null(siteCovs(object)) & !all(names(siteCovs(object))=="Point_Name")) ~ 
+                paste("~",paste(object %>% siteCovs %>% select(-Point_Name) %>% names,collapse="+"),sep="")
             )
             
             

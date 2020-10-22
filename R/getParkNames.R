@@ -1,5 +1,5 @@
 #' @include NCRNbirds_Class_def.R 
-#' @title getNParkNames
+#' @title getParkNames
 #' 
 #' @description Retreives park names from an NCRNbirds object or a list of such objects.
 #' 

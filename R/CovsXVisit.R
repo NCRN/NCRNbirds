@@ -25,6 +25,8 @@
 #' \item{"visit"}{Indicates if a visit occurred or not. Each visit column will either have the visit number if a visit occured or \code{NA}
 #' if it did not.}
 #' \item{"wind"}{Provides the wind level for each visit (e.g. Calm, Light breeze).}
+#' \item{"fyear"}{Provdes the year as a factor for each visit.}
+#' \item{"nyear}{Provides the centered year for each visit.}
 #' }
 #' 
 #' @details This produces a Covariate(s) X Visit matrix for a \code{NCRNbirds} object or a \code{list} of such objects. Each row of the matrix
@@ -70,7 +72,9 @@ setMethod(f="CovsXVisit", signature=c(object="data.frame"),
   function(object,covs){
     
     if("time" %in% covs) {object<-object %>% mutate(StartTimeDec = 60*hour(StartTime) + minute(StartTime) + second(StartTime)/60 )}
-    
+    if("fyear" %in% covs) {object<-object %>% mutate(fYear = factor(Year))}
+    if("nyear" %in% covs) {object<-object %>% mutate(nYear = scale(Year,scale=FALSE))}
+     
     OutMats<-list(
       distinct(object, Admin_Unit_Code, Point_Name, Year),
       {if ("day" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
@@ -90,7 +94,11 @@ setMethod(f="CovsXVisit", signature=c(object="data.frame"),
       {if ("visit" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
                                          names_prefix = "Visit",values_from=Visit)},
       {if ("wind" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
-                                          names_prefix = "Wind",values_from=Wind)}
+                                          names_prefix = "Wind",values_from=Wind)},
+      {if ("fyear" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
+                                           names_prefix = "fYear",values_from=fYear)},
+      {if ("nyear" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
+                                          names_prefix = "nYear",values_from=nYear)}
       )
     OutMats<-compact(OutMats)
     

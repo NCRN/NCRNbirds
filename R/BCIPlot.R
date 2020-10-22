@@ -9,7 +9,7 @@
 #' @importFrom magrittr %>% 
 #' @importFrom purrr map map_dbl pmap
 #' @importFrom RColorBrewer brewer.pal
-#' @importFrom tidyr full_seq replace_na
+#' @importFrom tidyr full_seq
 #' 
 #' @description Plots BCI score over time.
 #' 
@@ -17,7 +17,8 @@
 #' @param years  A numeric vector. Indicates which years should be graphed.
 #' @param points A character vector of point names. Only these points will be used.
 #' @param visits A length 1 numeric vector, defaults to NA. Returns data only from the indicated visits. 
-#' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
+#' @param times A numeric vector of length 1. Returns only data from points where the number of years that a point has been vistied is greater or equal 
+#' to the value of \code{times}. This is determined based on the data found in the \code{Visits} slot.
 #' @param plot_title  Optional,  A title for the plot. 
 #' @param point_num An optional numeric vector indicating the number of points sampled each year. If \code{object} is a \code{NCRNbirds} object
 #' then this will be calculated automatically. If \code{object} is a \code{data.frame} or a \code{list} than this can be provided by the user. 
@@ -31,7 +32,7 @@
 #' @param ... Additional arguments passed to \code{\link{birdRichness}}
 #' 
 #' @details This function produces a graph the Bird community Index  over time. It does this by using the output of 
-#' the \code{\link{BCI}} function, and averging the plot values for the park's yearly value. The error bars on the plot represnt 95% 
+#' the \code{\link{BCI}} function, and averging the plot values for the park's yearly value. The error bars on the plot reprsent 95% 
 #' bootstrap confidence intervals. The data is then passed on 
 #' to ggplot2 for graphing. Typically this is done automatically by providing an \code{NCRNbirds} object or a \code{list}
 #' of such objects. If the user wishes to provide their own \code{data.frame} it should have 3 columns, \code{Year, BCI, BCI_Category}

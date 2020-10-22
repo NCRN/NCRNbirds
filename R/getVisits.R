@@ -38,7 +38,7 @@ setMethod(f="getVisits", signature=c(object="list"),
             OutVisits<-lapply(X=object, FUN=getVisits, parks=parks,  points=points, years=years, times=times, visits=visits,
                               reps=reps, site= site, dist= dist,wind=wind,sky=sky, output=output)
             switch(output,
-                   list={names(OutPoints)<-getParkNames(object,name.class="code")
+                   list={names(OutVisits)<-getParkNames(object,name.class="code")
                      return(OutVisits)},
                    dataframe=return(do.call("rbind",OutVisits))
             )

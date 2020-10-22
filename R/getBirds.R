@@ -14,7 +14,7 @@
 #' @param years  A vector of numbers. Will return only data from the indicated years.
 #' @param min.count  A numeric vector of length one. Will only return data with a bird count equal to or geater than \code{min.count}
 #' @param max.count  A numeric vector of length one. Will only return data with a bird count equal to or less than \code{max.count}
-#' @param band A numeric vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned. 
+#' @param band A numeric vector. Only observations whose \code{Distance_id} field matches a value in \code{band} will be returned. \code{NA} returns all bands.
 #' @param interval A numeric vector. Only observations whose \code{Interval} field matches a value in \code{interval} will be returned.
 #' @param reps A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
 #' visited is greater or equal to the valuemax,site,dist,wind,sky, of \code{times}. This is determined based on the data found in the \code{Visits} slot.
@@ -52,10 +52,10 @@ setMethod(f="getBirds", signature=c(object="list"),
 setMethod(f="getBirds", signature=c(object="NCRNbirds"),
           function(object,points,AOU,years,min.count,max.count,band,interval,visits,times,reps,flyover,gender,first3min,incidental,juvenile, output){
             XBirds<-object@Birds
-            if(flyover) XBirds<-XBirds else XBirds<-XBirds %>% filter(Flyover_Observed %in% 0) # keep flyovers in the data if TRUE
-            if(first3min) XBirds<-XBirds %>% filter(Initial_Three_Min_Cnt %in% 1) else XBirds<-XBirds # keep only detecions during first 3 min if TRUE
-            if(incidental) XBirds<-XBirds else XBirds<-XBirds %>% filter(Incidental %in% 0) # add incidental obs to the data if TRUE
-            if(juvenile) XBirds<-XBirds else XBirds<-XBirds %>% filter(Juvenile %in% 0) # add juveniles obs to the data if TRUE
+            if(!flyover & exists("Flyover_observed", XBirds)) XBirds<-XBirds %>% filter(Flyover_Observed %in% 0)# keep flyovers in the data if TRUE
+            if(first3min & exists("Initial_Tree_Min_Cnt", XBirds)) XBirds<-XBirds %>% filter(Initial_Three_Min_Cnt %in% 1) # keep only detecions during first 3 min if TRUE
+            if(!incidental & exists("Incidental", XBirds)) XBirds<-XBirds %>% filter(Incidental %in% 0)# keep incidental obs in the data if TRUE
+            if(!juvenile& exists("Juvenile", XBirds)) XBirds<-XBirds %>% filter(Juvenile %in% 0)# keep juveniles obs ni the data if TRUE
             if(!anyNA(gender)) XBirds<-XBirds %>% filter(Sex %in% gender)
             if(!anyNA(points)) XBirds<-XBirds %>% filter(Point_Name %in% points)
             if(!anyNA(AOU)) XBirds<-XBirds %>% filter (AOU_Code %in% AOU)

@@ -1,8 +1,9 @@
 Package: NCRNbirds
 Type: Package
 Title: Data analysis and visualization for NPS I&M bird monitoring.
-Version: 0.5.3.1
-Date: 2020-04-17
+Version: 0.6
+Date: 2020-10-06
+
 Author: John Paul Schmit, Aaron Weed, Matt Marshall, Mark Johnson, Zachary Ladin
 Maintainer: John Paul Schmit <john_schmit@nps.gov>
 Encoding: UTF-8
@@ -37,11 +38,14 @@ Collate:
     'getBirdNames.R'
     'getChecklist.R'
     'SumRelAbund.R'
+    'barplotRichness.R'
+    'matchParkCodes.R'
+    'getGuilds.R'
     'birdRichness.R'
     'importNETNbirds.R'
     'getAKNData.R'
-    'getGuilds.R'
     'getPoints.R'
+    'heatmapRichness.R'
     'importERMNbirds.R'
     'importERMNbirds2007.R'
     'importMIDNbirds.R'
@@ -49,6 +53,13 @@ Collate:
     'makeNCRNbirds.R'
     'makeUMF.R'
     'mapBirds.R'
+    'mapBCI.R'
+    'summarizeEffort.R'
+    'mapEffort.R'
+    'mapRichness.R'
+    'mapUnmarked.R'
     'richnessPlot.R'
+    'summarizeTrend.R'
+    'trendsPlot.R'
     'unmarkedBirds.R'
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

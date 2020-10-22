@@ -39,31 +39,31 @@ to the value of \code{times}. This is determined based on the data found in the 
 \item{reps}{A numeric vector of length 1. Defaults to NA. Returns only data from points where the number of years that a point has been 
 visited is greater or equal to the valuemax,site,dist,wind,sky, of \code{times}. This is determined based on the data found in the \code{Visits} slot.}
 
-\item{frametype}{Indicates the type of \code{unmarkedFrame} to make. Options are "pcount" the default incudes number of decections for n-mixture modeling. 
+\item{frametype}{Indicates the type of \code{unmarkedFrame} to make. "pcount", the default, uses number of decections for n-mixture modeling. 
 "occu" is used for occupancy modeling.}
 
-\item{sitecovs}{A \code{data.frame} of site covariates created by the user.Each covariate shoulb be in a separate olumn and point in its own row.
-This should not include a column of point names. Make sure that the order of the points in this \code{data.frame} math the order in the observation data. 
+\item{sitecovs}{A \code{data.frame} of site covariates created by the user. Each covariate should be in a separate column and point in its own row.
+This should not include a column of point names. Make sure that the order of the points in this \code{data.frame} macthes the order in the observation data. 
 If the input \code{object} is a \code{list} and the desired output is a \code{list} than \code{sitecovs} should also be a \code{list} of \code{data.frames}
 with one \code{data.frame} for each park.}
 
-\item{visitcovs}{A characeter vector with names of visit covariates to be used which ARE obtained from the \code{\link{CovsXVisit}} function.\code{makeUMF}
-will automtically format these for use in unmarkedFrames. These will be formatted at a list of named \code{data.frames}}
+\item{visitcovs}{A characeter vector with names of visit covariates to be used which are obtained from the \code{\link{CovsXVisit}} function.\code{makeUMF}
+will automatically format these for use in unmarkedFrames. These will be formatted at a list of named \code{data.frames}}
 
 \item{obscovslist}{A named \code{list} of \code{data.frame}s with observation covariates. Typically this will include covariates that ARE NOT returned 
-by the \code{\link{CovsXVisit}} function.This will be used in conjuciton with the visit covariates specified by \code{visitcovs}.If the input \code{object}
+by the \code{\link{CovsXVisit}} function.This will be used in conjuciton with the visit covariates specified by \code{visitcovs}. If the input \code{object}
 is a \code{list} and the desired output is a \code{list} than \code{obscovslist} should also be a \code{list} of \code{lists}
 with one \code{list} of observation covariates for each park. The covariates should be in order of Unit_Code, Year and Point_Name.}
 
-\item{trend}{Used for multi-year data sets to indicate if the year of obsevation shoud be included in the model. Options are "none" the default, "numeric"
-to indicate that year should be treated as a numeric value and "factor" to indicate that year should be treated as a factor. Note that is the trend is set
-to "numeric" it is centered to imporve the odds of the model successfully fitting.}
+\item{trend}{Used for multi-year data sets to indicate if the year of observation shoud be included in the model. Options are "none" the default, "numeric"
+to indicate that year should be treated as a numeric value and "factor" to indicate that year should be treated as a factor. Note that if the trend is set
+to "numeric" it is centered to improve the odds of the model successfully fitting.}
 
 \item{output}{Either "umf" (the defautlt) or "list". Controls the output when \code{object} is a list. If "umf" the data from all \code{NCRNbirds}
 objects in the list will be combined into a single unmarked frame. If "list" then the output will be a list of unmarked frames - one for 
 each \code{NCRNbirds} object in the input list.}
 
-\item{...}{Additonal arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.}
+\item{...}{Additional arguments passed to \code{\link{CountXVisit}} and from there to \code{\link{getBirds}}.}
 }
 \value{
 Either an \code{unmarkedFrameOccu} or an \code{unmarkedFramePcount} object.
