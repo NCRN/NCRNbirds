@@ -10,7 +10,7 @@ importNCBNbirds(Dir)
 \item{Dir}{The directory where the data is found. You should omit the trailing slash ("/") in the directory name.}
 }
 \value{
-Returns a list of 6 \code{NCRNbirds} objects, one for each park.
+Returns a list of 1 \code{NCRNbirds} objects, one for each park.
 }
 \description{
 This function imports data from the standard NCBN .csv files and saves it as \code{NCRNbirds} objects. 
