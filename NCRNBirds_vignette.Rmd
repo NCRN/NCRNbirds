@@ -1,0 +1,117 @@
+---
+title: "Import, summary and analysis of point count data using NCRNbirds"
+output:
+  html_document:
+    highlight: textmate
+    number_sections: yes
+    theme: united
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
+version: Built with R `r getRversion()`
+---
+
+```{r setup, include = FALSE, echo=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+# Introduction {#intro}
+
+This document describes how to use the NCRNbirds R package developed to ...
+
+<br>
+
+# Load packages
+``` {r load, include = TRUE, echo= TRUE, eval= FALSE, cache= TRUE,warning=FALSE, comment= NA}
+require(NCRNbirds)
+```
+
+You can access the most recent `NCRNbirds` package release with this command: `devtools::install_github("NCRN/NCRNBirds")`. All functions and associated documentation for the package is managed at the following online repository  https://github.com/NCRN/NCRNbirds.
+
+More here about package dependencies. 
+
+# Importing Data for use in the `NCRNbirds` package
+
+## Required data files
+
+`NCRNbirds` requires the following data files to import your data:
+
+* **FieldData.csv**: Raw bird detection data
+* **Visits.csv**: List of unique surveys by date for each point count station
+* **Points.csv**: List of point count station names and locations
+* **XXXXbands.csv**: List of distance bands used during point count surveys for a particular network. 'XXXX' refers to the 4 letter network acronym.
+* **XXXXintervals.csv**: List of time intervals used during point count surveys for a particular network. 'XXXX' refers to the 4 letter network acronym.
+* **BirdSpecies.csv**: Species taxonomy table
+* **BirdGuildAssignments.csv**: Bird Guild Table
+
+A description of the data fields within each of these files is detailed below. 
+
+``` {r loadDataPackageDefs, include = TRUE, echo= F, child= "vigsubsections\\DataPackageDefs.Rmd"}
+```
+
+## Import functions to create `NCRNbirds` object
+
+The package includes a series of import functions specific to the 4 Inventory and Monitoring Programs using this package denoted by their 4 letter acronyms:
+
++ `importNCRNbirds` imports point count data from thed National Capitol Region I&M Network
++ `importERMNNbirds` imports point count data from the Eastern Rivers and Mountains I&M Network
++ `importMIDNbirds` imports point count data from the Mid-Atlantic I&M Network
++ `importNETNbirds` imports point count data from the Northeast Temperate I&M Network
+
+The following example is how to import NETN's landbird data 'package' located within the `/Data/NETN `subdirectory of the project's working directory:
+
+``` {r import, include = TRUE, echo= TRUE, eval= FALSE,warning=FALSE, comment= NA}
+NETN<-importNCRNbirds("./Data/NETN")
+```
+
+## Import NETN data from AKN for use in `NCRNbirds`
+
+``` {r getAKNData, include = TRUE, echo= F, child= "vigsubsections\\getAKNData.Rmd"}
+```
+
+<br>
+
+# Access and Summarize Detection Data
+
+## getBirds
+
+## getVisits
+
+## CountXVisit
+
+## Relative Abundance 
+
+# Visualize data
+
+## Relative Abundance
+
+## Species Richness
+
+## Bird Community Index
+
+# Analyses
+
+## Occupancy modeling
+
+## Abundance modeling
+
+# References
+
+Faccio SD and Others. 2015. Northeast Temperate Network breeding landbird monitoring protocol: 2015 revision.. Natural Resource Report. NPS/NETN/NRR—2015/942. National Park Service. Fort Collins, Colorado
+
+# Revision History 
+
+Version numbers will be incremented by a whole number (e.g., Version 1.3 to 2.0) when a change is made that significantly affects requirements or procedures. Version numbers will be incremented by decimals (e.g., Version 1.06 to Version 1.07) when there are minor modifications that do not affect requirements or procedures included in the protocol. Add rows as needed for each change or set of changes tied to an updated version number.
+
+**Revision History Log**
+
+| Version #  |  Date |  Revised by  | Changes  |Justification |
+|---|---|---|---|---|
+|   |   |   |   |   |
+|   |   |   |   |   |
