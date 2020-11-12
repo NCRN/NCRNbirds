@@ -7,7 +7,7 @@
 #' @importFrom ggplot2 aes annotate element_line geom_pointrange ggplot ggtitle guides guide_legend labs mean_cl_boot
 #' @importFrom ggplot2 scale_color_manual scale_x_continuous scale_y_continuous theme theme_classic ylab
 #' @importFrom magrittr %>% 
-#' @importFrom purrr map map_dbl pmap
+#' @importFrom purrr map map_dbl map_lgl pmap
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom tidyr full_seq
 #' 
@@ -55,9 +55,15 @@ setMethod(f="BCIPlot", signature=c(object="list"),
         years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
            pull(Year) %>% unique %>% sort %>% full_seq(1) else years
   
-        graphdata<-data.frame(Year=years,BCI=NA, BCI_Category=NA)
+        
     
         BCIlist<-years %>% map(~BCI(object=object, years=.x, points=points, type=type, visits=visits, times=times, output="dataframe",...)) 
+        
+        NoData<-BCIlist %>% map_lgl(is.null)
+        
+        graphdata<-data.frame(Year=years[!NoData],BCI=NA, BCI_Category=NA)
+        
+        BCIlist<-BCIlist[!NoData]
       
         graphdata<-graphdata %>% mutate(BCI=BCIlist %>% map("BCI") %>% map_dbl(mean) %>% round(1), 
                                         Low=BCIlist %>% map("BCI") %>% map(mean_cl_boot) %>% map_dbl("ymin"),
@@ -94,10 +100,14 @@ setMethod(f="BCIPlot", signature=c(object="NCRNbirds"),
     years<-if(anyNA(years)) getVisits(object, points=points, visits=visits, times=times) %>% 
       pull(Year) %>% unique %>% sort %>% full_seq(1) else years
     
-    
-    graphdata<-data.frame(Year=years,BCI=NA, BCI_Category=NA)
     BCIlist<-years %>% map(~BCI(object=object, years=.x, points=points, 
                                     visits=visits, times=times,type=type,...)) 
+    
+    NoData<-BCIlist %>% map_lgl(is.null)
+    
+    graphdata<-data.frame(Year=years[!NoData],BCI=NA, BCI_Category=NA)
+    
+    BCIlist<-BCIlist[!NoData]
     
     graphdata<-graphdata %>% mutate(BCI=BCIlist %>% map("BCI") %>% map_dbl(mean) %>% round(1), 
                                     Low=BCIlist %>% map("BCI") %>% map(mean_cl_boot) %>% map_dbl("ymin"),
@@ -131,14 +141,11 @@ setMethod(f="BCIPlot", signature=c(object="data.frame"),
    
    names(BCIColors)<-c("Low Integrity", "Medium Integrity", "High Integrity", "Highest Integrity")
    
-    
-
     SampEffort<-if(!all(is.na(point_num))) pmap(point_num, paste, sep=",") %>% unlist else NA
     
     integer_breaks<-min(object$Year):max(object$Year)
     YearTicks<- if(!all(is.na(point_num))) paste0(integer_breaks, "\n(", SampEffort,")") else integer_breaks
 
-    
     GraphOut<-ggplot(data=object, aes(x=Year, y=BCI, color=BCI_Category)) +
       annotate("rect", ymin=0,  ymax=40, xmin=-Inf, xmax=Inf, fill=BCIColors[1]) +
       annotate("rect", ymin=40, ymax=52, xmin=-Inf, xmax=Inf, fill=BCIColors[2]) +
