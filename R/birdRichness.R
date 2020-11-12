@@ -60,7 +60,7 @@ setMethod(f="birdRichness", signature=c(object="list"),
     switch(output,
       list= return(
         lapply(X=object, FUN=birdRichness, points=points,AOU=AOU,years=years,visits=visits, byPark=byPark, byYear=byYear, byPoint=byPoint, 
-               byGuild=ByGuild, guildType=guildType, guildCategory=guildCategory, wide=wide, name.class=name.class, output=output,...)
+               byGuild=byGuild, guildType=guildType, guildCategory=guildCategory, wide=wide, name.class=name.class, output=output,...)
       ),
       total={
         Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...) %>% 
