@@ -1,25 +1,25 @@
 #' @include NCRNbirds_Class_def.R
 #' 
-#' @title importCNNAPbirds
+#' @title importCROWbirds
 #' 
 #' @importFrom lubridate year mdy
 #' @importFrom readr read_csv
 #' 
-#' @description  This function imports data from the standard CNNAP .csv files and saves it as \code{NCRNbirds} objects. 
-#' The required .csv files are: Points, Visits, FieldData CNNAPbands, CNNAPintervals, BirdSpecies, and BirdGuildAssignments.
+#' @description  This function imports data from the standard CROW .csv files and saves it as \code{NCRNbirds} objects. 
+#' The required .csv files are: Points, Visits, FieldData CROWbands, CROWintervals, BirdSpecies, and BirdGuildAssignments.
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
 #' 
-#' @return Returns a list of 6 \code{NCRNbirds} objects, one for each park.
+#' @return Returns 1 \code{NCRNbirds} object.
 #' 
 #' @export
 
 
-importCNNAPbirds<-function(Dir){
+importCROWbirds<-function(Dir){
   
   
-  InBands<-read_csv(paste(Dir,"CNNAPbands.csv", sep="/"))
-  InIntervals<-read_csv(paste(Dir,"CNNAPintervals.csv", sep="/"))
+  InBands<-read_csv(paste(Dir,"CROWbands.csv", sep="/"))
+  InIntervals<-read_csv(paste(Dir,"CROWintervals.csv", sep="/"))
   
   InPoints<-read_csv(paste(Dir,"Points.csv", sep="/"))
   
@@ -36,23 +36,23 @@ importCNNAPbirds<-function(Dir){
   InGuilds<-read_csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"))
   
   
-  CNNAP<-new("NCRNbirds",
-             ParkCode="CCNAP",
+  CROW<-new("NCRNbirds",
+             ParkCode="CROW",
              ShortName="Crow's Nest",
              LongName="Crow's Nest Natural Area Preserve", 
-             Network="CNNAP", 
+             Network="CROW", 
              
              VisitNumber=4,
              Bands=InBands,
              Intervals=InIntervals,
              
-             Points=InPoints[InPoints$Admin_Unit_Code=="CCNAP",], 
-             Visits=InVisits[InVisits$Admin_Unit_Code=="CCNAP",],
-             Birds=InFieldData[InFieldData$Admin_Unit_Code=="CCNAP",],
+             Points=InPoints[InPoints$Admin_Unit_Code=="CROW",], 
+             Visits=InVisits[InVisits$Admin_Unit_Code=="CROW",],
+             Birds=InFieldData[InFieldData$Admin_Unit_Code=="CROW",],
              Species=InSpecies,
              Guilds=InGuilds
   ) 
   
   
-  return(c(CNNAP))
+  return(c(CROW))
 }
