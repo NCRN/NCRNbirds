@@ -63,4 +63,5 @@ Collate:
     'summarizeTrend.R'
     'trendsPlot.R'
     'unmarkedBirds.R'
+    'importCNNAPbirds.R'
 RoxygenNote: 7.1.1
