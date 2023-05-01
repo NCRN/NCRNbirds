@@ -10,7 +10,7 @@
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
 #' 
-#' @return Returns a list of 6 \code{NCRNbirds} objects, one for each park.
+#' @return Returns a list of 8 \code{NCRNbirds} objects, one for each park.
 #' 
 #' @export
 
@@ -138,6 +138,40 @@ importMIDNbirds<-function(Dir){
             Guilds=InGuilds
   ) 
   
+  GETT<-new("NCRNbirds",
+            ParkCode="GETT",
+            ShortName="Gettysburg",
+            LongName="Gettysburg National Military Park", 
+            Network="MIDN", 
+            
+            VisitNumber=8,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="GETT",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="GETT",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="GETT",],
+            Species=InSpecies,
+            Guilds=InGuilds
+  ) 
   
-  return(c(APCO,BOWA,FRSP,PETE,RICH,VAFO))
+  HOFU<-new("NCRNbirds",
+            ParkCode="HOFU",
+            ShortName="Hopewell Furnace",
+            LongName="Hopewell Furnace National Historic Site", 
+            Network="MIDN", 
+            
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="GETT",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="GETT",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="GETT",],
+            Species=InSpecies,
+            Guilds=InGuilds
+  ) 
+  
+  
+  return(c(APCO,BOWA,FRSP,PETE,RICH,VAFO,GETT,HOFU))
 }
