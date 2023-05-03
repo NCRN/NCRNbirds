@@ -144,23 +144,6 @@ importMIDNbirds<-function(Dir){
             LongName="Gettysburg National Military Park", 
             Network="MIDN", 
             
-            VisitNumber=8,
-            Bands=InBands,
-            Intervals=InIntervals,
-            
-            Points=InPoints[InPoints$Admin_Unit_Code=="GETT",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="GETT",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="GETT",],
-            Species=InSpecies,
-            Guilds=InGuilds
-  ) 
-  
-  HOFU<-new("NCRNbirds",
-            ParkCode="HOFU",
-            ShortName="Hopewell Furnace",
-            LongName="Hopewell Furnace National Historic Site", 
-            Network="MIDN", 
-            
             VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
@@ -172,6 +155,7 @@ importMIDNbirds<-function(Dir){
             Guilds=InGuilds
   ) 
   
+ 
   
-  return(c(APCO,BOWA,FRSP,PETE,RICH,VAFO,GETT,HOFU))
+  return(c(APCO,BOWA,FRSP,PETE,RICH,VAFO,GETT))
 }
