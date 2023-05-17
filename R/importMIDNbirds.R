@@ -87,6 +87,23 @@ importMIDNbirds<-function(Dir){
             Guilds=InGuilds
   )
   
+  GETT<-new("NCRNbirds",
+            ParkCode="GETT",
+            ShortName="Gettysburg",
+            LongName="Gettysburg National Military Park", 
+            Network="MIDN", 
+            
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="GETT",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="GETT",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="GETT",],
+            Species=InSpecies,
+            Guilds=InGuilds
+  ) 
+  
   PETE<-new("NCRNbirds", 
             ParkCode="PETE", 
             ShortName="Petersburg", 
@@ -138,24 +155,9 @@ importMIDNbirds<-function(Dir){
             Guilds=InGuilds
   ) 
   
-  GETT<-new("NCRNbirds",
-            ParkCode="GETT",
-            ShortName="Gettysburg",
-            LongName="Gettysburg National Military Park", 
-            Network="MIDN", 
-            
-            VisitNumber=4,
-            Bands=InBands,
-            Intervals=InIntervals,
-            
-            Points=InPoints[InPoints$Admin_Unit_Code=="GETT",], 
-            Visits=InVisits[InVisits$Admin_Unit_Code=="GETT",],
-            Birds=InFieldData[InFieldData$Admin_Unit_Code=="GETT",],
-            Species=InSpecies,
-            Guilds=InGuilds
-  ) 
+ 
   
  
   
-  return(c(APCO,BOWA,FRSP,PETE,RICH,VAFO,GETT))
+  return(c(APCO,BOWA,FRSP,GETT,PETE,RICH,VAFO))
 }
