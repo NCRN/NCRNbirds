@@ -93,7 +93,7 @@ importMIDNbirds<-function(Dir){
             LongName="Gettysburg National Military Park", 
             Network="MIDN", 
             
-            VisitNumber=4,
+            VisitNumber=8,
             Bands=InBands,
             Intervals=InIntervals,
             
