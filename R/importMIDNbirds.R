@@ -92,7 +92,7 @@ importMIDNbirds<-function(Dir){
             ShortName="Gettysburg",
             LongName="Gettysburg National Military Park", 
             Network="MIDN", 
-            
+
             VisitNumber=8,
             Bands=InBands,
             Intervals=InIntervals,
@@ -104,6 +104,7 @@ importMIDNbirds<-function(Dir){
             Guilds=InGuilds
   ) 
   
+
   HOFU<-new("NCRNbirds",
             ParkCode="HOFU",
             ShortName="Hopewell",
@@ -120,7 +121,7 @@ importMIDNbirds<-function(Dir){
             Species=InSpecies,
             Guilds=InGuilds
   ) 
-  
+
   PETE<-new("NCRNbirds", 
             ParkCode="PETE", 
             ShortName="Petersburg", 
@@ -171,7 +172,8 @@ importMIDNbirds<-function(Dir){
             Species=InSpecies,
             Guilds=InGuilds
   ) 
-  
-  
+    
+
   return(c(APCO,BOWA,FRSP,GETT,HOFU,PETE,RICH,VAFO))
+
 }
