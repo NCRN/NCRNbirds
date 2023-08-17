@@ -16,7 +16,7 @@
 
 
 importMIDNbirds<-function(Dir){
-
+  
   
   InBands<-read_csv(paste(Dir,"MIDNbands.csv", sep="/"))
   InIntervals<-read_csv(paste(Dir,"MIDNintervals.csv", sep="/"))
@@ -26,7 +26,7 @@ importMIDNbirds<-function(Dir){
   InVisits<-read_csv(paste(Dir,"Visits.csv",sep="/"))
   InVisits$EventDate<-mdy(InVisits$EventDate)
   InVisits$Year<-year(InVisits$EventDate)
-
+  
   
   InFieldData<-read_csv(paste(Dir,"FieldData.csv", sep="/"))
   InFieldData$EventDate<-mdy(InFieldData$EventDate)
@@ -92,8 +92,8 @@ importMIDNbirds<-function(Dir){
             ShortName="Gettysburg",
             LongName="Gettysburg National Military Park", 
             Network="MIDN", 
-            
-            VisitNumber=4,
+
+            VisitNumber=8,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -104,6 +104,24 @@ importMIDNbirds<-function(Dir){
             Guilds=InGuilds
   ) 
   
+
+  HOFU<-new("NCRNbirds",
+            ParkCode="HOFU",
+            ShortName="Hopewell",
+            LongName="Hopewell Furnace National Historic Site", 
+            Network="MIDN", 
+            
+            VisitNumber=4,
+            Bands=InBands,
+            Intervals=InIntervals,
+            
+            Points=InPoints[InPoints$Admin_Unit_Code=="HOFU",], 
+            Visits=InVisits[InVisits$Admin_Unit_Code=="HOFU",],
+            Birds=InFieldData[InFieldData$Admin_Unit_Code=="HOFU",],
+            Species=InSpecies,
+            Guilds=InGuilds
+  ) 
+
   PETE<-new("NCRNbirds", 
             ParkCode="PETE", 
             ShortName="Petersburg", 
@@ -154,10 +172,8 @@ importMIDNbirds<-function(Dir){
             Species=InSpecies,
             Guilds=InGuilds
   ) 
-  
- 
-  
- 
-  
-  return(c(APCO,BOWA,FRSP,GETT,PETE,RICH,VAFO))
+    
+
+  return(c(APCO,BOWA,FRSP,GETT,HOFU,PETE,RICH,VAFO))
+
 }
