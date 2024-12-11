@@ -17,23 +17,36 @@
 
 importNETNbirds<-function(Dir){
   
+   
+  # import  data package and filter NETN records
+  
+  BirdData<- read_csv(paste(Dir,"MIDN_NCBN_NETN_Landbirds_20240909.csv", sep ="/")) %>% 
+    filter(GroupCode == "NETN")
+  
+ # create following df objects from imported data package
+  
+  
+  InVisits<- BirdData %>% select(Admin_Unit_Code = UnitCode, Transect_Name = PointGroupName, Point_Name = PointCode, Survey_Type= HabitatType,
+                                Year= EventYear, EventDate, StartTime, Visit= VisitNumber, ObserverID ) %>% 
+    distinct()
+    
+
+  InFieldData<-BirdData %>% select(Admin_Unit_Code = UnitCode, Transect_CODE= GroupCode, Transect_Name = PointGroupName, Point_Name = PointCode, EventDate, Year= EventYear, 
+                                   Visit= VisitNumber,Survey_Type= HabitatType, 
+                                   AOU_Code= SpeciesCode, Common_Name= CommonName, Scientific_Name = ScientificName, Distance,
+                                   Interval = IntervalObserved, Bird_Count = BirdCount, ObserverID )
+  
+  InPoints<-BirdData %>% select(Admin_Unit_Code = UnitCode, Transect_CODE= GroupCode, Transect_Name = PointGroupName, Point_Name = PointCode,  Survey_Type = HabitatType) %>% 
+    distinct()
+  
+  # directly import csv look up tables
+  
   InBands<-read_csv(paste(Dir,"NETNbands.csv", sep="/"))
   
   InIntervals<-read_csv(paste(Dir,"NETNintervals.csv", sep="/"))
   
-  InPoints<-read_csv(paste(Dir,"Points.csv", sep="/"))
-  
-  InVisits<-read_csv(paste(Dir,"Visits.csv",sep="/"))
-  #InVisits$EventDate<-mdy(InVisits$EventDate)
-  InVisits$Year<-year(InVisits$EventDate)
-  
-  InFieldData<-read_csv(paste(Dir,"FieldData.csv", sep="/"))
-  #InFieldData$EventDate<-mdy(InFieldData$EventDate)
-  InFieldData$Year<-year(InFieldData$EventDate)
-  
   InSpecies<-read_csv(paste(Dir,"BirdSpecies.csv", sep="/"))  
   InGuilds<-read_csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"))
-  
   
   ACAD<-new("NCRNbirds", 
             ParkCode="ACAD", 
@@ -141,18 +154,18 @@ importNETNbirds<-function(Dir){
             Guilds=InGuilds
   )
   
-  # ROVA<-new("NCRNbirds",
-  #           ParkCode="ROVA",
-  #           ShortName="Roosevelt-Vanderbilt",
-  #           LongName="Roosevelt-Vanderbilt National Historic Sites",
-  #           Network="NETN",
-  # 
-  #           Points=InPoints[InPoints$Admin_Unit_Code=="ROVA",],
-  #           Visits=InVisits[InVisits$Admin_Unit_Code=="ROVA",],
-  #           Birds=InFieldData[InFieldData$Admin_Unit_Code=="ROVA",],
-  #           Species=InSpecies
-  # )
-  # 
+  ROVA<-new("NCRNbirds",
+            ParkCode="ROVA",
+            ShortName="Roosevelt-Vanderbilt",
+            LongName="Roosevelt-Vanderbilt National Historic Sites",
+            Network="NETN",
+
+            Points=InPoints[InPoints$Admin_Unit_Code %in% c("ELRO", "HOFR", "VAMA"),] %>% mutate(Admin_Unit_Code = "ROVA") ,
+            Visits=InVisits[InVisits$Admin_Unit_Code %in% c("ELRO", "HOFR", "VAMA"),] %>% mutate(Admin_Unit_Code = "ROVA"),
+            Birds=InFieldData[InFieldData$Admin_Unit_Code %in% c("ELRO", "HOFR", "VAMA"),] %>% mutate(Admin_Unit_Code = "ROVA"),
+            Species=InSpecies
+  )
+
   SAGA<-new("NCRNbirds", 
             ParkCode="SAGA", 
             ShortName="Saint-Gaudens", 
@@ -240,5 +253,5 @@ importNETNbirds<-function(Dir){
   ) 
   
   
-  return(c(ACAD,ELRO,HOFR,MABI,MIMA,MORR,SAGA,SARA,SAIR,VAMA,WEFA))
+  return(c(ACAD,ELRO,HOFR,MABI,MIMA,MORR,ROVA,SAGA,SARA,SAIR,VAMA,WEFA))
 }
