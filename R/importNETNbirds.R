@@ -23,20 +23,31 @@ importNETNbirds<-function(Dir){
   BirdData<- read_csv(paste(Dir,"MIDN_NCBN_NETN_Landbirds_20240909.csv", sep ="/")) %>% 
     filter(GroupCode == "NETN")
   
- # create following df objects from imported data package
+ 
+  # create following df objects from imported data package
   
+  # create data frame of unique Events
   
-  InVisits<- BirdData %>% select(Admin_Unit_Code = UnitCode, Transect_Name = PointGroupName, Point_Name = PointCode, Survey_Type= HabitatType,
+  InVisits<- BirdData %>% filter(ExcludeEvent == 0) %>% # remove QC events
+    select(Admin_Unit_Code = UnitCode, Transect_Name = PointGroupName, Point_Name = PointCode, Survey_Type= HabitatType,
                                 Year= EventYear, EventDate, StartTime, Visit= VisitNumber, ObserverID ) %>% 
     distinct()
     
-
-  InFieldData<-BirdData %>% select(Admin_Unit_Code = UnitCode, Transect_CODE= GroupCode, Transect_Name = PointGroupName, Point_Name = PointCode, EventDate, Year= EventYear, 
+  # create data frame of point count data
+  
+  InFieldData<-BirdData %>% filter(ExcludeEvent == 0) %>% # remove QC events
+    select(Admin_Unit_Code = UnitCode, Transect_CODE= GroupCode, Transect_Name = PointGroupName, Point_Name = PointCode, EventDate, Year= EventYear, 
                                    Visit= VisitNumber,Survey_Type= HabitatType, 
                                    AOU_Code= SpeciesCode, Common_Name= CommonName, Scientific_Name = ScientificName, Distance,
-                                   Interval = IntervalObserved, Bird_Count = BirdCount, ObserverID )
-  
-  InPoints<-BirdData %>% select(Admin_Unit_Code = UnitCode, Transect_CODE= GroupCode, Transect_Name = PointGroupName, Point_Name = PointCode,  Survey_Type = HabitatType) %>% 
+                                   Interval = IntervalObserved, Bird_Count = BirdCount, IdentificationMethod, ObserverID ) %>% 
+            filter(!IdentificationMethod %in% "Incidental" ) %>% # remove incidentals
+            mutate(Bird_Count = as.numeric(Bird_Count)) %>% # force to numeric bc of characters added to vector
+            mutate(Distance_id = case_when(Distance == "0-50" ~ 1, # relabel distance ID band
+                                           Distance == "> 50" ~ 2))
+              
+
+  # create data frame of unique Events
+  InPoints<-BirdData %>% select(Admin_Unit_Code = UnitCode, Transect_CODE= PointGroupCode, Transect_Name = PointGroupName, Point_Name = PointCode,  Longitude, Latitude, Survey_Type = HabitatType) %>% 
     distinct()
   
   # directly import csv look up tables
