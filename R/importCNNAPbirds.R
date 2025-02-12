@@ -6,7 +6,7 @@
 #' @importFrom readr read_csv
 #' 
 #' @description  This function imports data from the standard CNNAP .csv files and saves it as \code{NCRNbirds} objects. 
-#' The required .csv files are: Points, Visits, FieldData CNNAPbands, CNNAPintervals, BirdSpecies, and BirdGuildAssignments.
+#' The required .csv files are: Points, Visits, FieldData, CNNAPbands, CNNAPintervals, BirdSpecies, and BirdGuildAssignments.
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
 #' 
