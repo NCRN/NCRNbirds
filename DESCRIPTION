@@ -45,6 +45,7 @@ Collate:
     'getAKNData.R'
     'getPoints.R'
     'heatmapRichness.R'
+    'importCNNAPbirds.R'
     'importERMNbirds.R'
     'importERMNbirds2007.R'
     'importMIDNbirds.R'
@@ -63,5 +64,4 @@ Collate:
     'summarizeTrend.R'
     'trendsPlot.R'
     'unmarkedBirds.R'
-    'importCNNAPbirds.R'
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
