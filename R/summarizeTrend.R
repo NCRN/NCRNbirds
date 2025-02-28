@@ -7,7 +7,7 @@
 #' @importFrom boot inv.logit
 #' @importFrom dplyr arrange group_by mutate summarize
 #' @importFrom magrittr %>%
-#' @importFrom unmarked bup coef confint getData getY predict ranef SE show siteCovs
+#' @importFrom unmarked bup coef confint getData getY ranef SE siteCovs
 #' @importFrom purrr map pmap
 #' 
 #' @param object An unmarked fit object such as those created by \code{\link{unmarkedBirds}} or a \code{list} of such fits. 
