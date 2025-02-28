@@ -1,7 +1,6 @@
 #' @include NCRNbirds_Class_def.R 
 #'   
 #' @title trendsPlot
-#'
 #' 
 #' @importFrom ggplot2 aes expand_limits ggplot geom_errorbar geom_line geom_point geom_ribbon guide_legend guides labs scale_color_manual 
 #' @importFrom ggplot2 scale_shape_identity scale_x_continuous theme theme_classic
