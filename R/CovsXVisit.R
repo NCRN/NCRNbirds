@@ -21,6 +21,7 @@
 #' \item{"sky"}{Provides the sky condiiton (e.g. Clear, Cloudy, Fog etc.) for each visit.}
 #' \item{"temp"}{Provides the temperature for each visit.}
 #' \item{"decibel"}{Provides the backround noise level in decibels.}
+#' \item{"disturbance}{Provides the disturbance condition (e.g. No effect on count, Slight effect on count, etc.) for each visit.}
 #' \item{"time"}{Provides the time of day when each visit began. This is expressed in minutes since the start of the day.}
 #' \item{"visit"}{Indicates if a visit occurred or not. Each visit column will either have the visit number if a visit occured or \code{NA}
 #' if it did not.}
@@ -89,6 +90,8 @@ setMethod(f="CovsXVisit", signature=c(object="data.frame"),
                                         names_prefix = "Temperature",values_from=Temperature )},
       {if ("decibel" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
                                          names_prefix = "Decibels",values_from=Decibel )},
+      {if ("disturbance" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
+                                            names_prefix = "Disturbance",values_from=Disturbance )},
       {if ("time" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
                                          names_prefix = "Time",values_from=StartTimeDec)},
       {if ("visit" %in% covs) pivot_wider(data = object, id_cols = c(Admin_Unit_Code, Point_Name, Year), names_from=Visit, 
