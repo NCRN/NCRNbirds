@@ -46,6 +46,7 @@ Collate:
     'getPoints.R'
     'heatmapRichness.R'
     'importCNNAPbirds.R'
+    'importEGRPbirds.R'
     'importERMNbirds.R'
     'importERMNbirds2007.R'
     'importMIDNbirds.R'
@@ -64,4 +65,4 @@ Collate:
     'summarizeTrend.R'
     'trendsPlot.R'
     'unmarkedBirds.R'
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
