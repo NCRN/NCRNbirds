@@ -55,7 +55,7 @@ importEGRPbirds<-function(Dir){
   )
   
   FLNI<-new("NCRNbirds", 
-            ParkCode="FLNI ", 
+            ParkCode="FLNI", 
             ShortName="Flight 93 NM", 
             LongName="Flight 93 National Monument", 
             Network="ERMN", 
@@ -105,7 +105,6 @@ importEGRPbirds<-function(Dir){
             Guilds=InGuilds
   )
   
-
   NERI<-new("NCRNbirds", 
             ParkCode="NERI", 
             ShortName="New River Gorge NR", 
@@ -193,7 +192,6 @@ importEGRPbirds<-function(Dir){
             Guilds=InGuilds
   ) 
   
-  
   PETE<-new("NCRNbirds", 
             ParkCode="PETE", 
             ShortName="Petersburg", 
@@ -244,6 +242,7 @@ importEGRPbirds<-function(Dir){
             Species=InSpecies,
             Guilds=InGuilds
   )
+  
   VAFO<-new("NCRNbirds",
             ParkCode="VAFO",
             ShortName="Valley Forge",
@@ -270,7 +269,7 @@ importEGRPbirds<-function(Dir){
             LongName="Appalachian National Scenic Trail", 
             Network="NETN", 
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -281,14 +280,13 @@ importEGRPbirds<-function(Dir){
             Guilds=InGuilds
   )
   
-  
   MABI<-new("NCRNbirds", 
             ParkCode="MABI", 
             ShortName="Marsh-Billings-Rockefeller", 
             LongName="Marsh-Billings-Rockefeller National Historical Park", 
             Network="NETN", 
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -305,7 +303,7 @@ importEGRPbirds<-function(Dir){
             LongName="Minute Man National Historical Park", 
             Network="NETN", 
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -322,7 +320,7 @@ importEGRPbirds<-function(Dir){
             LongName="Saint-Gaudens National Historic Site", 
             Network="NETN",
             
-            VisitNumber=2,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
@@ -339,7 +337,7 @@ importEGRPbirds<-function(Dir){
             LongName="Saratoga National Historical Park", 
             Network="NETN",
             
-            VisitNumber=1,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
