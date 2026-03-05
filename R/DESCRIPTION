@@ -1,0 +1,68 @@
+Package: NCRNbirds
+Type: Package
+Title: Data analysis and visualization for NPS I&M bird monitoring.
+Version: 0.6.4
+Date: 2026-03-05
+Author: John Paul Schmit, Aaron Weed, Matt Marshall, Mark Johnson, Zachary Ladin
+Maintainer: John Paul Schmit <john_schmit@nps.gov>
+Encoding: UTF-8
+Description: This package is designed to analyze and visualize data from the
+    National Park Service, National Capital Region, Northeast Temperate, Mid-Atlantic and Eastern Rivers and Mountains Inventory and Monitoring
+    Networks.
+License: Public Domain
+LazyData: true
+Depends:
+    R (>= 3.1.2)
+Imports:
+    lubridate(>= 1.3.3),
+    dplyr(>= 0.4.1),
+    tidyr(>= 0.2.0),
+    unmarked(>= 0.10-6),
+    leaflet(>= 0.0.16),
+    data.table(>= 1.10.4-3),
+    purrr(>= 0.2.5),
+    ggplot2(>= 3.0.0)
+Collate: 
+    'NCRNbirds_Class_def.R'
+    'getVisits.R'
+    'getBirds.R'
+    'BCI.R'
+    'BCIPlot.R'
+    'BirdGuildSummary.R'
+    'getDesign.R'
+    'CountXVisit.R'
+    'CovsXVisit.R'
+    'getParkNames.R'
+    'DetectsPlot.R'
+    'getBirdNames.R'
+    'getChecklist.R'
+    'SumRelAbund.R'
+    'barplotRichness.R'
+    'matchParkCodes.R'
+    'getGuilds.R'
+    'birdRichness.R'
+    'importNETNbirds.R'
+    'getAKNData.R'
+    'getPoints.R'
+    'heatmapRichness.R'
+    'importCNNAPbirds.R'
+    'importEGRPbirds.R'
+    'importERMNbirds.R'
+    'importERMNbirds2007.R'
+    'importMIDNbirds.R'
+    'importNCBNbirds.R'
+    'importNCCNbirds.R'
+    'importNCRNbirds.R'
+    'makeNCRNbirds.R'
+    'makeUMF.R'
+    'mapBirds.R'
+    'mapBCI.R'
+    'summarizeEffort.R'
+    'mapEffort.R'
+    'mapRichness.R'
+    'mapUnmarked.R'
+    'richnessPlot.R'
+    'summarizeTrend.R'
+    'trendsPlot.R'
+    'unmarkedBirds.R'
+RoxygenNote: 7.3.3
