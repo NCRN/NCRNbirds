@@ -6,11 +6,11 @@
 #' @importFrom readr read_csv
 #' 
 #' @description  This function imports data for the Eastern Grassland Restoration Project (EGRP) from the standard MIDN .csv files and saves it as \code{NCRNbirds} objects. 
-#' The required .csv files are: Points, Visits, FieldData MIDNbands, MIDNintervals, BirdSpecies, and BirdGuildAssignments.
+#' The required .csv files are: Points, Visits, FieldData, MIDNbands, MIDNintervals, BirdSpecies, and BirdGuildAssignments.
 #' 
 #' @param Dir  The directory where the data is found. You should omit the trailing slash ("/") in the directory name.
 #' 
-#' @return Returns a list of 8 \code{NCRNbirds} objects, one for each park.
+#' @return Returns a list of 18 \code{NCRNbirds} objects, one for each park.
 #' 
 #' @export
 
@@ -198,7 +198,7 @@ importEGRPbirds<-function(Dir){
             LongName="Petersburg National Battlefield", 
             Network="MIDN", 
             
-            VisitNumber=4 ,
+            VisitNumber=4,
             Bands=InBands,
             Intervals=InIntervals,
             
