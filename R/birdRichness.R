@@ -1,8 +1,9 @@
-#' @include NCRNbirds_Class_def.R getBirds.R getGuilds.R getVisits.R matchParkCodes.R 
+#' @include NCRNbirds_Class_def.R getBirds.R getGuilds.R getVisits.R getParkNames.R
 #' 
 #' @title birdRichness
 #' 
-#' @importFrom dplyr distinct filter mutate n_distinct pull select summarise ungroup
+#' @importFrom dplyr distinct filter mutate n_distinct pull select summarise ungroup bind_rows
+#' @importFrom purrr map2
 #' @importFrom magrittr %>% 
 #' 
 #' @description Returns the number of bird species found in a park, at a point or a collection of points. 
@@ -63,8 +64,12 @@ setMethod(f="birdRichness", signature=c(object="list"),
                byGuild=byGuild, guildType=guildType, guildCategory=guildCategory, wide=wide, name.class=name.class, output=output,...)
       ),
       total={
-        Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...) %>% 
-          mutate(ParkName=matchParkCodes(object, Admin_Unit_Code, name.class = name.class))
+        Data_List<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="list",...) 
+       
+        ParkNames<-getParkNames(object,name.class=name.class)
+        
+        Data<-map2(.x=Data_List, .y=ParkNames, ~mutate(.x, ParkName=.y)) |> bind_rows()
+
         years<-getVisits(object=object, points=points, years=years, visits= visits, output="dataframe") %>% distinct(Year) %>% pull() 
         
         if(byGuild){
@@ -84,7 +89,7 @@ setMethod(f="birdRichness", signature=c(object="NCRNbirds"),
   function(object, points, AOU, years, byPark, byYear, byPoint, byGuild, guildType, guildCategory, wide, name.class, ...){
 
     Data<-getBirds(object=object,points=points,AOU=AOU,years=years,visits= visits, output="dataframe",...) %>% 
-      mutate(ParkName=matchParkCodes(object, Admin_Unit_Code, name.class = name.class)) 
+      mutate(ParkName=getParkNames(object,name.class=name.class)) 
     years<-getVisits(object=object, points=points, years=years, output="dataframe") %>% distinct(Year) %>% pull() 
     
     if(byGuild){
