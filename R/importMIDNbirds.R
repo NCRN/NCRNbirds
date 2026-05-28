@@ -17,23 +17,57 @@
 
 importMIDNbirds<-function(Dir){
   
+   
+  # import data package CSV; Import ignores date in file name; filter to keep MIDN records and remove Excluded and Incidental records
+  
+  BirdData <- readr::read_csv(
+    list.files(Dir, pattern = "^MIDN_NCBN_NETN_Landbirds.*\\.csv$", full.names = TRUE) %>%
+      { .[which.max(file.info(.)$mtime)] }
+    ) %>% dplyr::filter(GroupCode == "MIDN",
+                        ExcludeEvent == 0, #Will Drop NAs as well
+                        ExcludeObservation == 0, 
+                        Incidental == 0
+                        )
+  
+  # create following df objects from imported data package
+  
+  # create data frame of unique Events
+  
+  InVisits<- BirdData %>% 
+    select(Admin_Unit_Code = UnitCode, SubUnitName, Point_Name = PointCode, Survey_Type= HabitatType, EventID,
+                                Year= EventYear, EventDate, StartTime, Visit= VisitNumber, ObserverID) %>% 
+    
+    distinct(EventID, .keep_all = TRUE)
+    
+  # create data frame of Point Count data
+  
+  InFieldData<-BirdData %>% 
+    select(Admin_Unit_Code = UnitCode, SubUnitName, Point_Name = PointCode, EventDate, Year= EventYear, 
+                                   Visit= VisitNumber, Survey_Type= HabitatType, ObservationID, 
+                                   AOU_Code= SpeciesCode, Common_Name= CommonName, Scientific_Name = ScientificName, Distance,
+                                   Interval = IntervalObserved, FirstThreeMinutes, FirstFiveMinutes, Bird_Count = BirdCount, IdentificationMethod, ObserverID) %>% 
+            
+    distinct(ObservationID, .keep_all = TRUE) %>%  
+    
+            mutate(Bird_Count = as.numeric(Bird_Count)) %>% # force to numeric bc of characters added to vector
+            mutate(Distance_id = case_when(Distance == "0-50" ~ 1, # relabel distance ID band
+                                           Distance == "> 50" ~ 2))
+      
+
+  # create data frame of unique Points
+  
+  InPoints<-BirdData %>% select(Admin_Unit_Code = UnitCode, UnitName, SubUnitName, Point_Name = PointCode, IsActive, Longitude, Latitude, Datum, XYAccuracy) %>% 
+    
+    distinct(Point_Name, .keep_all = TRUE)
+  
+  # directly import csv look up tables
   
   InBands<-read_csv(paste(Dir,"MIDNbands.csv", sep="/"))
   InIntervals<-read_csv(paste(Dir,"MIDNintervals.csv", sep="/"))
-  
-  InPoints<-read_csv(paste(Dir,"Points.csv", sep="/"))
-  
-  InVisits<-read_csv(paste(Dir,"Visits.csv",sep="/"))
-  InVisits$EventDate<-mdy(InVisits$EventDate)
-  InVisits$Year<-year(InVisits$EventDate)
-  
-  
-  InFieldData<-read_csv(paste(Dir,"FieldData.csv", sep="/"))
-  InFieldData$EventDate<-mdy(InFieldData$EventDate)
-  InFieldData$Year<-year(InFieldData$EventDate)
-  
   InSpecies<-read_csv(paste(Dir,"BirdSpecies.csv", sep="/"))  
   InGuilds<-read_csv(paste(Dir,"BirdGuildAssignments.csv", sep="/"))
+  
+  
   
   APCO<-new("NCRNbirds", 
             ParkCode="APCO", 
@@ -92,7 +126,7 @@ importMIDNbirds<-function(Dir){
             ShortName="Gettysburg",
             LongName="Gettysburg National Military Park", 
             Network="MIDN", 
-
+            
             VisitNumber=8,
             Bands=InBands,
             Intervals=InIntervals,
@@ -104,7 +138,7 @@ importMIDNbirds<-function(Dir){
             Guilds=InGuilds
   ) 
   
-
+  
   HOFU<-new("NCRNbirds",
             ParkCode="HOFU",
             ShortName="Hopewell",
@@ -121,7 +155,7 @@ importMIDNbirds<-function(Dir){
             Species=InSpecies,
             Guilds=InGuilds
   ) 
-
+  
   PETE<-new("NCRNbirds", 
             ParkCode="PETE", 
             ShortName="Petersburg", 
@@ -172,8 +206,8 @@ importMIDNbirds<-function(Dir){
             Species=InSpecies,
             Guilds=InGuilds
   ) 
-    
-
+  
+  
   return(c(APCO,BOWA,FRSP,GETT,HOFU,PETE,RICH,VAFO))
-
+  
 }
