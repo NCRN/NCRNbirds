@@ -19,39 +19,67 @@ importMIDNbirds<-function(Dir){
   
    
   # import data package CSV; Import ignores date in file name; filter to keep MIDN records and remove Excluded and Incidental records
-  
+ 
   BirdData <- readr::read_csv(
     list.files(Dir, pattern = "^MIDN_NCBN_NETN_Landbirds.*\\.csv$", full.names = TRUE) %>%
       { .[which.max(file.info(.)$mtime)] }
-    ) %>% dplyr::filter(GroupCode == "MIDN",
-                        ExcludeEvent == 0, #Will Drop NAs as well
-                        ExcludeObservation == 0, 
-                        Incidental == 0
-                        )
+  ) %>%
+    dplyr::filter(
+      GroupCode == "MIDN",
+      ExcludeEvent == 0,       #excludes NAs as well
+      ExcludeObservation == 0, #excludes NAs as well   
+      Incidental == 0          #excludes NAs as well
+    )
   
-  # create following df objects from imported data package
+  InVisits <- BirdData %>%
+    select(
+      Admin_Unit_Code = UnitCode,
+      SubUnitName,
+      Point_Name = PointCode,
+      Survey_Type = HabitatType,
+      Event_ID = EventID,
+      Year = EventYear,
+      EventDate,
+      StartTime,
+      Visit = VisitNumber,
+      Observer = ObserverID
+    ) %>%
+    distinct(Event_ID, .keep_all = TRUE) %>%
+    mutate(
+      EventDate = as.Date(EventDate),   
+      Year      = year(EventDate)
+    )
   
-  # create data frame of unique Events
-  
-  InVisits<- BirdData %>% 
-    select(Admin_Unit_Code = UnitCode, SubUnitName, Point_Name = PointCode, Survey_Type= HabitatType, EventID,
-                                Year= EventYear, EventDate, StartTime, Visit= VisitNumber, ObserverID) %>% 
-    
-    distinct(EventID, .keep_all = TRUE)
     
   # create data frame of Point Count data
   
   InFieldData<-BirdData %>% 
-    select(Admin_Unit_Code = UnitCode, SubUnitName, Point_Name = PointCode, EventDate, Year= EventYear, 
-                                   Visit= VisitNumber, Survey_Type= HabitatType, ObservationID, 
-                                   AOU_Code= SpeciesCode, Common_Name= CommonName, Scientific_Name = ScientificName, Distance,
-                                   Interval = IntervalObserved, FirstThreeMinutes, FirstFiveMinutes, Bird_Count = BirdCount, IdentificationMethod, ObserverID) %>% 
-            
-    distinct(ObservationID, .keep_all = TRUE) %>%  
-    
-            mutate(Bird_Count = as.numeric(Bird_Count)) %>% # force to numeric bc of characters added to vector
-            mutate(Distance_id = case_when(Distance == "0-50" ~ 1, # relabel distance ID band
-                                           Distance == "> 50" ~ 2))
+    select(
+      Admin_Unit_Code = UnitCode,
+      SubUnitName,
+      Point_Name = PointCode,
+      EventDate,
+      Year= EventYear,
+      Visit= VisitNumber,
+      Survey_Type= HabitatType,
+      ObservationID,
+      AOU_Code= SpeciesCode,
+      Common_Name= CommonName,
+      Scientific_Name = ScientificName,
+      Distance,
+      Interval = IntervalObserved,
+      FirstThreeMinutes,
+      FirstFiveMinutes,
+      Bird_Count = BirdCount,
+      IdentificationMethod,
+      Observer = ObserverID
+    ) %>% 
+    distinct() %>%  
+      mutate(Bird_Count = as.numeric(Bird_Count)) %>% # force to numeric bc of characters added to vector
+      mutate(Distance_id = case_when(Distance == "0-50" ~ 1, # relabel distance ID band
+                                         Distance == "> 50" ~ 2)) %>% 
+          mutate(EventDate = as.Date(EventDate), Year = year(EventDate) 
+     )
       
 
   # create data frame of unique Points
@@ -61,6 +89,8 @@ importMIDNbirds<-function(Dir){
     distinct(Point_Name, .keep_all = TRUE)
   
   # directly import csv look up tables
+  
+  
   
   InBands<-read_csv(paste(Dir,"MIDNbands.csv", sep="/"))
   InIntervals<-read_csv(paste(Dir,"MIDNintervals.csv", sep="/"))
