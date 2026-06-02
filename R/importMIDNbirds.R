@@ -90,6 +90,13 @@ importMIDNbirds<-function(Dir){
   
   # directly import csv look up tables
   
+  InVisits<- BirdData %>% 
+    select(Admin_Unit_Code = UnitCode, SubUnitName, Point_Name = PointCode, Survey_Type= HabitatType, EventID,
+                                Year= EventYear, EventDate, StartTime, Visit= VisitNumber, ObserverID) %>% 
+    
+    distinct(EventID, .keep_all = TRUE)
+    
+  # create data frame of Point Count data
   
   
   InBands<-read_csv(paste(Dir,"MIDNbands.csv", sep="/"))
