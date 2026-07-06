@@ -14,5 +14,5 @@ Returns a list of 8 \code{NCRNbirds} objects, one for each park.
 }
 \description{
 This function imports data from the standard MIDN .csv files and saves it as \code{NCRNbirds} objects. 
-The required .csv files are: Points, Visits, FieldData MIDNbands, MIDNintervals, BirdSpecies, and BirdGuildAssignments.
+The required .csv files are: MIDN_NCBN_NETN_Landbirds_YYYYMMDD, MIDNbands, MIDNintervals, BirdSpecies, and BirdGuildAssignments.
 }
