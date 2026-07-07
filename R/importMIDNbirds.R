@@ -17,7 +17,7 @@
 
 importMIDNbirds<-function(Dir){
   
-   
+  
   # import data package CSV; Import ignores date in file name; filter to keep MIDN records and remove Excluded and Incidental records
  
   BirdData <- readr::read_csv(
@@ -32,7 +32,7 @@ importMIDNbirds<-function(Dir){
     )
   
   InVisits <- BirdData %>%
-    select(
+    dplyr::select(
       Admin_Unit_Code = UnitCode,
       SubUnitName,
       Point_Name = PointCode,
@@ -45,16 +45,16 @@ importMIDNbirds<-function(Dir){
       Observer = ObserverID
     ) %>%
     distinct(Event_ID, .keep_all = TRUE) %>%
-    mutate(
+    dplyr::mutate(
       EventDate = as.Date(EventDate),   
       Year      = year(EventDate)
     )
   
-    
+  
   # create data frame of Point Count data
   
   InFieldData<-BirdData %>% 
-    select(
+    dplyr::select(
       Admin_Unit_Code = UnitCode,
       SubUnitName,
       Point_Name = PointCode,
@@ -75,20 +75,21 @@ importMIDNbirds<-function(Dir){
       Observer = ObserverID
     ) %>% 
     distinct() %>%  
-      mutate(Bird_Count = as.numeric(Bird_Count)) %>% # force to numeric bc of characters added to vector
-      mutate(Distance_id = case_when(Distance == "0-50" ~ 1, # relabel distance ID band
-                                         Distance == "> 50" ~ 2)) %>% 
-          mutate(EventDate = as.Date(EventDate), Year = year(EventDate) 
-     )
-      
-
+    dplyr::mutate(Bird_Count = as.numeric(Bird_Count)) %>% # force to numeric bc of characters added to vector
+    dplyr::mutate(Distance_id = case_when(Distance == "0-50" ~ 1, # relabel distance ID band
+                                          Distance == "> 50" ~ 2)) %>% 
+    dplyr::mutate(EventDate = as.Date(EventDate), Year = year(EventDate) 
+    )
+  
+  
   # create data frame of unique Points
   
   InPoints<-BirdData %>% select(Admin_Unit_Code = UnitCode, UnitName, SubUnitName, Point_Name = PointCode, IsActive, Longitude, Latitude, Datum, XYAccuracy) %>% 
-    
     distinct(Point_Name, .keep_all = TRUE)
   
-  # directly import csv look up tables
+  
+  # create data frame of Point Count data
+  
   
   InVisits<- BirdData %>% 
     select(Admin_Unit_Code = UnitCode, SubUnitName, Point_Name = PointCode, Survey_Type= HabitatType, EventID,
@@ -245,6 +246,6 @@ importMIDNbirds<-function(Dir){
   ) 
   
   
-  return(c(APCO,BOWA,FRSP,GETT,HOFU,PETE,RICH,VAFO))
+  return(list(APCO,BOWA,FRSP,GETT,HOFU,PETE,RICH,VAFO))
   
 }
