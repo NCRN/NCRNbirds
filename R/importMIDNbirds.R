@@ -19,7 +19,7 @@ importMIDNbirds<-function(Dir){
   
   
   # import data package CSV; Import ignores date in file name; filter to keep MIDN records and remove Excluded and Incidental records
-  
+ 
   BirdData <- readr::read_csv(
     list.files(Dir, pattern = "^MIDN_NCBN_NETN_Landbirds.*\\.csv$", full.names = TRUE) %>%
       { .[which.max(file.info(.)$mtime)] }
@@ -88,6 +88,15 @@ importMIDNbirds<-function(Dir){
     distinct(Point_Name, .keep_all = TRUE)
   
   
+  # create data frame of Point Count data
+  
+  
+  InVisits<- BirdData %>% 
+    select(Admin_Unit_Code = UnitCode, SubUnitName, Point_Name = PointCode, Survey_Type= HabitatType, EventID,
+                                Year= EventYear, EventDate, StartTime, Visit= VisitNumber, ObserverID) %>% 
+    
+    distinct(EventID, .keep_all = TRUE)
+    
   # create data frame of Point Count data
   
   
